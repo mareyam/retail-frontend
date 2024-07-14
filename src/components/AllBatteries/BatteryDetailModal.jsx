@@ -22,7 +22,6 @@ const BatteryDetailModal = ({ isOpen, onClose, batteryDetails }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontSize="24" textAlign="center">
-          {batteryDetails.name}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>

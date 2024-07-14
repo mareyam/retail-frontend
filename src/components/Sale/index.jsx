@@ -21,10 +21,12 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Button,
 } from "@chakra-ui/react";
 import { SlArrowRight } from "react-icons/sl";
 import { SlArrowLeft } from "react-icons/sl";
 import Searchbar from "../common/Searchbar";
+import ViewCart from "./ViewCart";
 
 const ITEMS_PER_PAGE = 7;
 const Sale = () => {
@@ -36,10 +38,32 @@ const Sale = () => {
   const [battery, setBattery] = useState();
   const [quantity, setQuantity] = useState(1);
 
+  const [selectedBattery, setSelectedBattery] = useState(null);
+
   const handleQuantityChange = (value) => {
     setQuantity(value);
   };
 
+  const handleAddToCart = () => {
+    if (
+      selectedBattery &&
+      quantity > 0 &&
+      quantity <= selectedBattery.stockLeft
+    ) {
+      const item = {
+        id: selectedBattery.id,
+        name: selectedBattery.name,
+        quantity: quantity,
+        price: selectedBattery.salePrice,
+      };
+
+      setCart([...cart, item]);
+      setSelectedBattery(null);
+      setQuantity(0);
+    } else {
+      alert("Please select a battery and enter a valid quantity.");
+    }
+  };
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -77,6 +101,7 @@ const Sale = () => {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           />
+          <ViewCart />
         </Flex>
       </HStack>
       <Text>
@@ -125,6 +150,7 @@ const Sale = () => {
               <Th isNumeric>Sale Price</Th>
               <Th isNumeric>Stock Left</Th>
               <Th isNumeric>Total</Th>
+              <Th isNumeric>Add To Cart</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -163,7 +189,7 @@ const Sale = () => {
                     value={quantity}
                     onChange={handleQuantityChange}
                     min={0}
-                    max={100}
+                    max={battery.stockLeft}
                     step={1}
                     size="sm"
                     width="100px"
@@ -177,7 +203,21 @@ const Sale = () => {
                 </Td>
                 <Td>PKR.{battery.salePrice}</Td>
                 <Td isNumeric>{battery.stockLeft}</Td>
-                <Td>{battery.total}</Td>
+                <Td>{quantity * battery.salePrice}</Td>
+                <Td>
+                  <Button
+                    bgColor="#319795"
+                    color="white"
+                    onClick={handleAddToCart}
+                    disabled={
+                      !selectedBattery ||
+                      quantity <= 0 ||
+                      quantity > battery.stockLeft
+                    }
+                  >
+                    Add to cart
+                  </Button>
+                </Td>
               </Tr>
             ))}
           </Tbody>
@@ -234,6 +274,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 2,
@@ -247,6 +288,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 3,
@@ -260,6 +302,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 4,
@@ -273,6 +316,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 5,
@@ -286,6 +330,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 6,
@@ -299,6 +344,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 7,
@@ -312,6 +358,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 8,
@@ -325,6 +372,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 9,
@@ -338,6 +386,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 10,
@@ -351,6 +400,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 11,
@@ -364,6 +414,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 12,
@@ -377,6 +428,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 13,
@@ -390,6 +442,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 14,
@@ -403,6 +456,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 15,
@@ -416,6 +470,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 16,
@@ -429,6 +484,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 17,
@@ -442,6 +498,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 18,
@@ -455,6 +512,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 19,
@@ -468,6 +526,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 20,
@@ -481,6 +540,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 21,
@@ -494,6 +554,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 22,
@@ -507,6 +568,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 23,
@@ -520,6 +582,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 24,
@@ -533,6 +596,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 25,
@@ -546,6 +610,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 26,
@@ -559,6 +624,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 27,
@@ -572,6 +638,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 28,
@@ -585,6 +652,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 29,
@@ -598,6 +666,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 30,
@@ -611,6 +680,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 31,
@@ -624,6 +694,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 32,
@@ -637,6 +708,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 33,
@@ -650,6 +722,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 34,
@@ -663,6 +736,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 35,
@@ -676,6 +750,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 36,
@@ -689,6 +764,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 37,
@@ -702,6 +778,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 38,
@@ -715,6 +792,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 39,
@@ -728,6 +806,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 40,
@@ -741,6 +820,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 41,
@@ -754,6 +834,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 42,
@@ -767,6 +848,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 43,
@@ -780,6 +862,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 44,
@@ -793,6 +876,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 45,
@@ -806,6 +890,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 46,
@@ -819,6 +904,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 47,
@@ -832,6 +918,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 48,
@@ -845,6 +932,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 49,
@@ -858,6 +946,7 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
   {
     id: 50,
@@ -871,5 +960,6 @@ const batteryData = [
     description: "abc",
     date: "15-12-2023",
     profit: "5%",
+    quantity: 0,
   },
 ];

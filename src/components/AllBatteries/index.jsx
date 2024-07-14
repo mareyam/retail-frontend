@@ -214,7 +214,7 @@ const batteryData = [
     stockLeft: 50,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 2,
@@ -227,7 +227,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 3,
@@ -240,7 +240,7 @@ const batteryData = [
     stockLeft: 20,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 4,
@@ -253,7 +253,7 @@ const batteryData = [
     stockLeft: 15,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 5,
@@ -266,7 +266,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 6,
@@ -279,7 +279,7 @@ const batteryData = [
     stockLeft: 30,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 7,
@@ -292,7 +292,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 8,
@@ -305,7 +305,7 @@ const batteryData = [
     stockLeft: 25,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 9,
@@ -318,7 +318,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 10,
@@ -331,7 +331,7 @@ const batteryData = [
     stockLeft: 10,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 11,
@@ -344,7 +344,7 @@ const batteryData = [
     stockLeft: 40,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 12,
@@ -357,7 +357,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 13,
@@ -370,7 +370,7 @@ const batteryData = [
     stockLeft: 18,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 14,
@@ -383,7 +383,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 15,
@@ -396,7 +396,7 @@ const batteryData = [
     stockLeft: 5,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 16,
@@ -409,7 +409,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 17,
@@ -422,7 +422,7 @@ const batteryData = [
     stockLeft: 22,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 18,
@@ -435,7 +435,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 19,
@@ -448,7 +448,7 @@ const batteryData = [
     stockLeft: 35,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 20,
@@ -461,7 +461,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 21,
@@ -474,7 +474,7 @@ const batteryData = [
     stockLeft: 8,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 22,
@@ -487,7 +487,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 23,
@@ -500,7 +500,7 @@ const batteryData = [
     stockLeft: 19,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 24,
@@ -513,7 +513,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 25,
@@ -526,7 +526,7 @@ const batteryData = [
     stockLeft: 28,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 26,
@@ -539,7 +539,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 27,
@@ -552,7 +552,7 @@ const batteryData = [
     stockLeft: 12,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 28,
@@ -565,7 +565,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 29,
@@ -578,7 +578,7 @@ const batteryData = [
     stockLeft: 21,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 30,
@@ -591,7 +591,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 31,
@@ -604,7 +604,7 @@ const batteryData = [
     stockLeft: 17,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 32,
@@ -617,7 +617,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 33,
@@ -630,7 +630,7 @@ const batteryData = [
     stockLeft: 3,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 34,
@@ -643,7 +643,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 35,
@@ -656,7 +656,7 @@ const batteryData = [
     stockLeft: 24,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 36,
@@ -669,7 +669,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 37,
@@ -682,7 +682,7 @@ const batteryData = [
     stockLeft: 32,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 38,
@@ -695,7 +695,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 39,
@@ -708,7 +708,7 @@ const batteryData = [
     stockLeft: 6,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 40,
@@ -721,7 +721,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 41,
@@ -734,7 +734,7 @@ const batteryData = [
     stockLeft: 14,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 42,
@@ -747,7 +747,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 43,
@@ -760,7 +760,7 @@ const batteryData = [
     stockLeft: 26,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 44,
@@ -773,7 +773,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 45,
@@ -786,7 +786,7 @@ const batteryData = [
     stockLeft: 4,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 46,
@@ -799,7 +799,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 47,
@@ -812,7 +812,7 @@ const batteryData = [
     stockLeft: 23,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 48,
@@ -825,7 +825,7 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 49,
@@ -838,7 +838,7 @@ const batteryData = [
     stockLeft: 11,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
   {
     id: 50,
@@ -851,6 +851,6 @@ const batteryData = [
     stockLeft: 0,
     description: "abc",
     date: "15-12-2023",
-    profit:'5%'
+    profit: "5%",
   },
 ];

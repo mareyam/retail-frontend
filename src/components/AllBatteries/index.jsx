@@ -22,7 +22,7 @@ import BatteryDetailModal from "./BatteryDetailModal";
 
 const ITEMS_PER_PAGE = 7;
 
-const AllBatteries = () => {
+const BatteryInventory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredBatteryData, setFilteredBatteryData] = useState(batteryData);
@@ -57,12 +57,13 @@ const AllBatteries = () => {
     setCurrentPage(1);
   }, [searchQuery, batteryData]);
 
-  console.log(filteredBatteryData);
+  console.log(filteredBatteryData.length);
+  console.log(currentBatteryData.length);
 
   return (
     <>
       <HStack w="full" justifyContent="space-between">
-        <Heading py="2" bgColor={"white"}>
+        <Heading py="2" fontSize="28" bgColor={"white"}>
           Battery Inventory
         </Heading>
         <Flex>
@@ -74,8 +75,9 @@ const AllBatteries = () => {
         </Flex>
       </HStack>
       <TableContainer
+        mt="8"
         pos="relative"
-        h="80dvh"
+        h="76dvh"
         overflowY="auto"
         css={{
           "&::-webkit-scrollbar": {
@@ -118,15 +120,16 @@ const AllBatteries = () => {
           </Thead>
           <Tbody>
             {currentBatteryData.map((battery) => (
-              <Tr
-                key={battery.id}
-                onClick={() => {
-                  setBattery(battery);
-                  onOpenDetailModal();
-                }}
-              >
+              <Tr key={battery.id}>
                 <Td>{battery.id}</Td>
-                <Td>{battery.name}</Td>
+                <Td
+                  onClick={() => {
+                    setBattery(battery);
+                    onOpenDetailModal();
+                  }}
+                >
+                  {battery.name}
+                </Td>
                 <Td>{battery.modelNumber}</Td>
                 <Td>{battery.variant}</Td>
                 <Td>
@@ -156,7 +159,7 @@ const AllBatteries = () => {
           </Tbody>
         </Table>
       </TableContainer>
-      <HStack spacing={4} mt={4} alignItems="center" justifyContent="center">
+      <HStack mt="2" spacing={4} alignItems="center" justifyContent="center">
         <IconButton
           disabled={currentPage == 1}
           rounded="full"
@@ -173,7 +176,7 @@ const AllBatteries = () => {
 
         <Text>
           Showing {startIndex + 1} to {Math.min(endIndex, batteryData.length)}{" "}
-          of {currentBatteryData.length} entries
+          of {filteredBatteryData.length} entries
         </Text>
         <IconButton
           rounded="full"
@@ -200,7 +203,7 @@ const AllBatteries = () => {
   );
 };
 
-export default AllBatteries;
+export default BatteryInventory;
 
 const batteryData = [
   {

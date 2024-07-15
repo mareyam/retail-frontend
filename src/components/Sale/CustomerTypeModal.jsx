@@ -42,11 +42,11 @@ const CustomerTypeModal = () => {
                 transition: "all 0.5s ease",
               }}
               onClick={() => {
-                setCustomerType("Single Purchase");
+                setCustomerType("Retail");
                 onClose();
               }}
             >
-              Single Purchase
+              Retail
             </Button>
             <Button
               w="44"
@@ -60,11 +60,11 @@ const CustomerTypeModal = () => {
                 transition: "all 0.5s ease",
               }}
               onClick={() => {
-                setCustomerType("Bulk Purchase");
+                setCustomerType("Wholesale");
                 onClose();
               }}
             >
-              Bulk Purchase
+              Wholesale
             </Button>
           </Box>
         </ModalBody>

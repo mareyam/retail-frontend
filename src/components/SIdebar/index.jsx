@@ -19,7 +19,9 @@ const Sidebar = () => {
   return (
     <>
       <VStack alignItems="left">
-        <Heading>Brand Logo</Heading>
+        <Heading textAlign='center' w='full' fontSize="32">Exide Battery</Heading>
+        <Heading textAlign='center' w='full' fontSize="28" fontWeight='500' >123 Steet X Cantt, Quetta </Heading>
+
         <VStack align="flex-start" mt="8">
           {menuItems.map((item) => (
             <Flex
@@ -43,8 +45,9 @@ const Sidebar = () => {
               <Text
                 onClick={() => {
                   setSelectedComponent(item.name);
-                  onOpen(item.name == "Sale" ? true : false);
-                  // setIsCustomerTypeModal(item.name == "Sale" ? true : false);
+                  if (item.name === "Sale") {
+                    onOpen();
+                  }
                 }}
                 fontSize="20"
               >
@@ -63,7 +66,7 @@ export default Sidebar;
 
 const menuItems = [
   {
-    name: "All Batteries",
+    name: "Battery Inventory",
     icon: <FaCarBattery />,
   },
   {

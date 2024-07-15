@@ -38,7 +38,9 @@ const AddNewProduct = () => {
       >
         Add new Battery
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalOverlay />
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add New Battery</ModalHeader>

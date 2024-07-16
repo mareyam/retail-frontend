@@ -1,18 +1,13 @@
-import React from "react";
-import {
-  Input,
-  InputGroup,
-  InputLeftElement,
-} from "@chakra-ui/react";
-import { CiSearch } from "react-icons/ci";
+import React from 'react';
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import { CiSearch } from 'react-icons/ci';
 
 const Searchbar = ({ searchQuery, setSearchQuery }) => {
   return (
-    <InputGroup w="60" bgColor='white' rounded='full'>
-      <InputLeftElement
-        pointerEvents="none"
-        children={<CiSearch color="gray.600" />}
-      />
+    <InputGroup w="60" bgColor="white" rounded="full">
+      <InputLeftElement pointerEvents="none">
+        <CiSearch color="gray.600" />
+      </InputLeftElement>
       <Input
         rounded="full"
         type="text"

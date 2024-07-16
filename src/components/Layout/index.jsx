@@ -1,22 +1,24 @@
-import React from "react";
-import { Box, Flex, VStack } from "@chakra-ui/react";
-import Sidebar from "../SIdebar";
-import Navbar from "../Navbar";
-
-import useStateStore from "../zustand/store";
-import AllBatteries from "../AllBatteries";
-import Stats from "../Stats";
-import Sale from "../Sale";
+import React from 'react';
+import { Box, Flex, VStack } from '@chakra-ui/react';
+import Sidebar from '../SIdebar';
+import Navbar from '../Navbar';
+import useStateStore from '../zustand/store';
+import AllBatteries from '../AllBatteries';
+import Stats from '../Stats';
+import Sale from '../Sale';
+import Purchase from '../Purchase';
 
 function App() {
   const { selectedComponent, setSelectedComponent } = useStateStore();
   const renderComponent = () => {
     switch (selectedComponent) {
-      case "All Batteries":
+      case 'Stock':
         return <AllBatteries />;
-      case "Sale":
+      case 'Sale':
         return <Sale />;
-      case "Stats":
+      case 'Purchase':
+        return <Purchase />;
+      case 'Report':
         return <Stats />;
       default:
         return <AllBatteries />;
@@ -29,9 +31,9 @@ function App() {
         // bg='#55565B'
         // bg='#393a3f'
         // bg="#F6E05E"
-bg='#4682b4'
+        bg="#4682b4"
         color="white"
-        p="4"
+        px="2"
         position="fixed"
         height="100vh"
       >

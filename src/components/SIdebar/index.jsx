@@ -1,7 +1,7 @@
-import React from "react";
-import { FaCarBattery } from "react-icons/fa";
-import { IoStatsChartSharp } from "react-icons/io5";
-import { MdOutlinePointOfSale } from "react-icons/md";
+import React from 'react';
+import { FaCarBattery } from 'react-icons/fa';
+import { IoStatsChartSharp } from 'react-icons/io5';
+import { MdOutlinePointOfSale } from 'react-icons/md';
 import {
   Heading,
   HStack,
@@ -11,11 +11,11 @@ import {
   Flex,
   IconButton,
   Text,
-} from "@chakra-ui/react";
-import useStateStore from "../zustand/store";
-import CustomerTypeModal from "../Sale/CustomerTypeModal";
-import { IoIosMenu } from "react-icons/io";
-import { BiSolidPurchaseTagAlt } from "react-icons/bi";
+} from '@chakra-ui/react';
+import useStateStore from '../zustand/store';
+import CustomerTypeModal from '../Sale/CustomerTypeModal';
+import { IoIosMenu } from 'react-icons/io';
+import { BiSolidPurchaseTagAlt } from 'react-icons/bi';
 
 const Sidebar = () => {
   const {
@@ -29,22 +29,23 @@ const Sidebar = () => {
 
   return (
     <>
-      <VStack border="1px solid red">
+      <VStack>
         <Box w="40" h="20">
           <Image src="/image.png" />
         </Box>
       </VStack>
 
-      <VStack h="full" pt="16" border="1px solid red">
-        <HStack w="full" border="1px solid red">
+      <VStack px="4" h="full" pt="16">
+        <HStack w="full" alignItems="center">
           <IconButton
-            aria-label={"name"}
+            pt="1"
+            aria-label={'name'}
             icon={<IoIosMenu />}
             color="white"
             fontSize="32"
             bg="transparent"
             _hover={{
-              backgroundColor: "transparent",
+              backgroundColor: 'transparent',
             }}
           />
           <Text w="full" textAlign="flex-start" fontSize="28" fontWeight="500">
@@ -52,42 +53,41 @@ const Sidebar = () => {
           </Text>
         </HStack>
 
-
-<VStack w='full' lineHeight='1' border='1px solid red'>
-        {menuItems.map((item) => (
-          <Flex
-            lineHeight="1"
-            w="full"
-            py="4"
-            alignItems="center"
-            cursor="pointer"
-            _hover={{
-              textDecor: "underline",
-            }}
-          >
-            <IconButton
-              aria-label={item.name}
-              icon={item.icon}
-              color="white"
-              fontSize="20"
-              bg="transparent"
+        <VStack w="full" gap="0" pt="4">
+          {menuItems.map((item, index) => (
+            <Flex
+              key={index}
+              w="full"
+              py="1"
+              alignItems="center"
+              cursor="pointer"
               _hover={{
-                backgroundColor: "transparent",
+                textDecor: 'underline',
               }}
-            />
-            <Text
-              onClick={() => {
-                setSelectedComponent(item.name);
-                if (item.name === "Sale") {
-                  onOpen();
-                }
-              }}
-              fontSize="18"
             >
-              {item.name}
-            </Text>
-          </Flex>
-        ))}
+              <IconButton
+                aria-label={item.name}
+                icon={item.icon}
+                color="white"
+                fontSize="20"
+                bg="transparent"
+                _hover={{
+                  backgroundColor: 'transparent',
+                }}
+              />
+              <Text
+                onClick={() => {
+                  setSelectedComponent(item.name);
+                  if (item.name === 'Sale') {
+                    onOpen();
+                  }
+                }}
+                fontSize="18"
+              >
+                {item.name}
+              </Text>
+            </Flex>
+          ))}
         </VStack>
       </VStack>
       {isOpen && <CustomerTypeModal />}
@@ -99,19 +99,19 @@ export default Sidebar;
 
 const menuItems = [
   {
-    name: "Stock",
+    name: 'Stock',
     icon: <FaCarBattery />,
   },
   {
-    name: "Sale",
+    name: 'Sale',
     icon: <MdOutlinePointOfSale />,
   },
   {
-    name: "Purchase",
+    name: 'Purchase',
     icon: <BiSolidPurchaseTagAlt />,
   },
   {
-    name: "Report",
+    name: 'Report',
     icon: <IoStatsChartSharp />,
   },
 ];

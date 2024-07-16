@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   Drawer,
   DrawerBody,
@@ -22,25 +22,24 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-} from "@chakra-ui/react";
-import useStateStore from "../zustand/store";
-
+} from '@chakra-ui/react';
+import useStateStore from '../zustand/store';
 
 const ViewCart = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { customerType, cart, addToCart, removeFromCart } = useStateStore();
-console.log(cart);
+  console.log(cart);
   const btnRef = React.useRef();
 
   return (
     <>
       <Button
         rounded="full"
-        bgColor="#319795"
+        bg="#4682b4"
         color="white"
         _hover={{
-          bgColor: "#319795",
-          color: "white",
+          bg: '#4682b4',
+          color: 'white',
         }}
         onClick={onOpen}
         ref={btnRef}
@@ -65,17 +64,17 @@ console.log(cart);
               pos="relative"
               h="80dvh"
               css={{
-                "&::-webkit-scrollbar": {
-                  width: "10px",
-                  height: "6px",
+                '&::-webkit-scrollbar': {
+                  width: '10px',
+                  height: '6px',
                 },
-                "&::-webkit-scrollbar-track": {
-                  borderRadius: "10px",
-                  background: "#f0f0f0",
+                '&::-webkit-scrollbar-track': {
+                  borderRadius: '10px',
+                  background: '#f0f0f0',
                 },
-                "&::-webkit-scrollbar-thumb": {
-                  borderRadius: "10px",
-                  background: "#ccc",
+                '&::-webkit-scrollbar-thumb': {
+                  borderRadius: '10px',
+                  background: '#ccc',
                 },
               }}
             >
@@ -86,10 +85,10 @@ console.log(cart);
                   zIndex="1"
                   bgColor="white"
                   style={{
-                    position: "sticky",
+                    position: 'sticky',
                     top: 0,
                     zIndex: 1,
-                    backgroundColor: "white",
+                    backgroundColor: 'white',
                   }}
                 >
                   <Tr>
@@ -115,7 +114,7 @@ console.log(cart);
                       <Td>{battery.name}</Td>
                       <Td>{battery.modelNumber}</Td>
                       <Td>{battery.variant}</Td>
-                      
+
                       {/* <Td>
                         <NumberInput
                           value={quantity}
@@ -141,8 +140,8 @@ console.log(cart);
                           bgColor="#319795"
                           color="white"
                           _hover={{
-                            backgroundColor: "#319795",
-                            color: "white",
+                            backgroundColor: '#319795',
+                            color: 'white',
                           }}
                         >
                           Remove
@@ -171,30 +170,30 @@ export default ViewCart;
 const currentBatteryData = [
   {
     id: 1,
-    name: "Battery abc",
-    modelNumber: "BA123",
-    variant: "Standard",
-    availability: "In Stock",
+    name: 'Battery abc',
+    modelNumber: 'BA123',
+    variant: 'Standard',
+    availability: 'In Stock',
     purchasePrice: 100,
     salePrice: 150,
     stockLeft: 50,
-    description: "abc",
-    date: "15-12-2023",
-    profit: "5%",
+    description: 'abc',
+    date: '15-12-2023',
+    profit: '5%',
     quantity: 0,
   },
   {
     id: 2,
-    name: "abc Battery B",
-    modelNumber: "BB456",
-    variant: "Premium",
-    availability: "Out of Stock",
+    name: 'abc Battery B',
+    modelNumber: 'BB456',
+    variant: 'Premium',
+    availability: 'Out of Stock',
     purchasePrice: 200,
     salePrice: 250,
     stockLeft: 0,
-    description: "abc",
-    date: "15-12-2023",
-    profit: "5%",
+    description: 'abc',
+    date: '15-12-2023',
+    profit: '5%',
     quantity: 0,
   },
 ];

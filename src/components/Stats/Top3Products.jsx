@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Heading,
   Stack,
@@ -14,8 +14,8 @@ import {
   Th,
   Td,
   useDisclosure,
-} from "@chakra-ui/react";
-import BatteryDetailModal from "../AllBatteries/BatteryDetailModal";
+} from '@chakra-ui/react';
+import BatteryDetailModal from '../AllBatteries/BatteryDetailModal';
 
 const Top3Products = () => {
   const {
@@ -27,23 +27,23 @@ const Top3Products = () => {
 
   return (
     <>
-      <Card w="xl">
+      <Card w="xl" h="auto">
         <CardBody>
           <Text py="4" fontSize="20" fontWeight="500">
             Top 3 products
           </Text>
-          <hr />
-          <Table variant="striped" colorScheme="teal">
+          <hr /> 
+          <Table pt='4' variant="simple" size="sm">
             <Thead
               pos="sticky"
               top="0"
               zIndex="1"
               bgColor="white"
               style={{
-                position: "sticky",
+                position: 'sticky',
                 top: 0,
                 zIndex: 1,
-                backgroundcolor: "white",
+                backgroundcolor: 'white',
               }}
             >
               <Tr>
@@ -90,44 +90,44 @@ export default Top3Products;
 const top3BatteryData = [
   {
     id: 1,
-    name: "Battery A",
-    modelNumber: "A123",
+    name: 'Battery A',
+    modelNumber: 'A123',
     unitSold: 34,
-    variant: "Standard",
-    availability: "In Stock",
+    variant: 'Standard',
+    availability: 'In Stock',
     purchasePrice: 100,
     salePrice: 150,
     stockLeft: 50,
-    description: "abc",
-    date: "15-12-2023",
-    profit: "5%",
+    description: 'abc',
+    date: '15-12-2023',
+    profit: '5%',
   },
   {
     id: 2,
-    name: "Battery B",
-    modelNumber: "B456",
+    name: 'Battery B',
+    modelNumber: 'B456',
     unitSold: 34,
-    variant: "Standard",
-    availability: "In Stock",
+    variant: 'Standard',
+    availability: 'In Stock',
     purchasePrice: 100,
     salePrice: 150,
     stockLeft: 50,
-    description: "abc",
-    date: "15-12-2023",
-    profit: "5%",
+    description: 'abc',
+    date: '15-12-2023',
+    profit: '5%',
   },
   {
     id: 3,
-    name: "Battery C",
-    modelNumber: "C789",
+    name: 'Battery C',
+    modelNumber: 'C789',
     unitSold: 34,
-    variant: "Standard",
-    availability: "In Stock",
+    variant: 'Standard',
+    availability: 'In Stock',
     purchasePrice: 100,
     salePrice: 150,
     stockLeft: 50,
-    description: "abc",
-    date: "15-12-2023",
-    profit: "5%",
+    description: 'abc',
+    date: '15-12-2023',
+    profit: '5%',
   },
 ];

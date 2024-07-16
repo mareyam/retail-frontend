@@ -1,5 +1,5 @@
-import React from "react";
-import { Line } from "react-chartjs-2";
+import React from 'react';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,8 +9,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import { Box } from "@chakra-ui/react";
+} from 'chart.js';
+import { Box } from '@chakra-ui/react';
 
 ChartJS.register(
   CategoryScale,
@@ -30,26 +30,26 @@ const MonthlyProfitChart = () => {
 
   const chartData = {
     labels: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ],
     datasets: [
       {
-        label: "Monthly Profits (PKR)",
+        label: 'Monthly Profits (PKR)',
         data: data,
         fill: false,
-        backgroundColor: "rgba(75,192,192,0.4)",
-        borderColor: "rgba(75,192,192,1)",
+        backgroundColor: '#4682b4',
+        borderColor: '#4682b4',
       },
     ],
   };

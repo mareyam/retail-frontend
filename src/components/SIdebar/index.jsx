@@ -16,6 +16,8 @@ import useStateStore from '../zustand/store';
 import CustomerTypeModal from '../Sale/CustomerTypeModal';
 import { IoIosMenu } from 'react-icons/io';
 import { BiSolidPurchaseTagAlt } from 'react-icons/bi';
+import { FaShop } from 'react-icons/fa6';
+import { MdPeopleAlt } from 'react-icons/md';
 
 const Sidebar = () => {
   const {
@@ -114,4 +116,12 @@ const menuItems = [
     name: 'Report',
     icon: <IoStatsChartSharp />,
   },
+  {
+    name:'Vendor',
+    icon:<FaShop/>
+  },
+  {
+    name:'Customers',
+    icon:<MdPeopleAlt/>
+  }
 ];

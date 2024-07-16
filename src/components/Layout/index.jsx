@@ -7,6 +7,8 @@ import AllBatteries from '../AllBatteries';
 import Stats from '../Stats';
 import Sale from '../Sale';
 import Purchase from '../Purchase';
+import Vendors from '../Vendors';
+import Customer from '../Customer';
 
 function App() {
   const { selectedComponent, setSelectedComponent } = useStateStore();
@@ -20,6 +22,10 @@ function App() {
         return <Purchase />;
       case 'Report':
         return <Stats />;
+      case 'Vendor':
+        return <Vendors />;
+      case 'Customers':
+        return <Customer />;
       default:
         return <AllBatteries />;
     }

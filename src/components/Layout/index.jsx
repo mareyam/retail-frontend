@@ -1,6 +1,8 @@
 import React from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, VStack } from "@chakra-ui/react";
 import Sidebar from "../SIdebar";
+import Navbar from "../Navbar";
+
 import useStateStore from "../zustand/store";
 import AllBatteries from "../AllBatteries";
 import Stats from "../Stats";
@@ -23,8 +25,11 @@ function App() {
   return (
     <Flex height="100vh">
       <Box
-        width="250px"
-        bg="teal.500"
+        width="220px"
+        // bg='#55565B'
+        // bg='#393a3f'
+        // bg="#F6E05E"
+bg='#4682b4'
         color="white"
         p="4"
         position="fixed"
@@ -33,7 +38,8 @@ function App() {
         <Sidebar />
       </Box>
 
-      <Box ml="250px" p="4" width="calc(100% - 250px)" height="full">
+      <Box ml="220px" width="calc(100% - 220px)" height="full">
+        <Navbar />
         <Box>{renderComponent()}</Box>
       </Box>
     </Flex>

@@ -5,6 +5,7 @@ import {
   Tbody,
   Tr,
   Th,
+  VStack,
   Td,
   TableContainer,
   Text,
@@ -19,13 +20,17 @@ import { SlArrowLeft } from "react-icons/sl";
 import Searchbar from "../common/Searchbar";
 import AddNewProduct from "../common/AddNewProduct";
 import BatteryDetailModal from "./BatteryDetailModal";
+import axios from "axios";
 
-const ITEMS_PER_PAGE = 7;
+const ITEMS_PER_PAGE = 6;
 
 const BatteryInventory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredBatteryData, setFilteredBatteryData] = useState(batteryData);
+  const [batteries, setBatteries] = useState([]);
+  const [filteredBatteryData, setFilteredBatteryData] = useState(batteries);
+  // const [filteredBatteryData, setFilteredBatteryData] = useState(batteryData);
+
   const [battery, setBattery] = useState();
 
   const {
@@ -50,23 +55,34 @@ const BatteryInventory = () => {
 
   useEffect(() => {
     setFilteredBatteryData(
-      batteryData.filter((battery) =>
-        battery.name.toLowerCase().includes(searchQuery.toLowerCase())
+      batteries.filter((battery) =>
+        battery.model.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
     setCurrentPage(1);
-  }, [searchQuery, batteryData]);
+  }, [searchQuery, batteries]);
 
-  console.log(filteredBatteryData.length);
-  console.log(currentBatteryData.length);
+  // console.log(filteredBatteryData.length);
+  // console.log(currentBatteryData.length);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://localhost:7059/api/Product");
+        console.log("Data:", response.data);
+        setBatteries(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(batteries);
   return (
-    <>
-      <HStack w="full" justifyContent="space-between">
-        <Heading py="2" fontSize="28" bgColor={"white"}>
-          Battery Inventory
-        </Heading>
-        <Flex>
+    <VStack h="85dvh" bgColor="#F0FFF4" align="center">
+      <HStack w="80%">
+        <Flex py="8" justifyContent="space-between" w="full">
           <Searchbar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -75,9 +91,13 @@ const BatteryInventory = () => {
         </Flex>
       </HStack>
       <TableContainer
-        mt="8"
+        border="1px solid"
+        borderColor="gray.400"
+        mt="2"
+        w="80%"
         pos="relative"
-        h="76dvh"
+        // h="61dvh"
+        h="auto"
         overflowY="auto"
         css={{
           "&::-webkit-scrollbar": {
@@ -94,12 +114,11 @@ const BatteryInventory = () => {
           },
         }}
       >
-        <Table variant="striped" colorScheme="teal">
+        <Table variant="simple" size="sm">
           <Thead
             pos="sticky"
             top="0"
             zIndex="1"
-            bgColor="white"
             style={{
               position: "sticky",
               top: 0,
@@ -107,87 +126,97 @@ const BatteryInventory = () => {
               backgroundColor: "white",
             }}
           >
-            <Tr>
-              <Th>ID</Th>
-              <Th>Battery Name</Th>
-              <Th>Model Number</Th>
-              <Th>Variant</Th>
-              <Th>Availability</Th>
-              {/* <Th isNumeric>Purchase Price</Th>
-              <Th isNumeric>Sale Price</Th> */}
-              <Th isNumeric>Stock Left</Th>
+            <Tr
+bg='#4682b4'
+            color='white'
+            pb="4">
+              <Th  textTransform='capitilize' color='white' fontSize="16">ID</Th>
+              <Th  textTransform='capitilize' color='white' fontSize="16">Battery Name</Th>
+              <Th  textTransform='capitilize' color='white' fontSize="16">Model Number</Th>
+              <Th  textTransform='capitilize' color='white' fontSize="16">Description</Th>
+              <Th  textTransform='capitilize' color='white' fontSize="16">Availability</Th>
+              <Th  textTransform='capitilize' color='white' fontSize="16" isNumeric>
+                Price
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
             {currentBatteryData.map((battery) => (
-              <Tr key={battery.id}>
-                <Td>{battery.id}</Td>
+              <Tr lineHeight="1" gap="1" key={battery.id}>
+                <Td fontSize="16">{battery.productId}</Td>
                 <Td
+                  fontSize="16"
                   onClick={() => {
                     setBattery(battery);
                     onOpenDetailModal();
                   }}
                 >
-                  {battery.name}
+                  {battery.brand}
                 </Td>
-                <Td>{battery.modelNumber}</Td>
-                <Td>{battery.variant}</Td>
-                <Td>
+                <Td fontSize="16">{battery.model}</Td>
+                <Td fontSize="16">{battery.description}</Td>
+                <Td fontSize="16" w="20">
                   <Text
-                    p="2"
+                    // p="2"
+                    w="28"
                     textAlign="center"
                     rounded="full"
-                    bgColor={
-                      battery.availability === "In Stock"
-                        ? "green.200"
-                        : "red.200"
-                    }
+                    // bgColor={
+                    //   battery.status === "Available"
+                    //     ? "green.200"
+                    //     : "red.200"
+                    // }
                     color={
-                      battery.availability === "In Stock"
-                        ? "green.800"
-                        : "red.800"
+                      battery.status === "Available" ? "green.800" : "red.800"
                     }
                   >
-                    {battery.availability}
+                    {battery.status}
                   </Text>
                 </Td>
-                {/* <Td isNumeric>{battery.purchasePrice}</Td>
-                <Td isNumeric>{battery.salePrice}</Td> */}
-                <Td isNumeric>{battery.stockLeft}</Td>
+                <Td fontSize="16" isNumeric>
+                  {battery.price}
+                </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       </TableContainer>
-      <HStack mt="2" spacing={4} alignItems="center" justifyContent="center">
+      <HStack
+        pos="absolute"
+        bottom="4"
+        spacing={4}
+        alignItems="center"
+        justifyContent="center"
+      >
         <IconButton
           disabled={currentPage == 1}
           rounded="full"
-          bgColor="#319795"
+          bg="#4682b4"
           aria-label="left-icon"
           icon={<SlArrowLeft backgroundColor="red" />}
           fontSize="20"
           color="white"
           onClick={goToPreviousPage}
           _hover={{
-            backgroundColor: "#319795",
+            backgroundColor: "#4682b4",
           }}
         />
 
         <Text>
-          Showing {startIndex + 1} to {Math.min(endIndex, batteryData.length)}{" "}
-          of {filteredBatteryData.length} entries
+          Showing {startIndex + 1} to{" "}
+          {Math.min(endIndex, filteredBatteryData.length)} of{" "}
+          {filteredBatteryData.length} entries
         </Text>
         <IconButton
           rounded="full"
-          bgColor="#319795"
+          bg="#4682b4"
           aria-label="left-icon"
           icon={<SlArrowRight />}
           color="white"
           fontSize="20"
           onClick={goToNextPage}
           _hover={{
-            backgroundColor: "#319795",
+            backgroundColor: "#4682b4",
           }}
           disabled={currentPage == totalPages}
         />
@@ -199,7 +228,7 @@ const BatteryInventory = () => {
           onClose={onCloseDetailModal}
         />
       )}
-    </>
+    </VStack>
   );
 };
 

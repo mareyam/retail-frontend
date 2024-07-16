@@ -23,8 +23,10 @@ import MonthlyProfit from "./MonthlyProfit";
 const Stats = () => {
   return (
     <>
-      <Heading> Stats </Heading>
-      <Flex flexWrap="wrap" mt="4" gap="4">
+      {/* <Heading> Stats </Heading> */}
+      <Flex flexWrap="wrap" mt="4" gap="4" w='full'
+       justifyContent='space-around'
+      >
         <DailyProfit />
         <MonthlyProfit />
         <Top3Products />

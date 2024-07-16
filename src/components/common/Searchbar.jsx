@@ -8,7 +8,7 @@ import { CiSearch } from "react-icons/ci";
 
 const Searchbar = ({ searchQuery, setSearchQuery }) => {
   return (
-    <InputGroup w="60">
+    <InputGroup w="60" bgColor='white' rounded='full'>
       <InputLeftElement
         pointerEvents="none"
         children={<CiSearch color="gray.600" />}

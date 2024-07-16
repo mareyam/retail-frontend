@@ -28,10 +28,10 @@ const AddNewProduct = () => {
     <>
       <Button
         rounded="full"
-        bgColor="#319795"
+        bg="#4682b4"
         color="white"
         _hover={{
-          bgColor: "#319795",
+          bgColor: "4682b4",
           color: "white",
         }}
         onClick={onOpen}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -13,17 +13,67 @@ import {
   Text,
   Input,
   Flex,
-} from "@chakra-ui/react";
+  Stack,
+  RadioGroup,
+  Radio,
+  useToast,
+} from '@chakra-ui/react';
+import axios from 'axios';
 
-const AddNewProduct = () => {
+const AddNewProduct = ({ refresh, setRefresh }) => {
+  const toast = useToast();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentDate = new Date();
 
   const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-  const day = String(currentDate.getDate()).padStart(2, "0");
-
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}`;
+
+  const [brandId, setBrandId] = useState(0);
+  const [productModel, setProductModel] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [status, setStatus] = useState(false);
+
+  console.log(status);
+  const handleAddProduct = async () => {
+    const productData = {
+      brandId: brandId,
+      productModel: productModel,
+      productDescription: description,
+      productPrice: price,
+      productStatus: status,
+    };
+    console.log(productData);
+    try {
+      const response = await axios.post(
+        'https://localhost:7059/api/Product',
+        productData
+      );
+      console.log('Data:', response.data);
+      toast({
+        title: 'Record deleted.',
+        description: 'The record has been successfully added.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      setRefresh(!refresh);
+      onClose();
+    } catch (error) {
+      console.error('Error adding product:', error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to add the record.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <>
       <Button
@@ -31,8 +81,8 @@ const AddNewProduct = () => {
         bg="#4682b4"
         color="white"
         _hover={{
-          bgColor: "4682b4",
-          color: "white",
+          bgColor: '4682b4',
+          color: 'white',
         }}
         onClick={onOpen}
       >
@@ -48,11 +98,59 @@ const AddNewProduct = () => {
           <ModalBody>
             <VStack w="full">
               <Flex w="full" justifyContent="space-between">
-                <Text>Battery Name</Text>
-                <Input w="52" placeholder="Battery Name" />
+                <Text>Brand ID</Text>
+                <Input
+                  w="52"
+                  placeholder="Brand ID"
+                  value={brandId}
+                  onChange={(e) => setBrandId(Number(e.target.value))}
+                />
               </Flex>
 
               <Flex w="full" justifyContent="space-between">
+                <Text>Battery Name</Text>
+                <Input
+                  value={productModel}
+                  onChange={(e) => setProductModel(e.target.value)}
+                  w="52"
+                  placeholder="Battery Name"
+                />
+              </Flex>
+
+              <Flex w="full" justifyContent="space-between">
+                <Text>Description</Text>
+                <Input
+                  w="52"
+                  placeholder="Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Flex>
+
+              <Flex w="full" justifyContent="space-between">
+                <Text>Price</Text>
+                <Input
+                  w="52"
+                  placeholder="Price"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+              </Flex>
+
+              <Flex w="full" justifyContent="space-between">
+                <Text>Status</Text>
+                <RadioGroup
+                  onChange={(value) => setStatus(value === 'true')}
+                  value={String(status)}
+                >
+                  <Stack direction="row">
+                    <Radio value="true">Available</Radio>
+                    <Radio value="false">Not Available</Radio>
+                  </Stack>
+                </RadioGroup>
+              </Flex>
+
+              {/* <Flex w="full" justifyContent="space-between">
                 <Text>Quantity</Text>
                 <Input w="52" placeholder="123" />
               </Flex>
@@ -65,7 +163,7 @@ const AddNewProduct = () => {
               <Flex w="full" justifyContent="space-between">
                 <Text>Price</Text>
                 <Input w="52" placeholder="Rs. 15,000" />
-              </Flex>
+              </Flex> */}
 
               <Flex w="full" justifyContent="space-between">
                 <Text>Date</Text>
@@ -78,10 +176,10 @@ const AddNewProduct = () => {
             <Button
               bgColor="#319795"
               color="white"
-              onClick={onClose}
+              onClick={handleAddProduct}
               _hover={{
-                bgColor: "#319795",
-                color: "white",
+                bgColor: '#319795',
+                color: 'white',
               }}
             >
               Add Product

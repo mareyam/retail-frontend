@@ -9,6 +9,7 @@ import Sale from '../Sale';
 import Purchase from '../Purchase';
 import Vendors from '../Vendors';
 import Customer from '../Customer';
+import LandingPage from '../LandingPage';
 
 function App() {
   const { selectedComponent, setSelectedComponent } = useStateStore();
@@ -26,31 +27,40 @@ function App() {
         return <Vendors />;
       case 'Customers':
         return <Customer />;
+      case 'LandingPage':
+        return <LandingPage />;
       default:
-        return <AllBatteries />;
+        return <LandingPage />;
     }
   };
   return (
-    <Flex height="100vh">
-      <Box
-        width="220px"
-        // bg='#55565B'
-        // bg='#393a3f'
-        // bg="#F6E05E"
-        bg="#4682b4"
-        color="white"
-        px="2"
-        position="fixed"
-        height="100vh"
-      >
-        <Sidebar />
-      </Box>
+    <>
+      {selectedComponent == 'LandingPage' ? (
+        <>
+          <LandingPage />
+        </>
+      ) : (
+        <>
+          <Flex height="100vh">
+            <Box
+              width="220px"
+              bg="#4682b4"
+              color="white"
+              px="2"
+              position="fixed"
+              height="100vh"
+            >
+              <Sidebar />
+            </Box>
 
-      <Box ml="220px" width="calc(100% - 220px)" height="full">
-        <Navbar />
-        <Box>{renderComponent()}</Box>
-      </Box>
-    </Flex>
+            <Box ml="220px" width="calc(100% - 220px)" height="full">
+              <Navbar />
+              <Box>{renderComponent()}</Box>
+            </Box>
+          </Flex>
+        </>
+      )}
+    </>
   );
 }
 

@@ -1,34 +1,20 @@
 import React, { useState } from 'react';
-import { FaCarBattery } from 'react-icons/fa';
-import { IoStatsChartSharp } from 'react-icons/io5';
-import { MdOutlinePointOfSale } from 'react-icons/md';
 import {
   Heading,
+  Box,
   HStack,
+  Image,
   Button,
   VStack,
-  Box,
-  Flex,
-  IconButton,
   Text,
 } from '@chakra-ui/react';
-import useStateStore from '../zustand/store';
-import CustomerTypeModal from '../Sale/CustomerTypeModal';
 import { CiLogin } from 'react-icons/ci';
 import { CiLogout } from 'react-icons/ci';
 import GetCurrentDate from '../common/GetCurrentDate';
 
-const Navbar = () => {
-  const {
-    selectedComponent,
-    setSelectedComponent,
-    setIsCustomerTypeModal,
-    isCustomerTypeModal,
-    isOpen,
-    onOpen,
-  } = useStateStore();
-
+const LandingPage = () => {
   const [user, setUser] = useState('Naveed');
+
   return (
     <>
       <HStack
@@ -39,7 +25,7 @@ const Navbar = () => {
         bg="#4682b4"
       >
         <Text pt="14" color="white">
-          Date: <GetCurrentDate/>
+          Date: <GetCurrentDate />
         </Text>
 
         <VStack>
@@ -76,9 +62,31 @@ const Navbar = () => {
           </VStack>
         )}
       </HStack>
+      <HStack overflow="none" h="83dvh">
+        <Box w="50dvw" h="full" bg="#4682b4">
+          <Image src="/batery.png" />
+        </Box>
+        <Box
+          w="50dvw"
+          h="full"
+          alignItems="center"
+          justifyContent="center"
+          flexDir="column"
+          display="flex"
+        >
+          <Heading color="#4682b4" fontSize="5rem">
+            Battery House
+          </Heading>
+          <Text fontSize="1.5rem" color="#4682b4">
+            Discover a wide range of car, UPS, and large batteries at our
+            battery shop. Whether you need reliable power for your vehicle,
+            backup for your home, or high-capacity solutions for industrial use,
+            we have the perfect battery for you
+          </Text>
+        </Box>
+      </HStack>
     </>
   );
 };
 
-export default Navbar;
-
+export default LandingPage;

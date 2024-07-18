@@ -32,7 +32,7 @@ const Sidebar = () => {
   return (
     <>
       <VStack>
-        <Box w="40" h="20">
+        <Box w="40" h="20" onClick={() => setSelectedComponent('LandingPage')}>
           <Image src="/image.png" />
         </Box>
       </VStack>

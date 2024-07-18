@@ -1,7 +1,7 @@
-import create from "zustand";
+import create from 'zustand';
 
 const useStateStore = create((set) => ({
-  selectedComponent: "All Batteries",
+  selectedComponent: 'LandingPage',
   setSelectedComponent: (component) => set({ selectedComponent: component }),
   isCustomerTypeModal: false,
   setIsCustomerTypeModal: (component) =>
@@ -12,7 +12,7 @@ const useStateStore = create((set) => ({
   onClose: () => set({ isOpen: false }),
   onToggle: () => set((state) => ({ isOpen: !state.isOpen })),
 
-  customerType: "",
+  customerType: '',
   setCustomerType: (component) => set({ customerType: component }),
 
   cartItems: [],

@@ -11,9 +11,11 @@ import {
 import { CiLogin } from 'react-icons/ci';
 import { CiLogout } from 'react-icons/ci';
 import GetCurrentDate from '../common/GetCurrentDate';
+import useStateStore from '../zustand/store';
 
 const LandingPage = () => {
   const [user, setUser] = useState('Naveed');
+  const { selectedComponent, setSelectedComponent } = useStateStore();
 
   return (
     <>
@@ -21,13 +23,11 @@ const LandingPage = () => {
         px="4"
         py="4"
         justifyContent="space-between"
-        // bg="#4A4A4A"
         bg="#4682b4"
+        pos="fixed"
+        top="0"
+        w="100dvw"
       >
-        <Text pt="14" color="white">
-          Date: <GetCurrentDate />
-        </Text>
-
         <VStack>
           <Heading color="white" textAlign="left" w="full" fontSize="40">
             Exide Battery House
@@ -42,7 +42,19 @@ const LandingPage = () => {
             123 Steet X Cantt, Quetta{' '}
           </Heading>
         </VStack>
-
+        <Text
+          color="white"
+          onClick={() => setSelectedComponent('Stock')}
+          w="20dvw"
+          fontSize="24"
+          fontWeight="600"
+          _hover={{
+            textDecor: 'underline',
+            cursor: 'pointer',
+          }}
+        >
+          Menu
+        </Text>
         {user ? (
           <VStack w="44" h="20" pt="2">
             <Button onClick={() => setUser(null)}>
@@ -62,9 +74,16 @@ const LandingPage = () => {
           </VStack>
         )}
       </HStack>
-      <HStack overflow="none" h="83dvh">
-        <Box w="50dvw" h="full" bg="#4682b4">
-          <Image src="/batery.png" />
+      <HStack  overflow="none" h="100dvh">
+        <Box
+          alignItems="center"
+          // justifyContent="center"
+          display="flex"
+          w="50dvw"
+          h="full"
+          bg="#4682b4"
+        >
+          <Image  src="/batery.png" />
         </Box>
         <Box
           w="50dvw"

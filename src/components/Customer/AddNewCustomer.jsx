@@ -27,7 +27,6 @@ const AddNewCustomer = () => {
   return (
     <>
       <Button
-        rounded="full"
         bg="#4682b4"
         color="white"
         _hover={{

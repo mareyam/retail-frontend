@@ -19,10 +19,7 @@ import {
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
-import AddNewProduct from '../common/AddNewProduct';
-// import BatteryDetailModal from './BatteryDetailModal';
 import axios from 'axios';
-import AddNewInvoice from '../common/AddNewInvoice';
 import useStateStore from '../zustand/store';
 
 const ITEMS_PER_PAGE = 10;
@@ -83,13 +80,13 @@ const Stock = () => {
     <VStack h="85dvh" bgColor="#F0FFF4" align="center">
       <HStack w="80%">
         <Flex py="8" justifyContent="space-between" w="full">
-          <Searchbar
+          {/* <Searchbar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
-          />
-          <Heading color="#4682b4">Stock</Heading>
+          /> */}
+          <Heading color="#4682b4">Inventory Details</Heading>
           <Button
-            rounded="full"
+            // rounded="full"
             bg="#4682b4"
             color="white"
             _hover={{
@@ -98,7 +95,7 @@ const Stock = () => {
             }}
             onClick={() => setSelectedComponent('invoice')}
           >
-            Add New Invoice
+            Receive Stock
           </Button>
         </Flex>
       </HStack>

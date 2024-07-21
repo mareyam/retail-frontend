@@ -38,9 +38,9 @@ const Navbar = () => {
         // bg="#4A4A4A"
         bg="#4682b4"
       >
-        <Text pt="14" color="white">
-          Date: <GetCurrentDate/>
-        </Text>
+        {/* <Text pt="14" color="white">
+          Date: <GetCurrentDate />
+        </Text> */}
 
         <VStack>
           <Heading color="white" textAlign="left" w="full" fontSize="40">
@@ -57,7 +57,11 @@ const Navbar = () => {
           </Heading>
         </VStack>
 
-        {user ? (
+        <Heading  
+        color="white" 
+        >{selectedComponent}</Heading>
+
+        {/* {user ? (
           <VStack w="44" h="20" pt="2">
             <Button onClick={() => setUser(null)}>
               <CiLogout />
@@ -74,11 +78,10 @@ const Navbar = () => {
               &nbsp; Login
             </Button>
           </VStack>
-        )}
+        )} */}
       </HStack>
     </>
   );
 };
 
 export default Navbar;
-

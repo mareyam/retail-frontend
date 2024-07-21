@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaCarBattery } from 'react-icons/fa';
 import { IoStatsChartSharp } from 'react-icons/io5';
 import { MdOutlinePointOfSale } from 'react-icons/md';
@@ -11,6 +11,7 @@ import {
   Flex,
   IconButton,
   Text,
+  Button,
 } from '@chakra-ui/react';
 import useStateStore from '../zustand/store';
 import CustomerTypeModal from '../Sale/CustomerTypeModal';
@@ -19,8 +20,13 @@ import { BiSolidPurchaseTagAlt } from 'react-icons/bi';
 import { FaShop } from 'react-icons/fa6';
 import { MdPeopleAlt } from 'react-icons/md';
 import { FaTruck } from 'react-icons/fa';
+import GetCurrentDate from '../common/GetCurrentDate';
+import { CiLogin } from 'react-icons/ci';
+import { CiLogout } from 'react-icons/ci';
 
 const Sidebar = () => {
+  const [user, setUser] = useState('Naveed');
+
   const {
     selectedComponent,
     setSelectedComponent,
@@ -92,6 +98,31 @@ const Sidebar = () => {
             </Flex>
           ))}
         </VStack>
+      </VStack>
+
+      <VStack>
+        <Text pt="14" color="white">
+          Date: <GetCurrentDate />
+        </Text>
+
+        {user ? (
+          <VStack w="44" h="20" pt="2">
+            <Button onClick={() => setUser(null)}>
+              <CiLogout />
+              &nbsp; Logout
+            </Button>
+            <Text color="white" display={user ? 'block' : 'none'}>
+              Welcome {user}
+            </Text>
+          </VStack>
+        ) : (
+          <VStack w="44" h="20" pt="2">
+            <Button onClick={() => setUser('Maryam')}>
+              <CiLogin />
+              &nbsp; Login
+            </Button>
+          </VStack>
+        )}
       </VStack>
       {isOpen && <CustomerTypeModal />}
     </>

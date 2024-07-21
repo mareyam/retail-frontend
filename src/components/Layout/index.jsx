@@ -11,7 +11,7 @@ import Vendors from '../Vendors';
 import Customer from '../Customer';
 import LandingPage from '../LandingPage';
 import Stock from '../Stock';
-import AddNewInvoice from '../common/AddNewInvoice';
+import AddNewInvoice from '../Stock/AddNewInvoice';
 
 function App() {
   const { selectedComponent, setSelectedComponent } = useStateStore();
@@ -41,7 +41,7 @@ function App() {
   };
   return (
     <>
-      <Flex height="100vh">
+      <Flex height="100vh" bgColor="#F0FFF4">
         <Box
           width="220px"
           bg="#4682b4"

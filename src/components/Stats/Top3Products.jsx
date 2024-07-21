@@ -15,7 +15,7 @@ import {
   Td,
   useDisclosure,
 } from '@chakra-ui/react';
-import BatteryDetailModal from '../AllBatteries/BatteryDetailModal';
+import BatteryDetailModal from '../Products/BatteryDetailModal';
 
 const Top3Products = () => {
   const {
@@ -32,8 +32,8 @@ const Top3Products = () => {
           <Text py="4" fontSize="20" fontWeight="500">
             Top 3 products
           </Text>
-          <hr /> 
-          <Table pt='4' variant="simple" size="sm">
+          <hr />
+          <Table pt="4" variant="simple" size="sm">
             <Thead
               pos="sticky"
               top="0"

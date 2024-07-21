@@ -18,6 +18,7 @@ import { IoIosMenu } from 'react-icons/io';
 import { BiSolidPurchaseTagAlt } from 'react-icons/bi';
 import { FaShop } from 'react-icons/fa6';
 import { MdPeopleAlt } from 'react-icons/md';
+import { FaTruck } from 'react-icons/fa';
 
 const Sidebar = () => {
   const {
@@ -102,6 +103,10 @@ export default Sidebar;
 const menuItems = [
   {
     name: 'Stock',
+    icon: <FaTruck />,
+  },
+  {
+    name: 'Products',
     icon: <FaCarBattery />,
   },
   {
@@ -117,11 +122,11 @@ const menuItems = [
     icon: <IoStatsChartSharp />,
   },
   {
-    name:'Vendor',
-    icon:<FaShop/>
+    name: 'Vendor',
+    icon: <FaShop />,
   },
   {
-    name:'Customers',
-    icon:<MdPeopleAlt/>
-  }
+    name: 'Customers',
+    icon: <MdPeopleAlt />,
+  },
 ];

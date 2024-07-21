@@ -16,6 +16,7 @@ import {
   chakra,
   Button,
   VStack,
+  Heading,
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -87,6 +88,8 @@ const Sale = () => {
             <chakra.span fontWeight="400"> {customerType}</chakra.span>
           </Text>
         </HStack>
+        <Heading color="#4682b4">Sale</Heading>
+
         <Flex>
           <Searchbar
             searchQuery={searchQuery}

@@ -14,23 +14,27 @@ import {
   Heading,
   Flex,
   useDisclosure,
+  Button,
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import AddNewProduct from '../common/AddNewProduct';
-import BatteryDetailModal from './BatteryDetailModal';
+// import BatteryDetailModal from './BatteryDetailModal';
 import axios from 'axios';
+import AddNewInvoice from '../common/AddNewInvoice';
+import useStateStore from '../zustand/store';
 
 const ITEMS_PER_PAGE = 10;
 
-const BatteryInventory = () => {
+const Stock = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [batteries, setBatteries] = useState([]);
   const [filteredBatteryData, setFilteredBatteryData] = useState(batteries);
   const [battery, setBattery] = useState();
   const [refresh, setRefresh] = useState(false);
+  const { setSelectedComponent } = useStateStore();
 
   const {
     isOpen: isOpenDetailModal,
@@ -83,7 +87,19 @@ const BatteryInventory = () => {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           />
-          <AddNewProduct refresh={refresh} setRefresh={setRefresh} />
+          <Heading color="#4682b4">Stock</Heading>
+          <Button
+            rounded="full"
+            bg="#4682b4"
+            color="white"
+            _hover={{
+              bgColor: '4682b4',
+              color: 'white',
+            }}
+            onClick={() => setSelectedComponent('invoice')}
+          >
+            Add New Invoice
+          </Button>
         </Flex>
       </HStack>
       <TableContainer
@@ -237,15 +253,15 @@ const BatteryInventory = () => {
           disabled={currentPage == totalPages}
         />
       </HStack>
-      {isOpenDetailModal && (
+      {/* {isOpenDetailModal && (
         <BatteryDetailModal
           batteryDetails={battery}
           isOpen={onOpenDetailModal}
           onClose={onCloseDetailModal}
         />
-      )}
+      )} */}
     </VStack>
   );
 };
 
-export default BatteryInventory;
+export default Stock;

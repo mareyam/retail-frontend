@@ -17,7 +17,7 @@ function App() {
   const { selectedComponent, setSelectedComponent } = useStateStore();
   const renderComponent = () => {
     switch (selectedComponent) {
-      case 'Stock':
+      case 'Inventory':
         return <Stock />;
       case 'invoice':
         return <AddNewInvoice />;

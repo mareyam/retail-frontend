@@ -62,7 +62,7 @@ const Customer = () => {
     <VStack bgColor="#F0FFF4" align="center">
       <HStack py="8" w="80%" justifyContent="space-between">
         <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          <Heading color="#4682b4">Customers</Heading>
+        {/* <Heading color="#4682b4">Customers</Heading> */}
         <AddNewCustomer />
       </HStack>
 

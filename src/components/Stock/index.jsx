@@ -84,7 +84,7 @@ const Stock = () => {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           /> */}
-          <Heading color="#4682b4">Inventory Details</Heading>
+          {/* <Heading color="#4682b4">Inventory Details</Heading> */}
           <Button
             // rounded="full"
             bg="#4682b4"

@@ -83,7 +83,7 @@ const Products = () => {
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           />
-          <Heading color="#4682b4">Products</Heading>
+          {/* <Heading color="#4682b4">Products</Heading> */}
           <AddNewProduct refresh={refresh} setRefresh={setRefresh} />
         </Flex>
       </HStack>

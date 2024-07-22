@@ -59,6 +59,7 @@ const Navbar = () => {
 
         <Heading  
         color="white" 
+        display={selectedComponent == 'LandingPage' ? 'none' : 'block'}
         >{selectedComponent}</Heading>
 
         {/* {user ? (

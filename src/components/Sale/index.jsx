@@ -88,7 +88,7 @@ const Sale = () => {
             <chakra.span fontWeight="400"> {customerType}</chakra.span>
           </Text>
         </HStack>
-        <Heading color="#4682b4">Sale</Heading>
+        {/* <Heading color="#4682b4">Sale</Heading> */}
 
         <Flex>
           <Searchbar

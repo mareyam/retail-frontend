@@ -16,22 +16,31 @@ import {
   chakra,
   Button,
   VStack,
-  Heading,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import ViewCart from './ViewCart';
+import { FaTrashAlt } from 'react-icons/fa';
 
 const ITEMS_PER_PAGE = 6;
 const Sale = () => {
-  const { customerType, cart, addToCart, removeFromCart } = useStateStore();
+  const { customerType, customerName, cart, addToCart, removeFromCart } =
+    useStateStore();
   console.log(customerType);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredBatteryData, setFilteredBatteryData] = useState(batteryData);
   const [battery, setBattery] = useState();
   const [products, setProducts] = useState(batteryData);
+  const [selectedBattery, setSelectedBattery] = useState(null);
+  const [addedBatteries, setAddedBatteries] = useState([]);
+  const [quantity, setQuantity] = useState('');
 
   console.log(products.length);
 
@@ -61,6 +70,31 @@ const Sale = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
   };
 
+  const handleBatteryClick = (battery) => {
+    setSelectedBattery(battery);
+    if (!addedBatteries.find((item) => item.name === battery.name)) {
+      setAddedBatteries([...addedBatteries, { ...battery, quantity: 1 }]);
+    }
+  };
+
+  const handleAddClick = () => {
+    if (selectedBattery && quantity) {
+      setAddedBatteries([...addedBatteries, { ...selectedBattery, quantity }]);
+      setQuantity('');
+    }
+  };
+
+  // const handleDeleteClick = (index) => {
+  //   const newBatteries = [...addedBatteries];
+  //   newBatteries.splice(index, 1);
+  //   setAddedBatteries(newBatteries);
+  // };
+
+  const handleDeleteClick = (index) => {
+    const updatedBatteries = addedBatteries.filter((_, i) => i !== index);
+    setAddedBatteries(updatedBatteries);
+  };
+
   useEffect(() => {
     setFilteredBatteryData(
       batteryData.filter((battery) =>
@@ -85,7 +119,7 @@ const Sale = () => {
 
           <Text fontWeight="400">
             Customer Name:
-            <chakra.span fontWeight="400"> {customerType}</chakra.span>
+            <chakra.span fontWeight="400"> {customerName}</chakra.span>
           </Text>
         </HStack>
         {/* <Heading color="#4682b4">Sale</Heading> */}
@@ -99,7 +133,142 @@ const Sale = () => {
         </Flex>
       </HStack>
 
-      <TableContainer
+      <Box w="90%" py="6">
+        <HStack alignItems="start">
+          <Box
+            h="60dvh"
+            w="40%"
+            pos="relative"
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '10px',
+                height: '6px',
+              },
+              '&::-webkit-scrollbar-track': {
+                borderRadius: '10px',
+                background: '#f0f0f0',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                borderRadius: '10px',
+                background: '#ccc',
+              },
+            }}
+          >
+            <Table variant="simple" size="sm">
+              <Thead pos="sticky" top="0" zIndex={1} bgColor="#F0FFF4">
+                <Tr bg="#4682b4" color="white" pb="4">
+                  <Th textTransform="capitilize" color="white" fontSize="16">
+                    Battery Name
+                  </Th>
+                  <Th textTransform="capitilize" color="white" fontSize="16">
+                    Model Number
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody size="sm">
+                {currentBatteryData.map((battery, index) => (
+                  <Tr
+                    cursor="pointer"
+                    borderWidth={selectedBattery === battery ? '2px' : '0'}
+                    borderColor={
+                      selectedBattery === battery ? '#4682b4' : 'transparent'
+                    }
+                    borderStyle={selectedBattery === battery ? 'solid' : 'none'}
+                    bgColor={selectedBattery === battery ? 'blue.50' : 'none'}
+                    key={index}
+                    onClick={() => handleBatteryClick(battery)}
+                  >
+                    <Td>{battery.name}</Td>
+                    <Td>{battery.modelNumber}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Box>
+
+          <Box
+            overflowY="auto"
+            overflowX="hidden"
+            h="50dvh"
+            w="50%"
+            pos="relative"
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '10px',
+                height: '6px',
+              },
+              '&::-webkit-scrollbar-track': {
+                borderRadius: '10px',
+                background: '#f0f0f0',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                borderRadius: '10px',
+                background: '#ccc',
+              },
+            }}
+          >
+            <Table variant="simple" size="sm">
+              <Thead pos="sticky" top="0" zIndex={1} bgColor="#F0FFF4">
+                <Tr bg="#4682b4" color="white" pb="4">
+                  <Th textTransform="capitilize" color="white" fontSize="16">
+                   Quantity
+                  </Th>
+                  <Th textTransform="capitilize" color="white" fontSize="16">
+                    Model Number
+                  </Th>
+                  <Th textTransform="capitilize" color="white" fontSize="16">
+                    Quantity
+                  </Th>
+                  <Th textTransform="capitilize" color="white" fontSize="16">
+                    Actions
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody size="sm">
+                {addedBatteries.map((battery, index) => (
+                  <Tr key={index}>
+                    <Td>
+                       <Box>
+                      <Text fontSize="12">Enter Quantity</Text>
+                      <NumberInput
+                        defaultValue={1}
+                        min={1}
+                        max={100}
+                        clampValueOnBlur={false}
+                        w="32"
+                      >
+                        <NumberInputField h="12" />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper />
+                          <NumberDecrementStepper />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </Box>
+                    </Td>
+                    <Td>{battery.name}</Td>
+                    <Td>{battery.modelNumber}</Td>
+                    <Td>{battery.quantity}</Td>
+                    <Td>
+                      <IconButton
+                        onClick={() => handleDeleteClick(index)}
+                        bgColor="transparent"
+                        color="#4682b4"
+                        aria-label="left-icon"
+                        icon={<FaTrashAlt />}
+                        fontSize="20"
+                        _hover={{
+                          backgroundColor: 'transparent',
+                        }}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Box>
+        </HStack>
+      </Box>
+      {/* <TableContainer
         border="1px solid"
         borderColor="gray.400"
         w="80%"
@@ -239,7 +408,7 @@ const Sale = () => {
             ))}
           </Tbody>
         </Table>
-      </TableContainer>
+      </TableContainer> */}
 
       <HStack
         pos="absolute"

@@ -3,6 +3,8 @@ import create from 'zustand';
 const useStateStore = create((set) => ({
   selectedComponent: 'LandingPage',
   setSelectedComponent: (component) => set({ selectedComponent: component }),
+   customerName: '',
+  setCustomerName: (component) => set({ customerName: component }),
   isCustomerTypeModal: false,
   setIsCustomerTypeModal: (component) =>
     set({ isCustomerTypeModal: component }),

@@ -192,20 +192,20 @@ const AddNewInvoice = () => {
               h="50dvh"
               w="50%"
               pos="relative"
-              // css={{
-              //   '&::-webkit-scrollbar': {
-              //     width: '10px',
-              //     height: '6px',
-              //   },
-              //   '&::-webkit-scrollbar-track': {
-              //     borderRadius: '10px',
-              //     background: '#f0f0f0',
-              //   },
-              //   '&::-webkit-scrollbar-thumb': {
-              //     borderRadius: '10px',
-              //     background: '#ccc',
-              //   },
-              // }}
+              css={{
+                '&::-webkit-scrollbar': {
+                  width: '10px',
+                  height: '6px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  borderRadius: '10px',
+                  background: '#f0f0f0',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  borderRadius: '10px',
+                  background: '#ccc',
+                },
+              }}
             >
               <Table variant="simple" size="sm">
                 <Thead pos="sticky" top="0" zIndex={1} bgColor="#F0FFF4">

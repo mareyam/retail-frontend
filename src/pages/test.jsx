@@ -1,36 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Text, Box } from '@chakra-ui/react';
+import React, { useState } from 'react';
 
-const YourComponent = () => {
-  const [batteries, setBatteries] = useState([]);
+function App() {
+  const [rows, setRows] = useState([]);
+  const [inputData, setInputData] = useState({ field1: '', field2: '', field3: '' });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://localhost:7059/api/Product');
-        console.log('Data:', response.data);
-        setBatteries(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputData({ ...inputData, [name]: value });
+  };
 
-    fetchData();
-  }, []); 
-
-  console.log(batteries);
+  const handleAddRow = () => {
+    if (inputData.field1 && inputData.field2 && inputData.field3) {
+      setRows([...rows, inputData]);
+      setInputData({ field1: '', field2: '', field3: '' });
+    } else {
+      alert('All fields must be filled!');
+    }
+  };
 
   return (
-    <Box bg='pink' w='100dvw' h='30dvh'>
-      {batteries.map((battery) => (
-        <Text key={battery.id}>{battery.id}</Text>
-      ))}
-    </Box>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Field 1</th>
+            <th>Field 2</th>
+            <th>Field 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              <td>{row.field1}</td>
+              <td>{row.field2}</td>
+              <td>{row.field3}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div>
+        <input
+          type="text"
+          name="field1"
+          value={inputData.field1}
+          onChange={handleInputChange}
+          placeholder="Field 1"
+        />
+        <input
+          type="text"
+          name="field2"
+          value={inputData.field2}
+          onChange={handleInputChange}
+          placeholder="Field 2"
+        />
+        <input
+          type="text"
+          name="field3"
+          value={inputData.field3}
+          onChange={handleInputChange}
+          placeholder="Field 3"
+        />
+        <button onClick={handleAddRow}>Add</button>
+      </div>
+    </div>
   );
-};
+}
 
-export default YourComponent;
+export default App;
+
+// import React, { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import { Text, Box } from '@chakra-ui/react';
+
+// const YourComponent = () => {
+//   const [batteries, setBatteries] = useState([]);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await axios.get('https://localhost:7059/api/Product');
+//         console.log('Data:', response.data);
+//         setBatteries(response.data);
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   console.log(batteries);
+
+//   return (
+//     <Box bg='pink' w='100dvw' h='30dvh'>
+//       {batteries.map((battery) => (
+//         <Text key={battery.id}>{battery.id}</Text>
+//       ))}
+//     </Box>
+//   );
+// };
+
+// export default YourComponent;
 
 
 // // pages/index.js

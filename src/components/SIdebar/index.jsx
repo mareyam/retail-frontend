@@ -129,7 +129,7 @@ const Sidebar = () => {
           </VStack>
         </VStack>
       </Box>
-      {isOpen && <CustomerTypeModal />}
+      {/* {isOpen && <CustomerTypeModal />} */}
     </>
   );
 };

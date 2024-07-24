@@ -27,6 +27,7 @@ import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import ViewCart from './ViewCart';
 import { FaTrashAlt } from 'react-icons/fa';
+import Pricing from './Pricing';
 
 const ITEMS_PER_PAGE = 6;
 const Sale = () => {
@@ -108,7 +109,7 @@ const Sale = () => {
     <VStack
       bgColor="#F0FFF4"
       align="center"
-      visibility={!customerType ? 'hidden' : 'visible'}
+    // visibility={!customerType ? 'hidden' : 'visible'}
     >
       <HStack py="8" w="80%" justifyContent="space-between">
         <HStack>
@@ -207,17 +208,23 @@ const Sale = () => {
               },
             }}
           >
+
+            <Box h='30dvh' overflow='auto'>
             <Table variant="simple" size="sm">
               <Thead pos="sticky" top="0" zIndex={1} bgColor="#F0FFF4">
                 <Tr bg="#4682b4" color="white" pb="4">
                   <Th textTransform="capitilize" color="white" fontSize="16">
-                   Quantity
+                    Quantity
                   </Th>
+
                   <Th textTransform="capitilize" color="white" fontSize="16">
                     Model Number
                   </Th>
                   <Th textTransform="capitilize" color="white" fontSize="16">
                     Quantity
+                  </Th>
+                  <Th textTransform="capitilize" color="white" fontSize="16">
+                    Price
                   </Th>
                   <Th textTransform="capitilize" color="white" fontSize="16">
                     Actions
@@ -228,8 +235,6 @@ const Sale = () => {
                 {addedBatteries.map((battery, index) => (
                   <Tr key={index}>
                     <Td>
-                       <Box>
-                      <Text fontSize="12">Enter Quantity</Text>
                       <NumberInput
                         defaultValue={1}
                         min={1}
@@ -237,25 +242,25 @@ const Sale = () => {
                         clampValueOnBlur={false}
                         w="32"
                       >
-                        <NumberInputField h="12" />
-                        <NumberInputStepper>
+                        <NumberInputField h="6" />
+                        <NumberInputStepper fontSize="4">
                           <NumberIncrementStepper />
                           <NumberDecrementStepper />
                         </NumberInputStepper>
                       </NumberInput>
-                    </Box>
                     </Td>
-                    <Td>{battery.name}</Td>
                     <Td>{battery.modelNumber}</Td>
                     <Td>{battery.quantity}</Td>
+                    <Td>{battery.price}</Td>
                     <Td>
                       <IconButton
+                        p="none"
                         onClick={() => handleDeleteClick(index)}
                         bgColor="transparent"
                         color="#4682b4"
                         aria-label="left-icon"
                         icon={<FaTrashAlt />}
-                        fontSize="20"
+                        fontSize="12"
                         _hover={{
                           backgroundColor: 'transparent',
                         }}
@@ -265,154 +270,18 @@ const Sale = () => {
                 ))}
               </Tbody>
             </Table>
+            </Box>
+
+            <Box>
+              <Pricing/>
+            </Box>
           </Box>
         </HStack>
       </Box>
-      {/* <TableContainer
-        border="1px solid"
-        borderColor="gray.400"
-        w="80%"
-        pos="relative"
-        h="auto"
-        overflow="hidden"
-        css={{
-          '&::-webkit-scrollbar': {
-            width: '10px',
-            height: '6px',
-          },
-          '&::-webkit-scrollbar-track': {
-            borderRadius: '10px',
-            background: '#f0f0f0',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            borderRadius: '10px',
-            background: '#ccc',
-          },
-        }}
-      >
-        <Table variant="simple" size="sm">
-          <Thead
-            pos="sticky"
-            top="0"
-            zIndex="1"
-            bgColor="white"
-            style={{
-              position: 'sticky',
-              top: 0,
-              zIndex: 1,
-              backgroundColor: 'white',
-            }}
-          >
-            <Tr bg="#4682b4" color="white" pb="4">
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                ID
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Battery Name
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Model Number
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Variant
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Availability
-              </Th>
-              <Th
-                textTransform="capitilize"
-                color="white"
-                fontSize="16"
-                isNumeric
-              >
-                Quantity
-              </Th>
-              <Th
-                textTransform="capitilize"
-                color="white"
-                fontSize="16"
-                isNumeric
-              >
-                Sale Price
-              </Th>
-              <Th
-                textTransform="capitilize"
-                color="white"
-                fontSize="16"
-                isNumeric
-              >
-                Stock Left
-              </Th>
-              <Th
-                textTransform="capitilize"
-                color="white"
-                fontSize="16"
-                isNumeric
-              >
-                Total
-              </Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {currentBatteryData.map((battery, index) => (
-              <Tr
-                key={battery.id}
-                onClick={() => {
-                  setBattery(battery);
-                }}
-              >
-                <Td>{battery.id}</Td>
-                <Td>{battery.name}</Td>
-                <Td>{battery.modelNumber}</Td>
-                <Td>{battery.variant}</Td>
-                <Td>
-                  <Text
-                    textAlign="center"
-                    rounded="full"
-                    color={
-                      battery.availability === 'In Stock'
-                        ? 'green.800'
-                        : 'red.800'
-                    }
-                  >
-                    {battery.availability}
-                  </Text>
-                </Td>
-                <Td>
-                  <Box>
-                    <Button
-                      onClick={() => removeFromCart(battery.id)}
-                      isDisabled={(cart[battery.id] || 0) <= 0}
-                    >
-                      -
-                    </Button>
-                    <Text display="inline" mx={2}>
-                      {cart[battery.id] || 0}
-                    </Text>
-                    <Button
-                      onClick={() => addToCart(battery.id)}
-                      isDisabled={(cart[battery.id] || 0) >= battery.stockLeft}
-                    >
-                      +
-                    </Button>
-                  </Box>
-                </Td>
-                <Td>PKR.{battery.salePrice}</Td>
-                <Td isNumeric>{battery.stockLeft}</Td>
-                <Td>
-                  {cart[battery.id] === 0
-                    ? 0
-                    : (cart[battery.id] || 0) * battery.salePrice}
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer> */}
-
       <HStack
         pos="absolute"
-        bottom="4"
+        bottom="50%"
+        left="25%"
         spacing={4}
         alignItems="center"
         justifyContent="center"

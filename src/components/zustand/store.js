@@ -3,7 +3,7 @@ import create from 'zustand';
 const useStateStore = create((set) => ({
   selectedComponent: 'LandingPage',
   setSelectedComponent: (component) => set({ selectedComponent: component }),
-   customerName: '',
+   customerName: null,
   setCustomerName: (component) => set({ customerName: component }),
   isCustomerTypeModal: false,
   setIsCustomerTypeModal: (component) =>
@@ -38,6 +38,21 @@ const useStateStore = create((set) => ({
       }
       return { cart };
     }),
+
+  rows: [],
+  setRows: (component) => set({ rows: component }),
+  totalAmountReceived: 0,
+  setTotalAmountReceived: (component) => set({ totalAmountReceived: component }),
+
+  finalAmount: 0,
+  setFinalAmount: (component) => set({ finalAmount: component }),
+
+
+
+  customers: '',
+  setCustomers: (component) => set({ customers: component }),
+
+
 }));
 
 export default useStateStore;

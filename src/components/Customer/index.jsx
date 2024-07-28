@@ -22,18 +22,19 @@ import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import AddNewCustomer from './AddNewCustomer';
+import axios from 'axios';
 
 const ITEMS_PER_PAGE = 6;
 const Customer = () => {
-  const { customerType, cart, addToCart, removeFromCart } = useStateStore();
+  const { customerType, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
   console.log(customerType);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredBatteryData, setFilteredBatteryData] = useState(batteryData);
   const [battery, setBattery] = useState();
-  const [products, setProducts] = useState(batteryData);
+  const [refresh, setRefresh] = useState();
 
-  console.log(products.length);
+  console.log(customers.length);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -58,12 +59,27 @@ const Customer = () => {
     setCurrentPage(1);
   }, [searchQuery, batteryData]);
 
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await axios.get('https://localhost:7059/api/Customer');
+        console.log('Data:', response.data);
+        setCustomers(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchCustomers();
+  }, [refresh]);
+
+  console.log(customers)
+
   return (
     <VStack bgColor="#F0FFF4" align="center">
       <HStack py="8" w="80%" justifyContent="space-between">
         <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        {/* <Heading color="#4682b4">Customers</Heading> */}
-        <AddNewCustomer />
+        <AddNewCustomer refresh={refresh} setRefresh={setRefresh} />
       </HStack>
 
       <TableContainer
@@ -103,35 +119,51 @@ const Customer = () => {
           >
             <Tr bg="#4682b4" color="white" pb="4">
               <Th textTransform="capitilize" color="white" fontSize="16">
-                ID
+                Customer ID
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
-                Vendor Name
+                Customer Name
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
-                Description
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Address
+                Addres
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
                 Phone Number
               </Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">
+                Type
+              </Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">
+                Discount %
+              </Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">
+                Sales
+              </Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">
+                Bill Summary
+              </Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">
+                Received Cash
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {currentBatteryData.map((battery, index) => (
+            {customers.map((battery, index) => (
               <Tr
                 key={battery.id}
                 onClick={() => {
                   setBattery(battery);
                 }}
               >
-                <Td>{battery.id}</Td>
-                <Td>{battery.name}</Td>
-                <Td>{battery.description}</Td>
+                <Td>{battery.customerId}</Td>
+                <Td>{battery.customerName}</Td>
                 <Td>{battery.address}</Td>
                 <Td>{battery.phoneNumber}</Td>
+                <Td>{battery.customerType}</Td>
+                <Td>{battery.discoutPercent}</Td>
+                <Td>{battery.sales}</Td>
+                <Td>{battery.billSummary}</Td>
+                <Td>{battery.receivedCashProfiles}</Td>
               </Tr>
             ))}
           </Tbody>

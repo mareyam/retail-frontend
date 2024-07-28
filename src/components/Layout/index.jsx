@@ -23,7 +23,7 @@ function App() {
         return <AddNewInvoice />;
       case 'Products':
         return <Products />;
-      case 'Sale':
+      case 'Product Sale':
         return <Sale />;
       case 'Purchase':
         return <Purchase />;

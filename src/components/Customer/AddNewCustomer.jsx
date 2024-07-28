@@ -12,10 +12,11 @@ import {
   VStack,
   Text,
   Input,
-  Flex,RadioGroup,Stack, Radio
+  Flex, RadioGroup, Stack, Radio
 } from '@chakra-ui/react';
 
-const AddNewCustomer = () => {
+const AddNewCustomer = ({ refresh, setRefresh }) => {
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const currentDate = new Date();
 
@@ -51,17 +52,17 @@ const AddNewCustomer = () => {
                 <Input w="52" placeholder="Customer Name" />
               </Flex>
 
-            <Flex w="full"  justifyContent="space-between">
+              <Flex w="full" justifyContent="space-between">
                 <Text>Customer Type</Text>
                 <RadioGroup defaultValue='Retail'>
-                    <Stack spacing='12' direction='row'>
-                        <Radio colorScheme='green' value='Retail'>
-                        Retail
-                        </Radio>
-                        <Radio colorScheme='green' value='Wholesale'>
-                        Wholesale
-                        </Radio>
-                    </Stack>
+                  <Stack spacing='12' direction='row'>
+                    <Radio colorScheme='green' value='Retail'>
+                      Retail
+                    </Radio>
+                    <Radio colorScheme='green' value='Wholesale'>
+                      Wholesale
+                    </Radio>
+                  </Stack>
                 </RadioGroup>
               </Flex>
 
@@ -85,11 +86,11 @@ const AddNewCustomer = () => {
           <ModalFooter>
             <Button
               bg="#4682b4"
-        color="white"
+              color="white"
               onClick={onClose}
               _hover={{
-                backgroundColor:"#4682b4", 
-                color:"white"
+                backgroundColor: "#4682b4",
+                color: "white"
               }}
             >
               Add Customer

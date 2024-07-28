@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -14,12 +14,31 @@ import {
   Input,
   Select,
 } from '@chakra-ui/react';
+import axios from 'axios';
 import useStateStore from '../zustand/store';
 
-const CustomerTypeModal = () => {
-  const { customerName, setCustomerName, isOpen, onClose, customerType, setCustomerType } = useStateStore();
+const CustomerTypeModal = ({ isOpen, onOpen, onClose, isCustomerAdded, setIsCustomerAdded }) => {
+  const { customerName, setCustomerName, customerType, setCustomerType, customers, setCustomers } = useStateStore();
   console.log(customerType);
   console.log(customerName);
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await axios.get('https://localhost:7059/api/Customer');
+        console.log('Data:', response.data);
+        setCustomers(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchCustomers();
+  }, [refresh]);
+
+  console.log(customers)
+
 
   return (
     <Modal
@@ -74,28 +93,67 @@ const CustomerTypeModal = () => {
           </Box>
 
           <Box>
-            <HStack pt='4'display={customerType == 'Retail' ? 'block' : 'none'}>
+            <HStack pt='4' display={customerType == 'Retail' ? 'block' : 'none'}>
               <Text fontSize="14">Enter retail customer name</Text>
               <Input onChange={(event) => setCustomerName(event.target.value)} h="12" w="full" placeholder="Naveed" />
-              <Button onClick={onClose}disabled={!customerName}>Proceed</Button>
+              <Box w='full'
+                display='flex'
+                justifyContent='flex-end' >
+                <Button disabled={!customerName}
+                  bg="#4682b4"
+                  mt='2'
+                  color="white"
+                  _hover={{
+                    bgColor: '4682b4',
+                    color: 'white',
+                  }}
+                  onClick={() => {
+                    {
+                      setIsCustomerAdded(true)
+                      onClose()
+                    }
+                  }}
+                >Proceed</Button>
+              </Box>
+
+
+
             </HStack>
 
             <HStack pt='4' display={customerType == 'Wholesale' ? 'block' : 'none'}>
               <Text fontSize="14">Select wholesale customer name</Text>
               <Select onChange={(event) => setCustomerName(event.target.value)} h="12" w="full" placeholder="Select customer">
-                {wholesaleNames.map((name, index) => (
-                  <option key={index} value={name}>
-                    {name}
+                {customers.map((item, index) => (
+                  <option key={index} value={item.customerName}>
+                    {item.customerName}
                   </option>
                 ))}
               </Select>
-              <Button disabled={!customerName} onClick={onClose}>Proceed</Button>
+              <Box w='full'
+                display='flex'
+                justifyContent='flex-end' >
+                <Button disabled={!customerName}
+                  bg="#4682b4"
+                  mt='2'
+                  color="white"
+                  _hover={{
+                    bgColor: '4682b4',
+                    color: 'white',
+                  }}
+                  onClick={() => {
+                    {
+                      setIsCustomerAdded(true)
+                      onClose()
+                    }
+                  }}
+                >Proceed</Button>
+              </Box>
 
             </HStack>
           </Box>
         </ModalBody>
       </ModalContent>
-    </Modal>
+    </Modal >
   );
 };
 

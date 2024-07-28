@@ -1,72 +1,133 @@
 import React, { useState } from 'react';
+import { ChakraProvider, Box, Button, Text, VStack, HStack } from '@chakra-ui/react';
 
-function App() {
-  const [rows, setRows] = useState([]);
-  const [inputData, setInputData] = useState({ field1: '', field2: '', field3: '' });
+const App = () => {
+  // State to keep track of selected item and its quantity
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [quantity, setQuantity] = useState(0);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setInputData({ ...inputData, [name]: value });
-  };
-
-  const handleAddRow = () => {
-    if (inputData.field1 && inputData.field2 && inputData.field3) {
-      setRows([...rows, inputData]);
-      setInputData({ field1: '', field2: '', field3: '' });
-    } else {
-      alert('All fields must be filled!');
-    }
-  };
+  // Sample items
+  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Field 1</th>
-            <th>Field 2</th>
-            <th>Field 3</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, index) => (
-            <tr key={index}>
-              <td>{row.field1}</td>
-              <td>{row.field2}</td>
-              <td>{row.field3}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div>
-        <input
-          type="text"
-          name="field1"
-          value={inputData.field1}
-          onChange={handleInputChange}
-          placeholder="Field 1"
-        />
-        <input
-          type="text"
-          name="field2"
-          value={inputData.field2}
-          onChange={handleInputChange}
-          placeholder="Field 2"
-        />
-        <input
-          type="text"
-          name="field3"
-          value={inputData.field3}
-          onChange={handleInputChange}
-          placeholder="Field 3"
-        />
-        <button onClick={handleAddRow}>Add</button>
-      </div>
-    </div>
+    <ChakraProvider>
+      <HStack spacing="24px" p="4">
+        {/* Left Column: List of Items */}
+        <Box borderWidth="1px" borderRadius="md" p="4" width="200px">
+          <VStack spacing="4" align="start">
+            {items.map((item, index) => (
+              <Button
+                key={index}
+                onClick={() => {
+                  setSelectedItem(item);
+                  setQuantity(0); // Reset quantity when a new item is selected
+                }}
+                width="100%"
+                variant="outline"
+              >
+                {item}
+              </Button>
+            ))}
+          </VStack>
+        </Box>
+
+        {/* Right Column: Quantity Controls */}
+        <Box borderWidth="1px" borderRadius="md" p="4" width="200px">
+          <Text fontSize="xl" mb="4">
+            {selectedItem ? `Quantity of ${selectedItem}` : 'Select an item'}
+          </Text>
+          <HStack spacing="4">
+            <Button
+              isDisabled={!selectedItem}
+              onClick={() => setQuantity(prev => prev + 1)}
+            >
+              Increase
+            </Button>
+            <Text fontSize="lg">{quantity}</Text>
+            <Button
+              isDisabled={!selectedItem || quantity === 0}
+              onClick={() => setQuantity(prev => prev - 1)}
+            >
+              Decrease
+            </Button>
+          </HStack>
+        </Box>
+      </HStack>
+    </ChakraProvider>
   );
-}
+};
 
 export default App;
+
+// import React, { useState } from 'react';
+
+// function App() {
+//   const [rows, setRows] = useState([]);
+//   const [inputData, setInputData] = useState({ field1: '', field2: '', field3: '' });
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setInputData({ ...inputData, [name]: value });
+//   };
+
+//   const handleAddRow = () => {
+//     if (inputData.field1 && inputData.field2 && inputData.field3) {
+//       setRows([...rows, inputData]);
+//       setInputData({ field1: '', field2: '', field3: '' });
+//     } else {
+//       alert('All fields must be filled!');
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <table>
+//         <thead>
+//           <tr>
+//             <th>Field 1</th>
+//             <th>Field 2</th>
+//             <th>Field 3</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {rows.map((row, index) => (
+//             <tr key={index}>
+//               <td>{row.field1}</td>
+//               <td>{row.field2}</td>
+//               <td>{row.field3}</td>
+//             </tr>
+//           ))}
+//         </tbody>
+//       </table>
+//       <div>
+//         <input
+//           type="text"
+//           name="field1"
+//           value={inputData.field1}
+//           onChange={handleInputChange}
+//           placeholder="Field 1"
+//         />
+//         <input
+//           type="text"
+//           name="field2"
+//           value={inputData.field2}
+//           onChange={handleInputChange}
+//           placeholder="Field 2"
+//         />
+//         <input
+//           type="text"
+//           name="field3"
+//           value={inputData.field3}
+//           onChange={handleInputChange}
+//           placeholder="Field 3"
+//         />
+//         <button onClick={handleAddRow}>Add</button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default App;
 
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';

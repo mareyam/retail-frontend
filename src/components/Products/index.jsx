@@ -70,8 +70,8 @@ const Products = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    };
     fetchData();
+    };
   }, [refresh]);
 
   console.log(battery);

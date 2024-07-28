@@ -129,7 +129,6 @@ const Sidebar = () => {
           </VStack>
         </VStack>
       </Box>
-      {/* {isOpen && <CustomerTypeModal />} */}
     </>
   );
 };
@@ -146,7 +145,7 @@ const menuItems = [
     icon: <FaCarBattery />,
   },
   {
-    name: 'Sale',
+    name: 'Product Sale',
     icon: <MdOutlinePointOfSale />,
   },
   {

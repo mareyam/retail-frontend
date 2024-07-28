@@ -100,7 +100,7 @@ const AddNewInvoice = () => {
               border="1px solid #949494"
               w="44"
               bgColor="white"
-              // rounded="full"
+            // rounded="full"
             >
               {vendors.map((vendor, index) => (
                 <option key={index} value={vendor}>
@@ -313,7 +313,7 @@ const AddNewInvoice = () => {
             _hover={{
               backgroundColor: '#4682b4',
             }}
-            // disabled={currentPage == totalPages}
+          // disabled={currentPage == totalPages}
           />
         </HStack>
       </Box>

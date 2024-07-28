@@ -10,36 +10,45 @@ import {
   TableContainer,
   Text,
   HStack,
-  IconButton,
   Flex,
   Box,
   chakra,
   Button,
   VStack,
   Heading,
+  IconButton,
+  useDisclosure
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import AddNewVendor from './AddNewVendor';
+import axios from 'axios';
+import { FiEdit } from "react-icons/fi";
+import { FiDelete } from "react-icons/fi";
+import VendorDetailModal from './VendorDetailModal';
+
 
 const ITEMS_PER_PAGE = 6;
 const Vendors = () => {
-  const { customerType, cart, addToCart, removeFromCart } = useStateStore();
-  console.log(customerType);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredBatteryData, setFilteredBatteryData] = useState(batteryData);
-  const [battery, setBattery] = useState();
-  const [products, setProducts] = useState(batteryData);
+  const [vendor, setVendor] = useState();
+  const [vendors, setVendors] = useState([]);
+  const [filteredVendorList, setFilteredVendorList] = useState(vendors);
+  const [refresh, setRefresh] = useState(false);
+  const {
+    isOpen: isOpenDetailModal,
+    onOpen: onOpenDetailModal,
+    onClose: onCloseDetailModal,
+  } = useDisclosure();
 
-  console.log(products.length);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentBatteryData = filteredBatteryData.slice(startIndex, endIndex);
+  const currentVendors = filteredVendorList.slice(startIndex, endIndex);
 
-  const totalPages = Math.ceil(filteredBatteryData.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredVendorList.length / ITEMS_PER_PAGE);
 
   const goToPreviousPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -50,21 +59,34 @@ const Vendors = () => {
   };
 
   useEffect(() => {
-    setFilteredBatteryData(
-      batteryData.filter((battery) =>
-        battery.name.toLowerCase().includes(searchQuery.toLowerCase())
+    setFilteredVendorList(
+      vendors.filter((vendor) =>
+        vendor.vendorName.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
     setCurrentPage(1);
-  }, [searchQuery, batteryData]);
+  }, [searchQuery, vendors]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://localhost:7059/api/Vendor');
+        console.log('Data:', response.data);
+        setVendors(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [refresh]);
+
+
 
   return (
     <VStack bgColor="#F0FFF4" align="center">
       <HStack py="8" w="80%" justifyContent="space-between">
         <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        {/* <Heading color="#4682b4">Vendor</Heading> */}
-
-        <AddNewVendor />
+        <AddNewVendor refresh={refresh} setRefresh={setRefresh} />
       </HStack>
 
       <TableContainer
@@ -118,21 +140,44 @@ const Vendors = () => {
               <Th textTransform="capitilize" color="white" fontSize="16">
                 Phone Number
               </Th>
+              <Th
+                textTransform="capitilize" color="white" fontSize="16"
+              >Edit</Th>
+              <Th
+                textTransform="capitilize" color="white" fontSize="16"
+              >Delete</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {currentBatteryData.map((battery, index) => (
+            {currentVendors.map((vendor, index) => (
               <Tr
-                key={battery.id}
+                key={vendor.id}
                 onClick={() => {
-                  setBattery(battery);
+                  setVendor(vendor);
                 }}
               >
-                <Td>{battery.id}</Td>
-                <Td>{battery.name}</Td>
-                <Td>{battery.description}</Td>
-                <Td>{battery.address}</Td>
-                <Td>{battery.phoneNumber}</Td>
+                <Td>{vendor.vendorId}</Td>
+                <Td>{vendor.vendorName}</Td>
+                <Td>{vendor.vendorDescription}</Td>
+                <Td>{vendor.vendorAddress}</Td>
+                <Td>{vendor.phone}</Td>
+                <Td>
+                  <IconButton
+                    onClick={onOpenDetailModal}
+                    bgColor='transparent'
+                    _hover={{
+                      bgColor: "transparent"
+                    }}
+                    aria-label='edit' icon={<FiEdit size="14" />} />
+                </Td>
+                <Td>
+                  <IconButton
+                    bgColor='transparent'
+                    _hover={{
+                      bgColor: "transparent"
+                    }}
+                    aria-label='delete' icon={<FiDelete size="14" />} />
+                </Td>
               </Tr>
             ))}
           </Tbody>
@@ -161,8 +206,8 @@ const Vendors = () => {
         />
 
         <Text>
-          Showing {startIndex + 1} to {Math.min(endIndex, batteryData.length)}{' '}
-          of {batteryData.length} entries
+          Showing {startIndex + 1} to {Math.min(endIndex, vendors.length)}{' '}
+          of {vendors.length} entries
         </Text>
         <IconButton
           rounded="full"
@@ -178,15 +223,22 @@ const Vendors = () => {
           disabled={currentPage == totalPages}
         />
       </HStack>
+      {isOpenDetailModal && (
+        <VendorDetailModal
+          vendorDetail={vendor}
+          isOpen={onOpenDetailModal}
+          onClose={onCloseDetailModal}
+        />
+      )}
     </VStack>
   );
 };
 export default Vendors;
 
-const batteryData = [
+const VendorList = [
   {
     id: 1,
-    name: 'Battery abc',
+    name: 'vendor abc',
     modelNumber: 'BA123',
     variant: 'Standard',
     availability: 'In Stock',
@@ -200,7 +252,7 @@ const batteryData = [
   },
   {
     id: 2,
-    name: 'abc Battery B',
+    name: 'abc vendor B',
     modelNumber: 'BB456',
     variant: 'Premium',
     availability: 'Out of Stock',
@@ -214,7 +266,7 @@ const batteryData = [
   },
   {
     id: 3,
-    name: 'Battery def',
+    name: 'vendor def',
     modelNumber: 'BC789',
     variant: 'Standard',
     availability: 'In Stock',

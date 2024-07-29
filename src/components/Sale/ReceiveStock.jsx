@@ -16,8 +16,12 @@ import {
     Th,
     Td,
     Text,
+    Flex,
+    IconButton,
 } from '@chakra-ui/react';
 import useStateStore from '../zustand/store';
+import { FaTrashAlt } from 'react-icons/fa';
+
 
 const ReceiveStock = () => {
     const { setTotalAmountReceived, totalAmountReceived, rows, setRows } = useStateStore();
@@ -73,8 +77,13 @@ const ReceiveStock = () => {
 
     const handleCancel = () => {
         setRows([]);
-setTotalAmountReceived(0)
+        setTotalAmountReceived(0)
     }
+
+    const handleDeleteClick = (index) => {
+        const updatedRows = rows.filter((_, i) => i !== index);
+        setRows(updatedRows);
+    };
     return (
         <>
             <Button
@@ -90,12 +99,13 @@ setTotalAmountReceived(0)
             </Button>
             <Modal isOpen={isOpen} onClose={onClose} size="3xl">
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent maxW='70dvw' maxH='70dvh'>
                     <ModalHeader>Receive Stock</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
+                    <ModalBody h='40dvh' overflowY='auto' >
                         <Table>
-                            <Thead>
+                            <Thead pos="sticky" top="-2" bgColor="white" zIndex='1'
+                            >
                                 <Tr>
                                     <Th>Battery Name</Th>
                                     <Th>Model</Th>
@@ -103,9 +113,10 @@ setTotalAmountReceived(0)
                                     <Th>Price</Th>
                                     <Th>Date</Th>
                                     <Th>Total</Th>
+                                    <Th>Action</Th>
                                 </Tr>
                             </Thead>
-                            <Tbody>
+                            <Tbody maxH='40dvh' overflowY='auto'>
                                 {rows.map((row, index) => (
                                     <Tr key={index} >
                                         <Td>{row.batteryName}</Td>
@@ -114,12 +125,28 @@ setTotalAmountReceived(0)
                                         <Td>{row.price}</Td>
                                         <Td>{row.date}</Td>
                                         <Td>{(row.price * row.quantity).toFixed(2)}</Td>
+                                        <Td >
+                                            <IconButton
+                                                p="none"
+                                                onClick={() => handleDeleteClick(index)}
+                                                bgColor="transparent"
+                                                color="#4682b4"
+                                                aria-label="left-icon"
+                                                icon={<FaTrashAlt />}
+                                                fontSize="16"
+                                                _hover={{
+                                                    backgroundColor: 'transparent',
+                                                }}
+                                            />
+                                        </Td>
                                     </Tr>
                                 ))}
-                                <Tr w='full' >
+                                <Tr w='full' bg='red'>
                                     <Td w='full'>
                                         <Input
                                             w='8rem'
+                                            maxLength={15}
+                                            minLength={3}
                                             placeholder="Battery Name"
                                             name="batteryName"
                                             value={newRow.batteryName}
@@ -129,6 +156,8 @@ setTotalAmountReceived(0)
                                     <Td w='full'>
                                         <Input
                                             w='7rem'
+                                            maxLength={15}
+                                            minLength={3}
                                             placeholder="Model"
                                             name="model"
                                             value={newRow.model}
@@ -141,10 +170,11 @@ setTotalAmountReceived(0)
                                     >
                                         <Input
                                             w='6rem'
-
-
+                                            maxLength={4}
+                                            minLength={1}
                                             placeholder="Quantity"
                                             name="quantity"
+                                            type='number'
                                             value={newRow.quantity}
                                             onChange={handleInputChange}
                                         />
@@ -155,9 +185,11 @@ setTotalAmountReceived(0)
                                     >
                                         <Input
                                             w='7rem'
-
+                                            maxLength={8}
+                                            minLength={1}
                                             placeholder="Price"
                                             name="price"
+                                            type='number'
                                             value={newRow.price}
                                             onChange={handleInputChange}
                                         />
@@ -171,53 +203,50 @@ setTotalAmountReceived(0)
                             Total Amount: PKR: {totalAmount.toFixed(2)}
                         </Text>
                     </ModalBody>
-                    <ModalFooter>
-                        {/* <Button
-                            bgColor="#319795"
-                            color="white"
-                            onClick={handleAddProduct}
-                            _hover={{
-                                bgColor: '#319795',
-                                color: 'white',
-                            }}
-                        >
-                            Add New
-                        </Button> */}
+                    <ModalFooter >
+                       <Flex gap='3'>
+                        
                         <Button
-                            bgColor="#319795"
-                            color="white"
+                         bg="#4682b4"
+                  color="white"
+                  _hover={{
+                    bgColor: '4682b4',
+                    color: 'white',
+                  }}
                             onClick={handleAddProduct}
-                            _hover={{
-                                bgColor: '#319795',
-                                color: 'white',
-                            }}
+                            
                         >
                             Save
                         </Button>
 
-                         <Button
-                            bgColor="#319795"
-                            color="white"
+                        <Button
+                            bg="#4682b4"
+                  color="white"
+                  _hover={{
+                    bgColor: '4682b4',
+                    color: 'white',
+                  }}
                             onClick={onClose}
-                            _hover={{
-                                bgColor: '#319795',
-                                color: 'white',
-                            }}
+                            
                         >
-                          Close
+                            Close
                         </Button>
-                          <Button
-                            bgColor="#319795"
-                            color="white"
+                        <Button
+                            bg="#4682b4"
+                  color="white"
+                  _hover={{
+                    bgColor: '4682b4',
+                    color: 'white',
+                  }}
                             onClick={handleCancel}
-                            _hover={{
-                                bgColor: '#319795',
-                                color: 'white',
-                            }}
+                            
                         >
-                          Cancel
+                            Cancel
                         </Button>
-                    </ModalFooter>
+            
+
+                       </Flex>
+        </ModalFooter>
                 </ModalContent>
             </Modal>
         </>

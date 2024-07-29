@@ -10,19 +10,21 @@ import {
   TableContainer,
   Text,
   HStack,
-  IconButton,
   Flex,
   Box,
   chakra,
   Button,
   VStack,
   Heading,
+  IconButton, 
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import AddNewCustomer from './AddNewCustomer';
 import axios from 'axios';
+import { FaTrashAlt } from 'react-icons/fa';
+
 
 const ITEMS_PER_PAGE = 6;
 const Customer = () => {
@@ -74,6 +76,16 @@ const Customer = () => {
   }, [refresh]);
 
   console.log(customers)
+
+    const handleDeleteClick = (index) => {
+    const updated = customers.filter((_, i) => i !== index);
+    setCustomers(updated);
+  };
+
+  const handleEdit = (index) => {
+
+  }
+
 
   return (
     <VStack bgColor="#F0FFF4" align="center">
@@ -136,7 +148,10 @@ const Customer = () => {
               <Th textTransform="capitilize" color="white" fontSize="16">
                 Discount %
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th>Edit</Th>
+              <Th>Delete</Th>
+
+              {/* <Th textTransform="capitilize" color="white" fontSize="16">
                 Sales
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
@@ -144,11 +159,11 @@ const Customer = () => {
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
                 Received Cash
-              </Th>
+              </Th> */}
             </Tr>
           </Thead>
           <Tbody>
-            {customers.map((battery, index) => (
+            {customers?.map((battery, index) => (
               <Tr
                 key={battery.id}
                 onClick={() => {
@@ -161,9 +176,38 @@ const Customer = () => {
                 <Td>{battery.phoneNumber}</Td>
                 <Td>{battery.customerType}</Td>
                 <Td>{battery.discoutPercent}</Td>
-                <Td>{battery.sales}</Td>
+                {/* <Td>{battery.sales}</Td>
                 <Td>{battery.billSummary}</Td>
-                <Td>{battery.receivedCashProfiles}</Td>
+                <Td>{battery.receivedCashProfiles}</Td> */}
+                
+                <Td>
+                  <IconButton
+                    p="none"
+                    onClick={() => handleEdit(index)}
+                    bgColor="transparent"
+                    color="#4682b4"
+                    aria-label="left-icon"
+                    icon={<FaTrashAlt />}
+                    fontSize="12"
+                    _hover={{
+                      backgroundColor: 'transparent',
+                    }}
+                  />
+                </Td>
+                 <Td>
+                        <IconButton
+                          p="none"
+                          onClick={() => handleDeleteClick(index)}
+                          bgColor="transparent"
+                          color="#4682b4"
+                          aria-label="left-icon"
+                          icon={<FaTrashAlt />}
+                          fontSize="12"
+                          _hover={{
+                            backgroundColor: 'transparent',
+                          }}
+                        />
+                      </Td>
               </Tr>
             ))}
           </Tbody>

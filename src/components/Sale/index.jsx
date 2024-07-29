@@ -36,7 +36,7 @@ import ReceiveStock from './ReceiveStock';
 
 const ITEMS_PER_PAGE = 6;
 const Sale = () => {
-  const { totalAmountReceived, setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, setCustomerName, customerType, customerName, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
+  const { totalAmountReceived,setSelectedComponent,  setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, setCustomerName, customerType, customerName, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast();
@@ -131,6 +131,7 @@ const Sale = () => {
     setFinalAmount("")
     setInvoiceNumber("")
     setIsCustomerAdded(false)
+    setSelectedComponent("LandingPage")
   }
   useEffect(() => {
     setFilteredBatteryData(
@@ -487,6 +488,7 @@ const Sale = () => {
                     bgColor: '4682b4',
                     color: 'white',
                   }}
+                  disabled={customerName != ""}
                 >Add</Button>
                 <Button onClick={handlePostSale}
                   w='full'
@@ -503,6 +505,7 @@ const Sale = () => {
                 />
                 <Button onClick={handleCancel}
                   w='full'
+                  zIndex='100'
                   bg="#4682b4"
                   color="white"
                   _hover={{

@@ -49,7 +49,7 @@ const useStateStore = create((set) => ({
 
 
 
-  customers: '',
+  customers:[],
   setCustomers: (component) => set({ customers: component }),
 
 

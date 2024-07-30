@@ -28,7 +28,7 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
   const [customerType, setCustomerType] = useState('Retail');
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [discountPercent, setDiscountPercent] = useState(0); 
+  const [discountPercent, setDiscountPercent] = useState(0);
 
   const currentDate = new Date();
   const formattedDate = currentDate.toISOString();
@@ -126,17 +126,19 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
                 <Text>Phone Number</Text>
                 <Input
                   w="52"
+                  type='number'
                   placeholder="Phone Number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                 />
               </Flex>
 
-               <Flex w="full" justifyContent="space-between">
+              <Flex w="full" justifyContent="space-between">
                 <Text>Discount %</Text>
                 <Input
                   w="52"
-                  placeholder="Phone Number"
+                  type='number'
+                  placeholder="Discount"
                   value={discountPercent}
                   onChange={(e) => setDiscountPercent(e.target.value)}
                 />

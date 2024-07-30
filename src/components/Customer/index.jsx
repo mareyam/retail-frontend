@@ -16,7 +16,8 @@ import {
   Button,
   VStack,
   Heading,
-  IconButton, 
+  IconButton,
+  useToast, useDisclosure
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -24,10 +25,13 @@ import Searchbar from '../common/Searchbar';
 import AddNewCustomer from './AddNewCustomer';
 import axios from 'axios';
 import { FaTrashAlt } from 'react-icons/fa';
-
+import EditCustomer from './EditCustomer';
+import { CiEdit } from "react-icons/ci";
 
 const ITEMS_PER_PAGE = 6;
 const Customer = () => {
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { customerType, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
   console.log(customerType);
   const [currentPage, setCurrentPage] = useState(1);
@@ -77,12 +81,34 @@ const Customer = () => {
 
   console.log(customers)
 
-    const handleDeleteClick = (index) => {
-    const updated = customers.filter((_, i) => i !== index);
-    setCustomers(updated);
+  const handleDeleteClick = async (id) => {
+    console.log(id)
+    try {
+      const response = await axios.delete(`https://localhost:7059/api/Customer/${id}`);
+      console.log('Data:', response.data);
+      toast({
+        title: 'Record deleted.',
+        description: 'The record has been successfully deleted.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      setRefresh(!refresh);
+      onClose();
+    } catch (error) {
+      console.error('Error deleting record:', error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to delete the record.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   const handleEdit = (index) => {
+    onOpen();
 
   }
 
@@ -148,8 +174,8 @@ const Customer = () => {
               <Th textTransform="capitilize" color="white" fontSize="16">
                 Discount %
               </Th>
-              <Th>Edit</Th>
-              <Th>Delete</Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">Edit</Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">Delete</Th>
 
               {/* <Th textTransform="capitilize" color="white" fontSize="16">
                 Sales
@@ -179,11 +205,25 @@ const Customer = () => {
                 {/* <Td>{battery.sales}</Td>
                 <Td>{battery.billSummary}</Td>
                 <Td>{battery.receivedCashProfiles}</Td> */}
-                
+
                 <Td>
                   <IconButton
                     p="none"
-                    onClick={() => handleEdit(index)}
+                    onClick={() => handleEdit(battery.customerId)}
+                    bgColor="transparent"
+                    color="#4682b4"
+                    aria-label="left-icon"
+                    icon={<CiEdit />}
+                    fontSize="12"
+                    _hover={{
+                      backgroundColor: 'transparent',
+                    }}
+                  />
+                </Td>
+                <Td>
+                  <IconButton
+                    p="none"
+                    onClick={() => handleDeleteClick(battery.customerId)}
                     bgColor="transparent"
                     color="#4682b4"
                     aria-label="left-icon"
@@ -194,20 +234,6 @@ const Customer = () => {
                     }}
                   />
                 </Td>
-                 <Td>
-                        <IconButton
-                          p="none"
-                          onClick={() => handleDeleteClick(index)}
-                          bgColor="transparent"
-                          color="#4682b4"
-                          aria-label="left-icon"
-                          icon={<FaTrashAlt />}
-                          fontSize="12"
-                          _hover={{
-                            backgroundColor: 'transparent',
-                          }}
-                        />
-                      </Td>
               </Tr>
             ))}
           </Tbody>
@@ -253,7 +279,10 @@ const Customer = () => {
           disabled={currentPage == totalPages}
         />
       </HStack>
-    </VStack>
+      {/* {isOpen && (
+        <EditCustomer refresh={refresh} customerId={id} setRefresh={setRefresh} isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
+      )} */}
+    </VStack >
   );
 };
 export default Customer;

@@ -36,7 +36,7 @@ import ReceiveStock from './ReceiveStock';
 
 const ITEMS_PER_PAGE = 6;
 const Sale = () => {
-  const { totalAmountReceived,setSelectedComponent,  setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, setCustomerName, customerType, customerName, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
+  const { totalAmountReceived, setSelectedComponent, setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, setCustomerName, customerType, customerName, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast();
@@ -49,7 +49,7 @@ const Sale = () => {
   console.log(addedBatteries)
   console.log(finalAmount)
 
-  const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [invoiceNumber, setInvoiceNumber] = useState();
   const [refresh, setRefresh] = useState(false);
   console.log(batteries.length);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -199,11 +199,20 @@ const Sale = () => {
 
       setRefresh(!refresh);
       onClose();
+      setAddedBatteries([]);
+      setSelectedBattery("");
+      setTotalAmountReceived("")
+      setCustomerType("")
+      setCustomerName("")
+      setFinalAmount("")
+      setInvoiceNumber("")
+      setIsCustomerAdded(false)
+      setSelectedComponent("Product Sale")
     } catch (error) {
       console.error('Error adding product:', error);
       toast({
         title: 'An error occurred.',
-        description: 'Unable to add the record.',
+        description: 'Unable to record the sale.',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -248,6 +257,22 @@ const Sale = () => {
 
   const [isCustomerAdded, setIsCustomerAdded] = useState(false)
 
+  useEffect(() => {
+    const fetchInvoiceNumber = async () => {
+      try {
+        const response = await axios.get('https://localhost:7059/api/Sale/NextOrderNumber');
+        console.log('Data:', response.data);
+        setInvoiceNumber(String(response.data));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchInvoiceNumber();
+  }, [isCustomerAdded]);
+
+  console.log(isCustomerAdded)
+
   return (
     <>
 
@@ -285,7 +310,7 @@ const Sale = () => {
             <Text fontWeight="500">
               Invoice Name:
               <chakra.span fontWeight="500">
-                <Input w='44' value={invoiceNumber} onChange={(event) => setInvoiceNumber(event.target.value)} />
+                <Input w='44' value={invoiceNumber} />
               </chakra.span>
             </Text>
           </Flex>
@@ -396,7 +421,6 @@ const Sale = () => {
               overflowY="auto"
               overflowX="hidden"
               h="45dvh"
-
               pos="relative"
               css={{
                 '&::-webkit-scrollbar': {
@@ -488,7 +512,7 @@ const Sale = () => {
                     bgColor: '4682b4',
                     color: 'white',
                   }}
-                  disabled={customerName != ""}
+                  isDisabled={isCustomerAdded}
                 >Add</Button>
                 <Button onClick={handlePostSale}
                   w='full'

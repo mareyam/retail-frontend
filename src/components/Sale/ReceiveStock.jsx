@@ -141,7 +141,7 @@ const ReceiveStock = () => {
                                         </Td>
                                     </Tr>
                                 ))}
-                                <Tr w='full' bg='red'>
+                                <Tr w='full'>
                                     <Td w='full'>
                                         <Input
                                             w='8rem'
@@ -204,49 +204,49 @@ const ReceiveStock = () => {
                         </Text>
                     </ModalBody>
                     <ModalFooter >
-                       <Flex gap='3'>
-                        
-                        <Button
-                         bg="#4682b4"
-                  color="white"
-                  _hover={{
-                    bgColor: '4682b4',
-                    color: 'white',
-                  }}
-                            onClick={handleAddProduct}
-                            
-                        >
-                            Save
-                        </Button>
+                        <Flex gap='3'>
 
-                        <Button
-                            bg="#4682b4"
-                  color="white"
-                  _hover={{
-                    bgColor: '4682b4',
-                    color: 'white',
-                  }}
-                            onClick={onClose}
-                            
-                        >
-                            Close
-                        </Button>
-                        <Button
-                            bg="#4682b4"
-                  color="white"
-                  _hover={{
-                    bgColor: '4682b4',
-                    color: 'white',
-                  }}
-                            onClick={handleCancel}
-                            
-                        >
-                            Cancel
-                        </Button>
-            
+                            <Button
+                                bg="#4682b4"
+                                color="white"
+                                _hover={{
+                                    bgColor: '4682b4',
+                                    color: 'white',
+                                }}
+                                onClick={handleAddProduct}
 
-                       </Flex>
-        </ModalFooter>
+                            >
+                                Save
+                            </Button>
+
+                            <Button
+                                bg="#4682b4"
+                                color="white"
+                                _hover={{
+                                    bgColor: '4682b4',
+                                    color: 'white',
+                                }}
+                                onClick={onClose}
+
+                            >
+                                Close
+                            </Button>
+                            <Button
+                                bg="#4682b4"
+                                color="white"
+                                _hover={{
+                                    bgColor: '4682b4',
+                                    color: 'white',
+                                }}
+                                onClick={handleCancel}
+
+                            >
+                                Cancel
+                            </Button>
+
+
+                        </Flex>
+                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </>

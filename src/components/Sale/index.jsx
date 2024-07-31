@@ -51,6 +51,7 @@ const Sale = () => {
 
   const [invoiceNumber, setInvoiceNumber] = useState();
   const [refresh, setRefresh] = useState(false);
+  const [saleMade, setSaleMade] = useState(false);
   console.log(batteries.length);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -173,7 +174,19 @@ const Sale = () => {
 
 
   const handlePostSale = async () => {
+    setSaleMade(true)
     try {
+      if (!invoiceNumber || !customerName || addedBatteries.some(battery => !battery.productId || !battery.quantity || !battery.productPrice)) {
+        toast({
+          title: 'Some fields are missing',
+          description: "",
+          status: 'warning',
+          duration: 3000,
+          isClosable: true
+        });
+        return;
+      }
+
       for (const battery of addedBatteries) {
         const postSale = {
           invoiceNumber: invoiceNumber,
@@ -207,6 +220,7 @@ const Sale = () => {
       setFinalAmount("")
       setInvoiceNumber("")
       setIsCustomerAdded(false)
+      setSaleMade(true)
       setSelectedComponent("Product Sale")
     } catch (error) {
       console.error('Error adding product:', error);
@@ -324,7 +338,7 @@ const Sale = () => {
           </Flex>
         </Flex>
 
-        <Flex w='90%'>
+        <Flex w='90%' pos='relative' >
           <Box
             h="auto"
             w="100%"
@@ -415,7 +429,9 @@ const Sale = () => {
             </HStack>
           </Box>
 
-          <Box w='full'>
+          <Box w='full' pos='relative' >
+
+
             <Box
               w='full'
               overflowY="auto"
@@ -437,7 +453,7 @@ const Sale = () => {
                 },
               }}
             >
-              <Table variant="simple" size="sm">
+              <Table variant="simple" size="sm" pos='relative'>
                 <Thead pos="sticky" top="0" zIndex={0} bgColor="#F0FFF4">
                   <Tr bg="#4682b4" color="white" pb="4">
                     <Th textTransform="capitalize" color="white" fontSize="16">
@@ -496,8 +512,25 @@ const Sale = () => {
                     </Tr>
                   ))}
                 </Tbody>
+
+
               </Table>
+
+               <Box
+            position="fixed"
+            top="0"
+            left='0'
+            width="100%"
+            height="100%"
+            display={!saleMade ? 'block' : 'none'}
+            bg="rgba(0, 0, 0, 0.5)"
+            zIndex="1"
+          />
+
+
+
             </Box>
+
 
             <HStack gap='2' justifyContent='flex-end'>
               <VStack
@@ -516,7 +549,7 @@ const Sale = () => {
                 >Add</Button>
                 <Button onClick={handlePostSale}
                   w='full'
-
+                  isDisabled={addedBatteries.length === 0}
                   bg="#4682b4"
                   color="white"
                   _hover={{
@@ -543,6 +576,19 @@ const Sale = () => {
               />
             </HStack>
           </Box>
+
+          {/* <Box
+            position="fixed"
+            top="44"
+            left='18rem'
+            width="74rem"
+            height="45dvh"
+            display={saleMade ? 'block' : 'none'}
+            bg="rgba(0, 0, 0, 0.5)"
+            zIndex="1"
+          /> */}
+
+
         </Flex>
         {isOpen && <CustomerTypeModal
           isCustomerAdded={isCustomerAdded} setIsCustomerAdded={setIsCustomerAdded}

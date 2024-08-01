@@ -18,12 +18,14 @@ import {
     Text,
     Flex,
     IconButton,
+    useToast
 } from '@chakra-ui/react';
 import useStateStore from '../zustand/store';
 import { FaTrashAlt } from 'react-icons/fa';
 
 
-const ReceiveStock = () => {
+const ReceiveStock = ({ saleMade }) => {
+    const toast = useToast();
     const { setTotalAmountReceived, totalAmountReceived, rows, setRows } = useStateStore();
     const [isOpen, setIsOpen] = useState(false);
     const [newRow, setNewRow] = useState({
@@ -52,15 +54,32 @@ const ReceiveStock = () => {
     };
 
     const handleAddProduct = () => {
-        setRows([...rows, newRow]);
-        setNewRow({
-            batteryName: '',
-            model: '',
-            date: new Date().toLocaleDateString(),
-            price: '',
-            quantity: '',
-        });
 
+        const missingFields = [];
+        if (newRow.batteryName === "") missingFields.push("Battery Name");
+        if (newRow.model === "") missingFields.push("Model");
+        if (newRow.price === "") missingFields.push("Price");
+        if (newRow.quantity === "") missingFields.push("Quantity");
+
+        if (missingFields.length > 0) {
+            toast({
+                title: `${missingFields.join(', ')} fields are missing`,
+                description: `Please fill`,
+                status: 'warning',
+                duration: 3000,
+                isClosable: true
+            });
+        }
+        else {
+            setRows([...rows, newRow]);
+            setNewRow({
+                batteryName: '',
+                model: '',
+                date: new Date().toLocaleDateString(),
+                price: '',
+                quantity: '',
+            });
+        }
     };
 
     const totalAmount = rows.reduce((total, row) => {
@@ -94,6 +113,7 @@ const ReceiveStock = () => {
                     color: 'white',
                 }}
                 onClick={onOpen}
+                isDisabled={saleMade}
             >
                 Receive Stock
             </Button>
@@ -214,9 +234,8 @@ const ReceiveStock = () => {
                                     color: 'white',
                                 }}
                                 onClick={handleAddProduct}
-
                             >
-                                Save
+                                Add More
                             </Button>
 
                             <Button
@@ -241,7 +260,7 @@ const ReceiveStock = () => {
                                 onClick={handleCancel}
 
                             >
-                                Cancel
+                                Delete all
                             </Button>
 
 

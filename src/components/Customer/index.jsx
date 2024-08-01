@@ -37,8 +37,10 @@ const Customer = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredBatteryData, setFilteredBatteryData] = useState(batteryData);
-  const [battery, setBattery] = useState();
+  const [customer, setBattery] = useState();
   const [refresh, setRefresh] = useState();
+  const [selectedCustomer, setSelectedCustomer] = useState();
+
 
   console.log(customers.length);
 
@@ -58,8 +60,8 @@ const Customer = () => {
 
   useEffect(() => {
     setFilteredBatteryData(
-      batteryData.filter((battery) =>
-        battery.name.toLowerCase().includes(searchQuery.toLowerCase())
+      batteryData.filter((customer) =>
+        customer.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
     setCurrentPage(1);
@@ -109,7 +111,7 @@ const Customer = () => {
 
   const handleEdit = (index) => {
     onOpen();
-
+    setSelectedCustomer(index)
   }
 
 
@@ -189,27 +191,27 @@ const Customer = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {customers?.map((battery, index) => (
+            {customers?.map((customer, index) => (
               <Tr
-                key={battery.id}
+                key={customer.id}
                 onClick={() => {
-                  setBattery(battery);
+                  setBattery(customer);
                 }}
               >
-                <Td>{battery.customerId}</Td>
-                <Td>{battery.customerName}</Td>
-                <Td>{battery.address}</Td>
-                <Td>{battery.phoneNumber}</Td>
-                <Td>{battery.customerType}</Td>
-                <Td>{battery.discoutPercent}</Td>
-                {/* <Td>{battery.sales}</Td>
-                <Td>{battery.billSummary}</Td>
-                <Td>{battery.receivedCashProfiles}</Td> */}
+                <Td>{customer.customerId}</Td>
+                <Td>{customer.customerName}</Td>
+                <Td>{customer.address}</Td>
+                <Td>{customer.phoneNumber}</Td>
+                <Td>{customer.customerType}</Td>
+                <Td>{customer.discount}</Td>
+                {/* <Td>{customer.sales}</Td>
+                <Td>{customer.billSummary}</Td>
+                <Td>{customer.receivedCashProfiles}</Td> */}
 
                 <Td>
                   <IconButton
                     p="none"
-                    onClick={() => handleEdit(battery.customerId)}
+                    onClick={() => handleEdit(customer.customerId)}
                     bgColor="transparent"
                     color="#4682b4"
                     aria-label="left-icon"
@@ -223,7 +225,7 @@ const Customer = () => {
                 <Td>
                   <IconButton
                     p="none"
-                    onClick={() => handleDeleteClick(battery.customerId)}
+                    onClick={() => handleDeleteClick(customer.customerId)}
                     bgColor="transparent"
                     color="#4682b4"
                     aria-label="left-icon"
@@ -279,9 +281,16 @@ const Customer = () => {
           disabled={currentPage == totalPages}
         />
       </HStack>
-      {/* {isOpen && (
-        <EditCustomer refresh={refresh} customerId={id} setRefresh={setRefresh} isOpen={isOpen} onOpen={onOpen} onClose={onClose}/>
-      )} */}
+      {isOpen && (
+        <EditCustomer
+          customerDetails={selectedCustomer}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+        />
+      )}
     </VStack >
   );
 };

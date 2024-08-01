@@ -17,28 +17,11 @@ import {
 import axios from 'axios';
 import useStateStore from '../zustand/store';
 
-const CustomerTypeModal = ({ isOpen, onOpen, onClose, isCustomerAdded, setIsCustomerAdded }) => {
-  const { customerName, setCustomerName, customerType, setCustomerType, customers, setCustomers } = useStateStore();
+const CustomerTypeModal = ({ isOpen, onOpen, onClose, isCustomerAdded, setIsCustomerAdded, customers }) => {
+  const { customerName, setCustomerName, customerType, setCustomerType } = useStateStore();
   console.log(customerType);
   console.log(customerName);
-  const [refresh, setRefresh] = useState(false);
-
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get('https://localhost:7059/api/Customer');
-        console.log('Data:', response.data);
-        setCustomers(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchCustomers();
-  }, [refresh]);
-
-  console.log(customers)
-
+  console.log(customers);
 
   return (
     <Modal
@@ -115,9 +98,6 @@ const CustomerTypeModal = ({ isOpen, onOpen, onClose, isCustomerAdded, setIsCust
                   }}
                 >Proceed</Button>
               </Box>
-
-
-
             </HStack>
 
             <HStack pt='4' display={customerType == 'Wholesale' ? 'block' : 'none'}>

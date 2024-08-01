@@ -5,15 +5,18 @@ import useStateStore from '../zustand/store';
 
 
 const Pricing = ({ total, quantity }) => {
-  const [discount, setDiscount] = useState(0);
-  const { totalAmountReceived, finalAmount, setFinalAmount } = useStateStore();
+  const { totalAmountReceived, finalAmount, setFinalAmount, discount, setDiscount, } = useStateStore();
   const tr = total - totalAmountReceived;
 
-  const discountAmount = (tr * discount) / 100;
+  // const discountAmount = (tr * discount) / 100;
 
   useEffect(() => {
-    setFinalAmount(tr - discountAmount)
-  }, [tr, discountAmount])
+    setDiscount((tr * discount) / 100)
+  }, [total])
+
+  useEffect(() => {
+    setFinalAmount(tr - discount)
+  }, [discount])
   console.log(finalAmount)
 
   return (

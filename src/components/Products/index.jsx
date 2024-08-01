@@ -70,7 +70,7 @@ const Products = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    fetchData();
+      fetchData();
     };
   }, [refresh]);
 
@@ -150,6 +150,9 @@ const Products = () => {
               >
                 Price
               </Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">Edit</Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">Delete</Th>
+
             </Tr>
           </Thead>
           <Tbody>
@@ -192,6 +195,34 @@ const Products = () => {
                 </Td>
                 <Td fontSize="16" isNumeric>
                   {battery.productPrice}
+                </Td>
+                <Td>
+                  <IconButton
+                    p="none"
+                    onClick={() => handleEdit(customer.customerId)}
+                    bgColor="transparent"
+                    color="#4682b4"
+                    aria-label="left-icon"
+                    icon={<CiEdit />}
+                    fontSize="12"
+                    _hover={{
+                      backgroundColor: 'transparent',
+                    }}
+                  />
+                </Td>
+                <Td>
+                  <IconButton
+                    p="none"
+                    onClick={() => handleDeleteClick(customer.customerId)}
+                    bgColor="transparent"
+                    color="#4682b4"
+                    aria-label="left-icon"
+                    icon={<FaTrashAlt />}
+                    fontSize="12"
+                    _hover={{
+                      backgroundColor: 'transparent',
+                    }}
+                  />
                 </Td>
               </Tr>
             ))}

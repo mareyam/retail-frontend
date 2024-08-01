@@ -1,61 +1,58 @@
-import React, { useState } from 'react';
-import { ChakraProvider, Box, Table, Thead, Tbody, Tr, Th, Td, Button } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { ChakraProvider, Box, Select } from '@chakra-ui/react';
+import axios from 'axios';
 
-const App = () => {
-  const [data, setData] = useState([
-    { id: 1, name: 'John Doe', age: 28 },
-    { id: 2, name: 'Jane Smith', age: 34 },
-    { id: 3, name: 'Sam Green', age: 45 },
-  ]);
-  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+function App() {
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [customers, setCustomers] = useState([]);
 
-  const handleToggleOverlay = () => {
-    setIsOverlayVisible(!isOverlayVisible);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await axios.get('https://localhost:7059/api/Customer');
+        setCustomers(response.data);
+        console.log(customers)
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
+
+
+
+  const handleCustomerChange = (event) => {
+    const selectedName = event.target.value;
+    const selectedCustomer = customers.find(
+      (customer) => customer.customerName === selectedName
+    );
+    if (selectedCustomer) {
+      setSelectedCustomerId(selectedCustomer.customerId);
+    } else {
+      setSelectedCustomerId(null);
+    }
   };
 
   return (
     <ChakraProvider>
-      <Box p={5} position="relative">
-        <Box position="relative">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>ID</Th>
-                <Th>Name</Th>
-                <Th>Age</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data.map((row) => (
-                <Tr key={row.id}>
-                  <Td>{row.id}</Td>
-                  <Td>{row.name}</Td>
-                  <Td>{row.age}</Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-          {isOverlayVisible && (
-            <Box
-              position="absolute"
-              top={0}
-              left={0}
-              width="100%"
-              height="100%"
-              backgroundColor="rgba(0, 0, 0, 0.5)"
-              zIndex={1}
-            />
-          )}
-        </Box>
-        <Button mt={4} onClick={handleToggleOverlay}>
-          Toggle Overlay
-        </Button>
+      <Box p={5}>
+        <Select placeholder="Select customer" onChange={handleCustomerChange}>
+          {customers.map((customer) => (
+            <option key={customer.customerId} value={customer.customerName}>
+              {customer.customerName}
+            </option>
+          ))}
+        </Select>
+        {selectedCustomerId && <Box mt={3}>Selected Customer ID: {selectedCustomerId}</Box>}
       </Box>
     </ChakraProvider>
   );
-};
+}
 
 export default App;
+
 
 // import React, { useState } from 'react';
 // import { ChakraProvider, Box, Button, Text, VStack, HStack, IconButton, Divider } from '@chakra-ui/react';

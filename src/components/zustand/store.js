@@ -14,7 +14,7 @@ const useStateStore = create((set) => ({
   onClose: () => set({ isOpen: false }),
   onToggle: () => set((state) => ({ isOpen: !state.isOpen })),
 
-  customerType: '',
+  customerType: 'Wholesale',
   setCustomerType: (component) => set({ customerType: component }),
 
   cartItems: [],
@@ -47,10 +47,15 @@ const useStateStore = create((set) => ({
   finalAmount: 0,
   setFinalAmount: (component) => set({ finalAmount: component }),
 
+  discount: null,
+  setDiscount: (component) => set({ discount: component }),
 
 
   customers:[],
   setCustomers: (component) => set({ customers: component }),
+
+  selectedCustomerId: null,
+  setSelectedCustomerId: (component) => set({ selectedComponent: component }),
 
 
 }));

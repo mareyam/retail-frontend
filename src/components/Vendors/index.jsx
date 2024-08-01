@@ -17,7 +17,8 @@ import {
   VStack,
   Heading,
   IconButton,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -31,6 +32,7 @@ import VendorDetailModal from './VendorDetailModal';
 
 const ITEMS_PER_PAGE = 6;
 const Vendors = () => {
+  const toast = useToast();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [vendor, setVendor] = useState();
@@ -80,6 +82,31 @@ const Vendors = () => {
     fetchData();
   }, [refresh]);
 
+  const handleDeleteClick = async (id) => {
+    console.log(id)
+    try {
+      const response = await axios.delete(`https://localhost:7059/api/Vendor/${id}`);
+      console.log('Data:', response.data);
+      toast({
+        title: 'Record deleted.',
+        description: 'The record has been successfully deleted.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      setRefresh(!refresh);
+      onClose();
+    } catch (error) {
+      console.error('Error deleting record:', error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to delete the record.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
 
   return (
@@ -172,6 +199,7 @@ const Vendors = () => {
                 </Td>
                 <Td>
                   <IconButton
+                    onClick={() => handleDeleteClick(vendor.vendorId)}
                     bgColor='transparent'
                     _hover={{
                       bgColor: "transparent"

@@ -94,10 +94,7 @@ const ReceiveStock = ({ saleMade }) => {
     console.log(totalAmountReceived)
 
 
-    const handleCancel = () => {
-        setRows([]);
-        setTotalAmountReceived(0)
-    }
+
 
     const handleDeleteClick = (index) => {
         const updatedRows = rows.filter((_, i) => i !== index);
@@ -114,8 +111,10 @@ const ReceiveStock = ({ saleMade }) => {
                 }}
                 onClick={onOpen}
                 isDisabled={saleMade}
+                w='full'
+
             >
-                Receive Stock
+                Return Goods
             </Button>
             <Modal isOpen={isOpen} onClose={onClose} size="3xl">
                 <ModalOverlay />
@@ -235,7 +234,7 @@ const ReceiveStock = ({ saleMade }) => {
                                 }}
                                 onClick={handleAddProduct}
                             >
-                                Add More
+                                Add and Save
                             </Button>
 
                             <Button
@@ -250,7 +249,7 @@ const ReceiveStock = ({ saleMade }) => {
                             >
                                 Close
                             </Button>
-                            <Button
+                            {/* <Button
                                 bg="#4682b4"
                                 color="white"
                                 _hover={{
@@ -261,7 +260,7 @@ const ReceiveStock = ({ saleMade }) => {
 
                             >
                                 Delete all
-                            </Button>
+                            </Button> */}
 
 
                         </Flex>
@@ -273,3 +272,7 @@ const ReceiveStock = ({ saleMade }) => {
 };
 
 export default ReceiveStock;
+// const handleCancel = () => {
+//     setRows([]);
+//     setTotalAmountReceived(0)
+// }

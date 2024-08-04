@@ -26,29 +26,28 @@ import {
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
-import Searchbar from '../common/Searchbar';
-import ViewCart from './ViewCart';
 import { FaTrashAlt } from 'react-icons/fa';
 import Pricing from './Pricing';
 import useStateStore from '../zustand/store';
-import CustomerTypeModal from './CustomerTypeModal';
 import axios from 'axios';
 import ReceiveStock from './ReceiveStock';
 import RemainingAmountByCustomer from './RemainingAmountByCustomer';
 
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 12;
 const Sale = () => {
-  const { discount, selectedCustomer, setSelectedCustomer, totalAmountReceived, setSelectedComponent, setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, setCustomerName, customerType, customerName, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
+  const { addedBatteries, setAddedBatteries, discount, setDiscount, totalAmountReceived, setSelectedComponent, setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, customerType, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const toast = useToast();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [customerName, setCustomerName] = useState('');
   const [batteries, setBatteries] = useState([]);
   const [filteredBatteryData, setFilteredBatteryData] = useState(batteries);
   const [selectedBattery, setSelectedBattery] = useState(null);
-  const [addedBatteries, setAddedBatteries] = useState([]);
+  // const [addedBatteries, setAddedBatteries] = useState([]);
+  console.log(addedBatteries)
 
   const [invoiceNumber, setInvoiceNumber] = useState();
   const [refresh, setRefresh] = useState(false);
@@ -60,7 +59,15 @@ const Sale = () => {
   const totalPages = Math.ceil(filteredBatteryData.length / ITEMS_PER_PAGE);
   const [isCustomerAdded, setIsCustomerAdded] = useState(false)
   const [showReceipt, setShowReceipt] = useState(false)
+  const [selectedCustomer, setSelectedCustomer] = useState(null)
 
+  console.log(selectedCustomer)
+
+
+  useEffect(() => {
+    setDiscount(selectedCustomer?.discountPercent)
+    setCustomerName(selectedCustomer?.customerName)
+  }, [selectedCustomer])
 
   const [newRow, setNewRow] = useState({
     batteryName: '',
@@ -84,6 +91,7 @@ const Sale = () => {
     setSelectedBattery(battery);
     if (!addedBatteries.find((item) => item.productModel === battery.productModel)) {
       setAddedBatteries([...addedBatteries, { ...battery, quantity: 1 }]);
+
     }
     setNewRow({
       batteryName: battery.brandName,
@@ -130,13 +138,13 @@ const Sale = () => {
   const handleCancel = () => {
     setAddedBatteries([]);
     setSelectedBattery("");
-    setTotalAmountReceived("")
+    setTotalAmountReceived(0)
     setCustomerType("")
     setCustomerName("")
     setFinalAmount("")
     setInvoiceNumber("")
     setIsCustomerAdded(false)
-    setSelectedComponent("LandingPage")
+    // setSelectedComponent("LandingPage")
   }
   useEffect(() => {
     setFilteredBatteryData(
@@ -176,8 +184,6 @@ const Sale = () => {
     }
   }, [refresh, saleMade]);
 
-
-
   const handlePostSale = async () => {
     if (selectedCustomerId) {
       setSaleMade(true)
@@ -196,20 +202,20 @@ const Sale = () => {
           const response = await axios.post('https://localhost:7059/api/Sale', postSale);
           console.log('Data:', response.data);
 
-          toast({
-            title: `Sale made to ${customerName}`,
-            description: "",
-            status: 'success',
-            duration: 3000,
-            isClosable: true
-          });
+          // toast({
+          //   title: `Sale made to ${customerName}`,
+          //   description: "",
+          //   status: 'success',
+          //   duration: 3000,
+          //   isClosable: true
+          // });
           setRefresh(!refresh);
           onClose();
           // setAddedBatteries([]);
           setSelectedBattery("");
           setTotalAmountReceived("")
           setCustomerType("")
-          setCustomerName("")
+          // setCustomerName("")
           setFinalAmount("")
           // setInvoiceNumber("")
           setIsCustomerAdded(false)
@@ -218,6 +224,13 @@ const Sale = () => {
           setShowReceipt(true)
 
         }
+        toast({
+          title: `Sale made to ${customerName}`,
+          description: "",
+          status: 'success',
+          duration: 3000,
+          isClosable: true
+        });
       }
       catch (error) {
         console.error('Error adding product:', error);
@@ -242,40 +255,6 @@ const Sale = () => {
 
   };
 
-  // const handlePostSale = async () => {
-  //   const postSale = {
-  //     invoiceNumber: invoiceNumber,
-  //     customerId: 1,
-  //     productId: addedBatteries[0].productId,
-  //     quantity: addedBatteries[0].quantity,
-  //     unitPrice: finalAmount
-  //   }
-  //   try {
-  //     const response = await axios.post('https://localhost:7059/api/Sale',
-  //       postSale
-  //     );
-  //     toast({
-  //       title: "vendor added",
-  //       description: "",
-  //       status: 'success',
-  //       duration: 3000,
-  //       isClosable: true
-  //     })
-  //     setRefresh(!refresh);
-  //     onClose();
-  //   } catch (error) {
-  //     console.error('Error adding product:', error);
-  //     toast({
-  //       title: 'An error occurred.',
-  //       description: 'Unable to add the record.',
-  //       status: 'error',
-  //       duration: 5000,
-  //       isClosable: true,
-  //     });
-  //   }
-  // }
-
-
   useEffect(() => {
     if (!saleMade) {
       const fetchInvoiceNumber = async () => {
@@ -292,6 +271,10 @@ const Sale = () => {
   }, [isCustomerAdded]);
 
 
+  useEffect(() => {
+    handleCancel()
+  }, [])
+
 
   return (
     <>
@@ -300,9 +283,15 @@ const Sale = () => {
           <CustomerTypeRadio
             saleMade={saleMade}
             customers={customers}
+            customerName={customerName}
+            setCustomerName={setCustomerName}
             selectedCustomerId={selectedCustomerId}
             setSelectedCustomerId={setSelectedCustomerId}
+            selectedCustomer={selectedCustomer}
+            setSelectedCustomer={setSelectedCustomer}
           />
+
+
 
           <Text fontWeight="500" >
             Invoice Name:
@@ -312,12 +301,17 @@ const Sale = () => {
               />
             </chakra.span>
           </Text>
+
+
         </Flex>
 
-        <Flex w='90%' pos='relative' justifyContent='space-between' pt='4'>
+        <Flex
+          gap='4'
+          w='90%' pos='relative' justifyContent='space-between' pt='4'>
           <Box
-            h="auto"
-            w="40%"
+            h="70dvh"
+            w="35%"
+
             pos="relative"
             css={{
               '&::-webkit-scrollbar': {
@@ -335,7 +329,7 @@ const Sale = () => {
             }}
           >
             <Table variant="simple" size="sm">
-              <Thead pos="sticky" top="0" zIndex={0} bgColor="#F0FFF4">
+              <Thead pos="sticky" top="0" zIndex={4} bgColor="#F0FFF4">
                 <Tr bg="#4682b4" color="white" pb="4">
                   <Th textTransform="capitilize" color="white" fontSize="16">
                     Battery Name
@@ -346,7 +340,7 @@ const Sale = () => {
                 </Tr>
               </Thead>
               <Tbody size="sm">
-                {batteries.map((battery, index) => (
+                {currentBatteryData.map((battery, index) => (
                   <Tr
                     visibility={!saleMade ? "visible" : "hidden"}
                     cursor="pointer"
@@ -407,7 +401,7 @@ const Sale = () => {
             </HStack>
           </Box>
 
-          <Box pos='relative' >
+          <Box w='80%' h='70dvh' pos='relative' justifyContent='space-between'>
             <Box
               w="100%"
               overflowY="auto"
@@ -471,7 +465,7 @@ const Sale = () => {
                       </Td>
                       <Td>{battery.productModel}</Td>
                       <Td>{battery.productPrice}</Td>
-                      <Td>PKR.{calculateTotalPrice(battery.quantity, battery.productPrice).toFixed(2)}</Td>
+                      <Td>PKR.{calculateTotalPrice(battery.quantity, battery.productPrice).toFixed(0)}</Td>
 
                       <Td>
                         <IconButton
@@ -495,98 +489,118 @@ const Sale = () => {
 
               </Table>
 
-              {/* <Box
-            position="fixed"
-            top={0}
-              left={0}
-            width="100%"
-            height="100%"
-            display={!saleMade ? 'block' : 'none'}
-            bg="rgba(0, 0, 0, 0.5)"
-            zIndex="1"
-          /> */}
-
-
-
             </Box>
 
 
             <HStack justifyContent='flex-end'
-              w='full'
+              w='full'>
+              <VStack>
+                <HStack align='flex-end'>
+                  {/* <Button
+                    zIndex='100'
+                    w='32'
+                    onClick={() => {
+                      setIsCustomerAdded(true)
+                      setSaleMade(false)
+                    }}
+                    bg="#4682b4"
+                    color="white"
+                    _hover={{
+                      bgColor: '4682b4',
+                      color: 'white',
+                    }}
+                    isDisabled={!saleMade}
 
-            >
-              <VStack align='flex-end'
 
-                ml='20%'
+                  >{showReceipt ? "Print Receipt" : "Add"}</Button> */}
 
-              >
-                <Button
-                  zIndex='100'
-                  w='32'
-                  onClick={() => {
-                    setIsCustomerAdded(true)
-                    setSaleMade(false)
-                  }}
-                  bg="#4682b4"
-                  color="white"
-                  _hover={{
-                    bgColor: '4682b4',
-                    color: 'white',
-                  }}
+                  <Button
+                    display={!showReceipt ? 'block' : "none"}
 
-                >{showReceipt ? "Print Receipt" : "Add"}</Button>
+                    zIndex='100'
+                    w='32'
+                    onClick={() => {
+                      setIsCustomerAdded(true)
+                      setSaleMade(false)
+                    }}
+                    bg="#4682b4"
+                    color="white"
+                    _hover={{
+                      bgColor: '4682b4',
+                      color: 'white',
+                    }}
+                    isDisabled={!saleMade}
 
-                <Button onClick={handlePostSale}
-                  w='32'
-                  isDisabled={addedBatteries.length < 1}
-                  bg="#4682b4"
-                  color="white"
-                  _hover={{
-                    bgColor: '4682b4',
-                    color: 'white',
-                  }}
-                >Save</Button>
 
-                <Flex gap='2'>
+                  >Add</Button>
+
+                  <Button
+                    display={showReceipt ? 'block' : "none"}
+                    zIndex='100'
+                    w='32'
+                    onClick={() => {
+                      setIsCustomerAdded(true)
+                      setSaleMade(false)
+                      setSelectedComponent('Receipt')
+                    }}
+                    bg="#4682b4"
+                    color="white"
+                    _hover={{
+                      bgColor: '4682b4',
+                      color: 'white',
+                    }}
+                    isDisabled={!saleMade}
+                  >Print Receipt</Button>
+
+
+
+                  <Button onClick={handlePostSale}
+                    w='32'
+                    isDisabled={addedBatteries.length < 1}
+                    bg="#4682b4"
+                    color="white"
+                    _hover={{
+                      bgColor: '4682b4',
+                      color: 'white',
+                    }}
+                  >Save</Button>
+
+                  <Button onClick={handleCancel}
+                    w='32'
+                    zIndex='100'
+                    bg="#4682b4"
+                    color="white"
+                    _hover={{
+                      bgColor: '4682b4',
+                      color: 'white',
+                    }}
+                  >Cancel</Button>
+
+
+
+                </HStack>
+
+                <Flex gap='2' w='full'>
                   <RemainingAmountByCustomer
                     totalBillAmount={overallTotal}
-                    totalDiscountAmount={discount}
                     customerName={customerName}
                     saleMade={saleMade}
-                    customerId={selectedCustomerId}
+                    customerId={selectedCustomer?.customerId}
                     invoiceNumber={invoiceNumber}
-                    discount={discount}
+                    discount={selectedCustomer?.discountPercent}
                   />
 
                   <ReceiveStock saleMade={saleMade}
                   />
                 </Flex>
-                <Button onClick={handleCancel}
-                  w='32'
-                  zIndex='100'
-                  bg="#4682b4"
-                  color="white"
-                  _hover={{
-                    bgColor: '4682b4',
-                    color: 'white',
-                  }}
-                >Cancel</Button>
               </VStack>
 
-              <Pricing total={overallTotal} quantity={totalQuantity}
+              <Pricing total={overallTotal} quantity={totalQuantity} discount={selectedCustomer?.discountPercent}
               />
             </HStack>
           </Box>
 
-          {/* <Box
-            position="fixed"
-            top="28"
-            left='17rem'
-            width="75rem"
-            height="47dvh"
-            display={saleMade ? 'block' : 'none'}
-            bg="rgba(0, 0, 0, 0.1)"
-            zIndex="1" /> */}
+
         </Flex>
 
       </VStack >
@@ -596,12 +610,12 @@ const Sale = () => {
 };
 export default Sale;
 
-const CustomerTypeRadio = ({ saleMade, setCustomers, selectedCustomerId, setSelectedCustomerId, }) => {
+const CustomerTypeRadio = ({
+  customerName, setCustomerName,
+  selectedCustomer, setSelectedCustomer, saleMade, setCustomers, selectedCustomerId, setSelectedCustomerId, }) => {
   const {
-    customerName, setCustomerName,
+    // customerName, setCustomerName,
     customers, customerType, setCustomerType } = useStateStore();
-
-
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -620,9 +634,13 @@ const CustomerTypeRadio = ({ saleMade, setCustomers, selectedCustomerId, setSele
     const selectedName = event.target.value;
     setCustomerName(selectedName)
     console.log(customerName)
-    const selectedCustomer = customers.find(
+
+    const customer = (customers.find(
       (customer) => customer.customerName === selectedName
-    );
+    ))
+    setSelectedCustomer(customer)
+    console.log(selectedCustomer)
+
     if (selectedCustomer) {
       setSelectedCustomerId(selectedCustomer.customerId);
     } else {
@@ -631,7 +649,7 @@ const CustomerTypeRadio = ({ saleMade, setCustomers, selectedCustomerId, setSele
   };
 
   return (
-    <Box >
+    <Flex align='center'>
       <Flex gap='2'>
         <Button
           bgColor="#4682b4"
@@ -687,7 +705,11 @@ const CustomerTypeRadio = ({ saleMade, setCustomers, selectedCustomerId, setSele
         </Box>
       </Flex>
 
-    </Box>
+      <Text px='2' fontSize='16' fontWeight='500' >Discount </Text>
+      <Text >{selectedCustomer?.discountPercent ? selectedCustomer?.discountPercent : 0}%</Text>
+
+
+    </Flex>
   );
 };
 

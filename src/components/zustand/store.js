@@ -3,8 +3,9 @@ import create from 'zustand';
 const useStateStore = create((set) => ({
   selectedComponent: 'LandingPage',
   setSelectedComponent: (component) => set({ selectedComponent: component }),
-   customerName: null,
-  setCustomerName: (component) => set({ customerName: component }),
+  // customerName: '',
+  // setCustomerName: (customerName) => set({ customerName }),
+
   isCustomerTypeModal: false,
   setIsCustomerTypeModal: (component) =>
     set({ isCustomerTypeModal: component }),
@@ -42,7 +43,8 @@ const useStateStore = create((set) => ({
   rows: [],
   setRows: (component) => set({ rows: component }),
   totalAmountReceived: 0,
-  setTotalAmountReceived: (component) => set({ totalAmountReceived: component }),
+  setTotalAmountReceived: (component) =>
+    set({ totalAmountReceived: component }),
 
   finalAmount: 0,
   setFinalAmount: (component) => set({ finalAmount: component }),
@@ -50,14 +52,24 @@ const useStateStore = create((set) => ({
   discount: null,
   setDiscount: (component) => set({ discount: component }),
 
-
-  customers:[],
+  customers: [],
   setCustomers: (component) => set({ customers: component }),
 
   selectedCustomerId: null,
   setSelectedCustomerId: (component) => set({ selectedComponent: component }),
 
+  selectedCustomer: null,
+  setSelectedCustomer: (customer) => set({ customer }),
 
+  receivedAmount: 0,
+  setReceivedAmount: (receivedAmount) => set({ receivedAmount }),
+
+  addedBatteries: [],
+  setAddedBatteries: (addedBatteries) => set({ addedBatteries }),
+
+  returnedProductAmount: 0,
+  setReturnedProductAmount: (returnedProductAmount) =>
+    set({ returnedProductAmount }),
 }));
 
 export default useStateStore;

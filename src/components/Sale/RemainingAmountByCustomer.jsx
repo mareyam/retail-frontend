@@ -18,17 +18,23 @@ import {
 } from '@chakra-ui/react';
 import { FaTruckPlane } from 'react-icons/fa6';
 import axios from 'axios'
+import useStateStore from '../zustand/store';
 
 const RemainingAmountByCustomer = ({
     invoiceNumber,
     totalBillAmount, totalDiscountAmount,
     saleMade, customerName, customerId, discount }) => {
     const toast = useToast();
-    const [refresh, setRefresh] = useState(false);
-    const [finalBillAmount, setFinalBillAmount] = useState("");
-    const [receivedAmount, setReceivedAmount] = useState("");
+    const { receivedAmount, setReceivedAmount, totalAmountReceived,
+        returnedProductAmount, setReturnedProductAmount,
+
+    } = useStateStore();
+
+    const [finalBillAmount, setFinalBillAmount] = useState();
+    const [discountAmount, setDiscountAmount] = useState();
+    // const [receivedAmount, setReceivedAmount] = useState("");
     const [remainingAmount, setRemainingAmount] = useState("");
-    const [returnedProductAmount, setReturnedProductAmount] = useState("");
+    // const [returnedProductAmount, setReturnedProductAmount] = useState();
     const [total, setTotal] = useState("");
     const { isOpen, onOpen, onClose } = useDisclosure();
     const currentDate = new Date();
@@ -38,34 +44,26 @@ const RemainingAmountByCustomer = ({
     const day = String(currentDate.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
 
+    useEffect(() => {
+        setDiscountAmount(totalBillAmount * (discount / 100));
+    }, [totalBillAmount, discount]);
+
+
+    console.log(totalAmountReceived)
+    console.log(discountAmount)
+
+
     const handlePostRemainingAmount = async () => {
-
-        const missingFields = [];
-        if (finalBillAmount === "") missingFields.push("Final Bill Amount");
-        if (receivedAmount === "") missingFields.push("Received Amount");
-        if (remainingAmount === "") missingFields.push("Remaining Amount");
-        if (returnedProductAmount === "") missingFields.push("Returned Product Amount");
-
-        if (missingFields.length > 0) {
-            toast({
-                title: `${missingFields.join(', ')} fields are missing`,
-                description: `Please fill`,
-                status: 'warning',
-                duration: 3000,
-                isClosable: true
-            });
-        }
-
 
         const remainingAmountData = {
             invoiceNumber: invoiceNumber,
             customerId, customerId,
             totalBillAmount: totalBillAmount,
-            totalDiscountAmount: totalDiscountAmount,
-            finalBillAmount: finalBillAmount,
+            totalDiscountAmount: discountAmount,
             receivedAmount: receivedAmount,
             remainingAmount: remainingAmount,
-            returnedProductAmount: returnedProductAmount
+            returnedProductAmount: returnedProductAmount,
+            finalBillAmount: finalBillAmount,
         }
         console.log(remainingAmountData);
         try {
@@ -84,13 +82,13 @@ const RemainingAmountByCustomer = ({
             onClose();
         } catch (error) {
             console.error('Error adding remaining amount:', error);
-            toast({
-                title: 'An error occurred.',
-                description: 'Unable to add the record.',
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            });
+            // toast({
+            //     title: 'An error occurred.',
+            //     description: 'Unable to add the record.',
+            //     status: 'error',
+            //     duration: 5000,
+            //     isClosable: true,
+            // });
         }
     }
 
@@ -104,17 +102,19 @@ const RemainingAmountByCustomer = ({
 
 
     useEffect(() => {
-        setFinalBillAmount(totalBillAmount - totalDiscountAmount)
-    }, [totalBillAmount, totalDiscountAmount])
+        setFinalBillAmount(totalBillAmount - discountAmount - returnedProductAmount - receivedAmount);
+    }, [totalBillAmount, discountAmount, returnedProductAmount, receivedAmount]);
+
 
     useEffect(() => {
-        setRemainingAmount(finalBillAmount - receivedAmount)
-    }, [finalBillAmount, receivedAmount])
+        setRemainingAmount(finalBillAmount - receivedAmount - totalAmountReceived);
+    }, [finalBillAmount, receivedAmount, totalAmountReceived]);
 
-    useEffect(() => {
-        setTotal(remainingAmount - returnedProductAmount)
-    }, [remainingAmount, returnedProductAmount])
 
+
+    // useEffect(() => {
+    //     setFinalBillAmount(totalBillAmount - discountAmount)
+    // }, [totalBillAmount, discountAmount, receivedAmount, returnedProductAmount])
 
     return (
         <>
@@ -126,8 +126,11 @@ const RemainingAmountByCustomer = ({
                     color: 'white',
                 }}
                 onClick={onOpen}
+                isDisabled={saleMade}
+
+                w='full'
             >
-                Remaining Amount
+                Payment
             </Button>
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
                 <ModalOverlay />
@@ -138,7 +141,7 @@ const RemainingAmountByCustomer = ({
                     <ModalCloseButton />
                     <ModalBody>
                         <VStack w="full">
-                            <Flex w="full" justifyContent="space-between">
+                            {/* <Flex w="full" justifyContent="space-between">
                                 <Text>Invoice Number</Text>
                                 <Input
                                     value={invoiceNumber}
@@ -150,7 +153,7 @@ const RemainingAmountByCustomer = ({
                                 <Input
                                     value={customerId}
                                     w="52" placeholder="Customer ID" />
-                            </Flex>
+                            </Flex> */}
 
                             <Flex w="full" justifyContent="space-between">
                                 <Text>Total Bill Amount</Text>
@@ -162,14 +165,14 @@ const RemainingAmountByCustomer = ({
                             <Flex w="full" justifyContent="space-between">
                                 <Text>Total Discount Amount</Text>
                                 <Input
-                                    value={totalDiscountAmount}
+                                    value={discountAmount?.toFixed(0)}
                                     w="52" />
                             </Flex>
 
                             <Flex w="full" justifyContent="space-between">
-                                <Text>Final Bill Amount</Text>
+                                <Text>Received Goods Amount</Text>
                                 <Input
-                                    value={finalBillAmount}
+                                    value={totalAmountReceived}
                                     w="52" />
                             </Flex>
 
@@ -181,12 +184,12 @@ const RemainingAmountByCustomer = ({
                                     w="52" placeholder="Received Amount" />
                             </Flex>
 
-                            <Flex w="full" justifyContent="space-between">
+                            {/* <Flex w="full" justifyContent="space-between">
                                 <Text>Remaining Amount</Text>
                                 <Input
                                     value={remainingAmount}
                                     w="52" placeholder="Remaining Amount" />
-                            </Flex>
+                            </Flex> */}
 
                             <Flex w="full" justifyContent="space-between">
                                 <Text>Returned Product Amount</Text>
@@ -195,13 +198,24 @@ const RemainingAmountByCustomer = ({
                                     onChange={(event) => setReturnedProductAmount(event.target.value)}
                                     w="52" placeholder="Returned Product Amount" />
                             </Flex>
+
+                            {/* <Flex w="full" justifyContent="space-between">
+                                <Text>Final Bill Amount</Text>
+                                <Input
+                                    value={finalBillAmount}
+                                    w="52" />
+                            </Flex> */}
+
+
+
+
                         </VStack>
                     </ModalBody>
 
 
                     <ModalFooter>
                         <Flex justifyContent='space-between' w='full'>
-                            <Text fontSize='20' fontWeight='700'>PKR. {total}</Text>
+                            <Text fontSize='20' fontWeight='700'>PKR. {finalBillAmount?.toFixed(0)}</Text>
 
                             <Box>
                                 <Button
@@ -213,10 +227,10 @@ const RemainingAmountByCustomer = ({
                                         color: 'white',
                                     }}
                                 >
-                                    Add Remaining Amount
+                                    Add Payable Amount
                                 </Button>
-                                <Button onClick={handleClearFields}>
-                                    Clear Fields
+                                <Button onClick={onClose}>
+                                    Close
                                 </Button>
                             </Box>
                         </Flex>

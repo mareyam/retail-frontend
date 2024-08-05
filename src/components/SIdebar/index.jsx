@@ -40,7 +40,7 @@ const Sidebar = () => {
     <>
       <Box px="4" h="full">
         <Box w="40" h="20" onClick={() => setSelectedComponent('LandingPage')}>
-          <Image src="/image.png" />
+          <Image src="/image.png" alt='landing page'/>
         </Box>
 
         <VStack h="full" gap="8">

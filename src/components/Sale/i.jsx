@@ -27,6 +27,8 @@ import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import ViewCart from './ViewCart';
 import { FaTrashAlt } from 'react-icons/fa';
+import ReceiveStock from './ReceiveStock';
+import Pricing from './Pricing';
 
 const ITEMS_PER_PAGE = 6;
 const Sale = () => {

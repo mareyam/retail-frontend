@@ -21,6 +21,8 @@ import Searchbar from '../common/Searchbar';
 import AddNewProduct from '../common/AddNewProduct';
 import BatteryDetailModal from './BatteryDetailModal';
 import axios from 'axios';
+import { CiEdit } from 'react-icons/ci';
+import { FaTrashAlt } from 'react-icons/fa';
 
 const ITEMS_PER_PAGE = 10;
 

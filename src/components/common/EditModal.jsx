@@ -27,7 +27,7 @@ const EditModal = ({ isOpen, onClose, batteryDetails }) => {
         title: 'Record deleted.',
         description: 'The record has been successfully deleted.',
         status: 'success',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
       onClose();
@@ -37,7 +37,7 @@ const EditModal = ({ isOpen, onClose, batteryDetails }) => {
         title: 'An error occurred.',
         description: 'Unable to delete the record.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }

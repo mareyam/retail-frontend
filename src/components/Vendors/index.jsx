@@ -92,7 +92,7 @@ const Vendors = () => {
         title: 'Record deleted.',
         description: 'The record has been successfully deleted.',
         status: 'success',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
       setRefresh(!refresh);
@@ -103,7 +103,7 @@ const Vendors = () => {
         title: 'An error occurred.',
         description: 'Unable to delete the record.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }

@@ -15,28 +15,35 @@ import {
   Flex,
   useDisclosure,
   Button,
+  useToast
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import axios from 'axios';
 import useStateStore from '../zustand/store';
+import { FaTrashAlt } from 'react-icons/fa';
+import { FiEdit } from 'react-icons/fi';
+import EditStock from './EditStock';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 7;
 
 const Stock = () => {
+  const toast = useToast()
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [batteries, setBatteries] = useState([]);
   const [filteredBatteryData, setFilteredBatteryData] = useState(batteries);
   const [battery, setBattery] = useState();
   const [refresh, setRefresh] = useState(false);
+  const [selectedStock, setSelectedStock] = useState();
+
   const { setSelectedComponent } = useStateStore();
 
   const {
-    isOpen: isOpenDetailModal,
-    onOpen: onOpenDetailModal,
-    onClose: onCloseDetailModal,
+    isOpen,
+    onOpen,
+    onClose,
   } = useDisclosure();
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -65,7 +72,7 @@ const Stock = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://localhost:7059/api/Product');
+        const response = await axios.get('https://localhost:7059/api/Stock');
         console.log('Data:', response.data);
         setBatteries(response.data);
       } catch (error) {
@@ -75,18 +82,46 @@ const Stock = () => {
     fetchData();
   }, [refresh]);
 
-  console.log(battery);
+
+  const handleDeleteClick = async (invoiceNumber) => {
+    console.log(invoiceNumber)
+    try {
+      const response = await axios.delete(`https://localhost:7059/api/Stock/${invoiceNumber}`);
+      console.log('Data:', response.data);
+      toast({
+        title: 'Record deleted.',
+        description: 'The record has been successfully deleted.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      setRefresh(!refresh);
+      onClose();
+    } catch (error) {
+      console.error('Error deleting record:', error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to delete the record.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+  const handleEdit = (stock) => {
+    onOpen();
+    setSelectedStock(stock)
+  }
   return (
     <VStack h="85dvh" bgColor="#F0FFF4" align="center">
       <HStack w="80%">
-        <Flex py="8" justifyContent="space-between" w="full">
+        <Flex py="2" justifyContent="space-between" w="full">
           {/* <Searchbar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
           /> */}
           {/* <Heading color="#4682b4">Inventory Details</Heading> */}
           <Button
-            // rounded="full"
             bg="#4682b4"
             color="white"
             _hover={{
@@ -102,7 +137,6 @@ const Stock = () => {
       <TableContainer
         border="1px solid"
         borderColor="gray.400"
-        mt="2"
         w="80%"
         pos="relative"
         // h="61dvh"
@@ -137,73 +171,68 @@ const Stock = () => {
           >
             <Tr bg="#4682b4" color="white" pb="4">
               <Th textTransform="capitilize" color="white" fontSize="16">
-                ID
+                Product Id
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
-                Battery Name
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Model Number
+                Product Model
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
                 Description
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
-                Availability
+                Invoice Number
               </Th>
               <Th textTransform="capitilize" color="white" fontSize="16">
-                Stock
+                Quantity
               </Th>
-              <Th
+              <Th textTransform="capitilize" color="white" fontSize="16">
+                Vendor Name
+              </Th>
+              <Th textTransform="capitilize" color="white" fontSize="16">
+                Actions
+              </Th>
+              {/* <Th
                 textTransform="capitilize"
                 color="white"
                 fontSize="16"
                 isNumeric
               >
                 Price
-              </Th>
+              </Th> */}
             </Tr>
           </Thead>
           <Tbody>
             {currentBatteryData.map((battery) => (
               <Tr lineHeight="1" gap="1" key={battery.id}>
                 <Td fontSize="16">{battery.productId}</Td>
-                <Td
-                  fontSize="16"
-                  onClick={() => {
-                    setBattery(battery);
-                    onOpenDetailModal();
-                  }}
-                >
-                  {battery.brandName}
-                </Td>
                 <Td fontSize="16">{battery.productModel}</Td>
-                <Td fontSize="16">{battery.productDescription}</Td>
-                <Td fontSize="16" w="20">
-                  <Text
-                    // p="2"
-                    w="28"
-                    textAlign="center"
-                    rounded="full"
-                    // bgColor={
-                    //   battery.status === "Available"
-                    //     ? "green.200"
-                    //     : "red.200"
-                    // }
-                    color={
-                      battery.productStatus === 'Available'
-                        ? 'green.800'
-                        : 'red.800'
-                    }
-                  >
-                    {battery.productStatus}
-                  </Text>
-                </Td>
-                <Td fontSize="16" isNumeric>
-                  {battery.quantity}
-                </Td>
-                <Td fontSize="16" isNumeric>
-                  {battery.productPrice}
+                <Td fontSize="16">{battery.productDescription ? battery.productDescription : 'null'}</Td>
+                <Td fontSize="16">{battery.invoiceNumber}</Td>
+                <Td fontSize="16">{battery.quantity}</Td>
+                <Td fontSize="16">{battery.vendorName}</Td>
+                <Td>
+                  <IconButton
+                    p="none"
+                    onClick={() => handleEdit(battery)}
+                    bgColor="transparent"
+                    color="#4682b4"
+                    aria-label="left-icon"
+                    icon={<FiEdit />}
+                    fontSize="14"
+                    _hover={{
+                      backgroundColor: 'transparent',
+                    }}
+                  />
+                  <IconButton
+                    p="none"
+                    onClick={() => handleDeleteClick(battery.invoiceNumber)}
+                    _hover={{
+                      bgColor: "transparent"
+                    }}
+                    aria-label='delete' icon={<FaTrashAlt size="14" />}
+                    bgColor="transparent"
+                    color="#4682b4"
+                  />
                 </Td>
               </Tr>
             ))}
@@ -250,13 +279,16 @@ const Stock = () => {
           disabled={currentPage == totalPages}
         />
       </HStack>
-      {/* {isOpenDetailModal && (
-        <BatteryDetailModal
-          batteryDetails={battery}
-          isOpen={onOpenDetailModal}
-          onClose={onCloseDetailModal}
+      {isOpen && (
+        <EditStock
+          stockDetails={selectedStock}
+          refresh={refresh}
+          setRefresh={setRefresh}
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
         />
-      )} */}
+      )}
     </VStack>
   );
 };

@@ -14,6 +14,7 @@ import {
   Heading,
   Flex,
   useDisclosure,
+  useToast
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -27,6 +28,7 @@ import EditProduct from './EditProduct';
 const ITEMS_PER_PAGE = 7;
 
 const Products = () => {
+  const toast = useToast()
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [batteries, setBatteries] = useState([]);
@@ -76,10 +78,39 @@ const Products = () => {
     fetchData();
   }, [refresh]);
 
-  const handleEdit = (customer) => {
+  const handleEdit = (battery) => {
     onOpenDetailModal();
-    setBattery(customer)
+    setBattery(battery)
   }
+
+
+  const handleDeleteClick = async (productId) => {
+    console.log(productId)
+    try {
+      const response = await axios.delete(
+        `https://localhost:7059/api/Product/${productId}`
+      );
+      console.log('Data:', response.data);
+      toast({
+        title: 'Record deleted.',
+        description: 'The record has been successfully deleted.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      setRefresh(!refresh)
+      onClose();
+    } catch (error) {
+      console.error('Error deleting data:', error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to delete the record.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
 
   console.log(batteries);
@@ -220,7 +251,7 @@ const Products = () => {
                 <Td>
                   <IconButton
                     p="none"
-                    onClick={() => handleDeleteClick(customer.customerId)}
+                    onClick={() => handleDeleteClick(battery.productId)}
                     bgColor="transparent"
                     color="#4682b4"
                     aria-label="left-icon"

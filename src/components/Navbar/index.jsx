@@ -44,7 +44,7 @@ const Navbar = () => {
 
         <VStack>
           <Heading color="white" textAlign="left" w="full" fontSize="40">
-            Exide Battery House
+            AGS Battery House
           </Heading>
           <Heading
             color="white"
@@ -57,9 +57,9 @@ const Navbar = () => {
           </Heading>
         </VStack>
 
-        <Heading  
-        color="white" 
-        display={selectedComponent == 'LandingPage' ? 'none' : 'block'}
+        <Heading
+          color="white"
+          display={selectedComponent == 'LandingPage' ? 'none' : 'block'}
         >{selectedComponent}</Heading>
 
         {/* {user ? (

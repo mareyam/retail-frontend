@@ -17,7 +17,7 @@ const Login = () => {
         title: 'Validation Error',
         description: 'Please enter both email and password.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true
       });
       return;
@@ -29,7 +29,7 @@ const Login = () => {
         title: 'Login Failed',
         description: 'The entered email is incorrect.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true
       });
       return;
@@ -40,7 +40,7 @@ const Login = () => {
         title: 'Login Failed',
         description: 'The entered password is incorrect.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true
       });
       return;
@@ -51,7 +51,7 @@ const Login = () => {
       title: 'Login Successful',
       description: 'You have logged in successfully.',
       status: 'success',
-      duration: 5000,
+      duration: 3000,
       isClosable: true
     });
     router.push('/')

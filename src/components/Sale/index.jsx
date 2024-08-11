@@ -240,7 +240,7 @@ const Sale = () => {
           title: 'An error occurred.',
           description: 'Unable to record the sale.',
           status: 'error',
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
       }

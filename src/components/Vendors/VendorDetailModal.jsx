@@ -55,7 +55,7 @@ const VendorDetailModal = ({ isOpen, onClose, vendorDetail, refresh, setRefresh 
         title: 'Validation Error',
         description: missingFields.join(' '),
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true
       });
       return false;
@@ -85,7 +85,6 @@ const VendorDetailModal = ({ isOpen, onClose, vendorDetail, refresh, setRefresh 
         duration: 3000,
         isClosable: true
       });
-
       setRefresh(!refresh);
       onClose();
     } catch (error) {
@@ -94,7 +93,7 @@ const VendorDetailModal = ({ isOpen, onClose, vendorDetail, refresh, setRefresh 
         title: 'An error occurred.',
         description: 'Unable to update the vendor.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }

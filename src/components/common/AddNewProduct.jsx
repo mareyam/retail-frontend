@@ -40,7 +40,7 @@ const AddNewProduct = ({ refresh, setRefresh }) => {
   console.log(status);
   const handleAddProduct = async () => {
     const productData = {
-      brandId: brandId,
+      brandId: 2,
       productModel: productModel,
       productDescription: description,
       productPrice: price,
@@ -57,7 +57,7 @@ const AddNewProduct = ({ refresh, setRefresh }) => {
         title: 'Record deleted.',
         description: 'The record has been successfully added.',
         status: 'success',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
       setRefresh(!refresh);
@@ -68,7 +68,7 @@ const AddNewProduct = ({ refresh, setRefresh }) => {
         title: 'An error occurred.',
         description: 'Unable to add the record.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }
@@ -96,7 +96,7 @@ const AddNewProduct = ({ refresh, setRefresh }) => {
           <ModalCloseButton />
           <ModalBody>
             <VStack w="full">
-              <Flex w="full" justifyContent="space-between">
+              {/* <Flex w="full" justifyContent="space-between">
                 <Text>Brand ID</Text>
                 <Input
                   w="52"
@@ -104,7 +104,7 @@ const AddNewProduct = ({ refresh, setRefresh }) => {
                   value={brandId}
                   onChange={(e) => setBrandId(Number(e.target.value))}
                 />
-              </Flex>
+              </Flex> */}
 
               <Flex w="full" justifyContent="space-between">
                 <Text>Battery Name</Text>

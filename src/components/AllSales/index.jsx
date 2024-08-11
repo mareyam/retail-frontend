@@ -22,7 +22,7 @@ import axios from 'axios';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 11;
 
 const AllSales = () => {
     const toast = useToast();
@@ -35,7 +35,7 @@ const AllSales = () => {
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get('https://localhost:7059/api/Sale');
+                const response = await axios.get('https://localhost:7059/api/BillSummary');
                 setSale(response.data);
                 setFilteredSale(response.data);
             } catch (error) {
@@ -77,17 +77,19 @@ const AllSales = () => {
                 overflow="auto"
                 css={{
                     '&::-webkit-scrollbar': {
-                        width: '6px',
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        background: '#f0f0f0',
+                        width: '2px',
+                        height: '4px',
+                        backgroundColor: 'transparent',
                     },
                     '&::-webkit-scrollbar-thumb': {
-                        background: '#ccc',
+                        backgroundColor: 'transparent',
                         borderRadius: '10px',
                     },
                     '&:hover::-webkit-scrollbar-thumb': {
-                        background: '#888',
+                        backgroundColor: '#4682b4',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                        backgroundColor: 'transparent',
                     },
                 }}
             >
@@ -99,28 +101,35 @@ const AllSales = () => {
                         zIndex="1"
                     >
                         <Tr bg="#4682b4" color="white">
-                            <Th textTransform="capitilize" color="white" fontSize="16">Sale ID</Th>
-                            <Th textTransform="capitilize" color="white" fontSize="16">Invoice Number</Th>
-                            <Th textTransform="capitilize" color="white" fontSize="16">Customer Id</Th>
-                            <Th textTransform="capitilize" color="white" fontSize="16">Product Id</Th>
-                            <Th textTransform="capitilize" color="white" fontSize="16">Quantity</Th>
-                            <Th textTransform="capitilize" color="white" fontSize="16">Unit Price</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">ID</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">Invoice Number</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">Customer ID</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">Total Bill Amount</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">Total Discount Amount</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">Received Amount</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">Remaining Amount</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">Returned Product Amount</Th>
+                            <Th textTransform="capitalize" color="white" fontSize="16">Final Bill Amount</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {currentSales?.map((saleItem, index) => (
                             <Tr key={index}>
-                                <Td>{saleItem.saleId}</Td>
+                                <Td>{saleItem.billSummaryId}</Td>
                                 <Td>{saleItem.invoiceNumber}</Td>
                                 <Td>{saleItem.customerId}</Td>
-                                <Td>{saleItem.productId}</Td>
-                                <Td>{saleItem.quantity}</Td>
-                                <Td>{saleItem.unitPrice}</Td>
+                                <Td>{saleItem.totalBillAmount}</Td>
+                                <Td>{saleItem.totalDiscountAmount ? saleItem.totalDiscountAmount : "null"}</Td>
+                                <Td>{saleItem.receivedAmount ? saleItem.receivedAmount : 'null'}</Td>
+                                <Td>{saleItem.remainingAmount ? saleItem.remainingAmount : 'null'}</Td>
+                                <Td>{saleItem.returnedProductAmount ? saleItem.returnedProductAmount : 'null'}</Td>
+                                <Td>{saleItem.finalBillAmount}</Td>
                             </Tr>
                         ))}
                     </Tbody>
                 </Table>
             </TableContainer>
+
 
             <HStack spacing={4} alignItems="center">
                 <IconButton
@@ -145,7 +154,7 @@ const AllSales = () => {
                     _hover={{ backgroundColor: '#4682b4' }}
                 />
             </HStack>
-        </VStack>
+        </VStack >
     );
 };
 

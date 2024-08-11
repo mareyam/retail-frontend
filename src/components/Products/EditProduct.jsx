@@ -63,7 +63,7 @@ const EditProduct = ({ productDetails, refresh, setRefresh, onClose, isOpen, onO
                 title: 'Validation Error',
                 description: missingFields.join(' '),
                 status: 'error',
-                duration: 5000,
+                duration: 3000,
                 isClosable: true
             });
             return false;
@@ -103,7 +103,7 @@ const EditProduct = ({ productDetails, refresh, setRefresh, onClose, isOpen, onO
                 title: 'An error occurred.',
                 description: 'Unable to update the product.',
                 status: 'error',
-                duration: 5000,
+                duration: 3000,
                 isClosable: true,
             });
         }

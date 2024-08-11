@@ -61,7 +61,7 @@ const AddNewVendor = ({ refresh, setRefresh }) => {
         title: 'An error occurred.',
         description: 'Unable to add the record.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }

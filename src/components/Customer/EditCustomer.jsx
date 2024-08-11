@@ -61,7 +61,7 @@ const EditCustomer = ({ customerDetails, refresh, setRefresh, onClose, isOpen, o
         title: 'Validation Error',
         description: missingFields.join(' '),
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true
       });
       return false;
@@ -100,7 +100,7 @@ const EditCustomer = ({ customerDetails, refresh, setRefresh, onClose, isOpen, o
         title: 'An error occurred.',
         description: 'Unable to update the customer.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }

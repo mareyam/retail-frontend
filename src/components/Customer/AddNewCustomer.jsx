@@ -57,7 +57,7 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
         title: `${missingFields.join(', ')} fields are missing or incorrect`,
         description: `Please check and correct the details.`,
         status: 'warning',
-        duration: 5000,
+        duration: 3000,
         isClosable: true
       });
       return;
@@ -91,7 +91,7 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
         title: 'An error occurred.',
         description: 'Unable to add the customer.',
         status: 'error',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     }

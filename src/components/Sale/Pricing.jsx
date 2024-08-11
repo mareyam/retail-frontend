@@ -49,19 +49,19 @@ const Pricing = ({ total, quantity, discount }) => {
   return (
     <VStack align="flex-start" spacing={2} w='full'  >
       <Flex w='full' justifyContent='space-between'>
-        <Text px='4' fontSize='20' fontWeight='500'>Total</Text>
-        <Text fontSize='20'>PKR: {total}</Text>
+        <Text px='4' fontSize='16' fontWeight='500'>Total</Text>
+        <Text fontSize='16'>PKR: {total}</Text>
       </Flex>
 
       <Flex w='full' justifyContent='space-between'>
-        <Text fontSize='20' px='4' fontWeight='500'>Discount Amount </Text>
-        <Text align='flex-end' fontSize='20'>PKR. {calcDiscount ? calcDiscount : 0}</Text>
+        <Text fontSize='16' px='4' fontWeight='500'>Discount Amount </Text>
+        <Text align='flex-end' fontSize='16'>PKR. {calcDiscount ? calcDiscount : 0}</Text>
       </Flex>
 
 
       <Flex w='full' justifyContent='space-between'>
-        <Text fontSize='20' px='4' fontWeight='500'>Returned Goods </Text>
-        <Text align='flex-end' fontSize='20'>PKR: {totalAmountReceived ? totalAmountReceived : 0}</Text>
+        <Text fontSize='16' px='4' fontWeight='500'>Returned Goods </Text>
+        <Text align='flex-end' fontSize='16'>PKR: {totalAmountReceived ? totalAmountReceived : 0}</Text>
       </Flex>
 
       {/* <Input
@@ -69,8 +69,8 @@ const Pricing = ({ total, quantity, discount }) => {
           value={discount}
         /> */}
       <Flex w='full' justifyContent='space-between'>
-        <Text fontSize='20' px='4' fontWeight='500' >Net Amount</Text>
-        <Text align='flex-end' fontSize='20'>PKR:{finalAmount ? finalAmount?.toFixed(1) : 0}</Text>
+        <Text fontSize='16' px='4' fontWeight='500' >Net Amount</Text>
+        <Text align='flex-end' fontSize='16'>PKR:{finalAmount ? finalAmount?.toFixed(1) : 0}</Text>
       </Flex>
     </VStack>
   );

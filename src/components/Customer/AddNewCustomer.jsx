@@ -108,7 +108,7 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
         }}
         onClick={onOpen}
       >
-        Add New Customer
+        +
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />

@@ -111,7 +111,8 @@ const ReceiveStock = ({ saleMade }) => {
                 }}
                 onClick={onOpen}
                 isDisabled={saleMade}
-                w='full'
+                w='28'
+                fontSize='12'
 
             >
                 Return Goods

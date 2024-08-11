@@ -22,11 +22,15 @@ import useStateStore from '../zustand/store';
 
 const RemainingAmountByCustomer = ({
     invoiceNumber,
+    setIsCustomerAdded,
+    setSaleMade,
     totalBillAmount, totalDiscountAmount,
     saleMade, customerName, customerId, discount }) => {
     const toast = useToast();
     const { receivedAmount, setReceivedAmount, totalAmountReceived,
         returnedProductAmount, setReturnedProductAmount,
+        setSelectedComponent
+
 
     } = useStateStore();
 
@@ -119,6 +123,25 @@ const RemainingAmountByCustomer = ({
 
     return (
         <>
+
+            <Button
+                fontSize='12'
+                zIndex='100'
+                w='28'
+                onClick={() => {
+                    setIsCustomerAdded(true)
+                    setSaleMade(false)
+                    setSelectedComponent('Receipt')
+                }}
+                bg="#4682b4"
+                color="white"
+                _hover={{
+                    bgColor: '4682b4',
+                    color: 'white',
+                }}
+                isDisabled={!saleMade}
+            >Print Receipt</Button>
+
             <Button
                 bg="#4682b4"
                 color="white"
@@ -129,7 +152,8 @@ const RemainingAmountByCustomer = ({
                 onClick={onOpen}
                 isDisabled={saleMade}
 
-                w='full'
+                w='28'
+                fontSize='12'
             >
                 Payment
             </Button>

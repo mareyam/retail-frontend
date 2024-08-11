@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Table,
   Thead,
+  chakra,
   Tbody,
   Tr,
   Th,
@@ -11,7 +12,6 @@ import {
   IconButton,
   Flex,
   Box,
-  chakra,
   Button,
   VStack,
   NumberInput,
@@ -23,6 +23,8 @@ import {
   Select,
   Input,
   useToast,
+  Radio, RadioGroup,
+  Divider
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -34,7 +36,7 @@ import ReceiveStock from './ReceiveStock';
 import RemainingAmountByCustomer from './RemainingAmountByCustomer';
 
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 100;
 const Sale = () => {
   const { addedBatteries, setAddedBatteries, discount, setDiscount, totalAmountReceived, setSelectedComponent, setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, customerType, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -281,7 +283,7 @@ const Sale = () => {
   return (
     <>
       <VStack w='full' h='auto' align='center'>
-        <Flex pt="4" w="90%" justifyContent="space-between">
+        <Flex pt='1' w="90%" justifyContent="space-between">
           <CustomerTypeRadio
             saleMade={saleMade}
             customers={customers}
@@ -309,35 +311,38 @@ const Sale = () => {
 
         <Flex
           gap='4'
-          w='90%' pos='relative' justifyContent='space-between' pt='4'>
+          w='90%' pos='relative' justifyContent='space-between' pt='0'>
           <Box
-            h="70dvh"
-            w="35%"
+            h="75dvh"
+            overflowY='auto'
+            w="25%"
 
             pos="relative"
             css={{
               '&::-webkit-scrollbar': {
-                width: '10px',
+                width: '6px',
                 height: '6px',
               },
               '&::-webkit-scrollbar-track': {
+                marginTop: '40px',
+
                 borderRadius: '10px',
                 background: '#f0f0f0',
               },
               '&::-webkit-scrollbar-thumb': {
                 borderRadius: '10px',
-                background: '#ccc',
+                background: '#4682b4',
               },
             }}
           >
             <Table variant="simple" size="sm">
               <Thead pos="sticky" top="0" zIndex={4} bgColor="#F0FFF4">
                 <Tr bg="#4682b4" color="white" pb="4">
-                  <Th textTransform="capitilize" color="white" fontSize="16">
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                     Battery Name
                   </Th>
-                  <Th textTransform="capitilize" color="white" fontSize="16">
-                    Model Number
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                    Model
                   </Th>
                 </Tr>
               </Thead>
@@ -362,7 +367,7 @@ const Sale = () => {
               </Tbody>
             </Table>
 
-            <HStack
+            {/* <HStack
               mt='4'
               w='full'
               spacing={4}
@@ -400,15 +405,15 @@ const Sale = () => {
                 }}
                 disabled={currentPage == totalPages}
               />
-            </HStack>
+            </HStack> */}
           </Box>
 
-          <Box w='80%' h='70dvh' pos='relative' justifyContent='space-between'>
+          <Box w='80%' h='80dvh' pos='relative' justifyContent='space-between'>
             <Box
               w="100%"
               overflowY="auto"
               overflowX="hidden"
-              h="45dvh"
+              h="60dvh"
               pos="relative"
               css={{
                 '&::-webkit-scrollbar': {
@@ -428,19 +433,19 @@ const Sale = () => {
               <Table variant="simple" size="sm" pos='relative'>
                 <Thead pos="sticky" top="0" zIndex={0} bgColor="#F0FFF4">
                   <Tr bg="#4682b4" color="white" pb="4">
-                    <Th textTransform="capitalize" color="white" fontSize="16">
+                    <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">
                       Quantity
                     </Th>
-                    <Th textTransform="capitalize" color="white" fontSize="16">
-                      Model Number
+                    <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">
+                      Model
                     </Th>
-                    <Th textTransform="capitalize" color="white" fontSize="16">
+                    <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">
                       Price
                     </Th>
-                    <Th textTransform="capitalize" color="white" fontSize="16">
+                    <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">
                       Net Price
                     </Th>
-                    <Th textTransform="capitalize" color="white" fontSize="16">
+                    <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">
                       Actions
                     </Th>
                   </Tr>
@@ -492,10 +497,16 @@ const Sale = () => {
               </Table>
 
             </Box>
-
+            <Divider
+              borderWidth='2px' // Adjust thickness here
+              borderColor='#4682b4' // Adjust color here
+            />
 
             <HStack justifyContent='flex-end'
-              w='full'>
+              w='full'
+              pt='2'
+
+            >
               <VStack>
                 <HStack align='flex-end'>
                   {/* <Button
@@ -518,9 +529,9 @@ const Sale = () => {
 
                   <Button
                     display={!showReceipt ? 'block' : "none"}
-
+                    fontSize='12'
                     zIndex='100'
-                    w='32'
+                    w='28'
                     onClick={() => {
                       setIsCustomerAdded(true)
                       setSaleMade(false)
@@ -536,28 +547,12 @@ const Sale = () => {
 
                   >Add</Button>
 
-                  <Button
-                    display={showReceipt ? 'block' : "none"}
-                    zIndex='100'
-                    w='32'
-                    onClick={() => {
-                      setIsCustomerAdded(true)
-                      setSaleMade(false)
-                      setSelectedComponent('Receipt')
-                    }}
-                    bg="#4682b4"
-                    color="white"
-                    _hover={{
-                      bgColor: '4682b4',
-                      color: 'white',
-                    }}
-                    isDisabled={!saleMade}
-                  >Print Receipt</Button>
+
 
 
 
                   <Button onClick={handlePostSale}
-                    w='32'
+                    w='28'
                     isDisabled={addedBatteries.length < 1 || saleMade}
                     bg="#4682b4"
                     color="white"
@@ -565,10 +560,12 @@ const Sale = () => {
                       bgColor: '4682b4',
                       color: 'white',
                     }}
+                    fontSize='12'
+
                   >Save</Button>
 
                   <Button onClick={handleCancel}
-                    w='32'
+                    w='28'
                     zIndex='100'
                     bg="#4682b4"
                     color="white"
@@ -576,6 +573,8 @@ const Sale = () => {
                       bgColor: '4682b4',
                       color: 'white',
                     }}
+                    fontSize='12'
+
                   >Cancel</Button>
 
 
@@ -584,6 +583,8 @@ const Sale = () => {
 
                 <Flex gap='2' w='full'>
                   <RemainingAmountByCustomer
+                    setIsCustomerAdded={setIsCustomerAdded}
+                    setSaleMade={setSaleMade}
                     totalBillAmount={overallTotal}
                     customerName={customerName}
                     saleMade={saleMade}
@@ -633,64 +634,119 @@ const CustomerTypeRadio = ({ customers, saleMade, selectedCustomerId, setSelecte
   };
 
   return (
-    <Flex align='center'>
-      <Flex gap='2'>
-        <Button
-          bgColor="#4682b4"
-          color='white'
-          _hover={{
-            bgColor: "#4682b4"
-          }}
-          onClick={() => setCustomerType('Retail')}
-          isDisabled={saleMade}
-        >
-          Retail
-        </Button>
+    // <Flex align='center'>
+    //   <Flex gap='2'>
+    //     <Button
+    //       bgColor="#4682b4"
+    //       color='white'
+    //       _hover={{
+    //         bgColor: "#4682b4"
+    //       }}
+    //       onClick={() => setCustomerType('Retail')}
+    //       isDisabled={saleMade}
+    //     >
+    //       Retail
+    //     </Button>
 
-        <Button
-          bgColor="#4682b4"
-          color='white'
-          _hover={{
-            bgColor: "#4682b4"
-          }}
-          onClick={() => setCustomerType('Wholesale')}
-          isDisabled={saleMade}
+    //     <Button
+    //       bgColor="#4682b4"
+    //       color='white'
+    //       _hover={{
+    //         bgColor: "#4682b4"
+    //       }}
+    //       onClick={() => setCustomerType('Wholesale')}
+    //       isDisabled={saleMade}
 
-        >
-          Wholesale
-        </Button>
+    //     >
+    //       Wholesale
+    //     </Button>
 
-        <Box>
-          {customerType === 'Retail' && (
-            <Input
-              h='10'
-              placeholder='Enter customer name'
-              isDisabled={saleMade}
+    //     <Box>
+    //       {customerType === 'Retail' && (
+    //         <Input
+    //           h='10'
+    //           placeholder='Enter customer name'
+    //           isDisabled={saleMade}
 
-            />
-          )}
+    //         />
+    //       )}
 
-          {customerType === 'Wholesale' && (
-            <Select
-              placeholder="Select customer"
-              onChange={handleCustomerChange}
-              isDisabled={saleMade}
+    //       {customerType === 'Wholesale' && (
+    //         <Select
+    //           placeholder="Select customer"
+    //           onChange={handleCustomerChange}
+    //           isDisabled={saleMade}
 
+    //         >
+    //           {customers.map((customer) => (
+    //             <option key={customer.customerId} value={customer.customerName}>
+    //               {customer.customerName}
+    //             </option>
+    //           ))}
+    //         </Select>
+    //       )}
+
+
+    //     </Box>
+    //   </Flex>
+
+    //   <Text px='2' fontSize='16' fontWeight='500' >Discount </Text>
+    //   <Text >{selectedCustomer?.discountPercent ? selectedCustomer?.discountPercent : 0}%</Text>
+
+
+    // </Flex>
+    <Flex align='center' direction='row'
+
+    >
+      <RadioGroup onChange={setCustomerType} value={customerType} >
+        <Flex gap='2'>
+          <Radio
+            value='Retail' isDisabled={saleMade}>
+
+            <chakra.span
+              fontWeight='500'
+
+            >Retail</chakra.span>
+          </Radio>
+          <Radio
+            fontWeight='500'
+
+            value='Wholesale' isDisabled={saleMade}>
+            <chakra.span
+              fontWeight='500'
             >
-              {customers.map((customer) => (
-                <option key={customer.customerId} value={customer.customerName}>
-                  {customer.customerName}
-                </option>
-              ))}
-            </Select>
-          )}
+              Wholesale            </chakra.span>
+          </Radio>
+        </Flex>
+      </RadioGroup>
 
+      <Flex w='full' align='center' gap='2'>
+        {customerType === 'Retail' && (
+          <Input
+            h='10'
+            placeholder='Enter customer name'
+            isDisabled={saleMade}
+          />
+        )}
 
-        </Box>
+        {customerType === 'Wholesale' && (
+          <Select
+            placeholder="Select customer"
+            onChange={handleCustomerChange}
+            isDisabled={saleMade}
+          >
+            {customers.map((customer) => (
+              <option key={customer.customerId} value={customer.customerName}>
+                {customer.customerName}
+              </option>
+            ))}
+          </Select>
+        )}
+        <Flex align='center'>
+          <Text px='2' fontSize='16' fontWeight='500'>Discount</Text>
+          <Text>{selectedCustomer?.discountPercent ? selectedCustomer?.discountPercent : 0}%</Text>
+        </Flex>
       </Flex>
-
-      <Text px='2' fontSize='16' fontWeight='500' >Discount </Text>
-      <Text >{selectedCustomer?.discountPercent ? selectedCustomer?.discountPercent : 0}%</Text>
 
 
     </Flex>

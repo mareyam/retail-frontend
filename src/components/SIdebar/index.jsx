@@ -60,7 +60,7 @@ const Sidebar = () => {
               w="full"
               textAlign="flex-start"
               fontSize="28"
-              fontWeight="700"
+              fontWeight="400"
             >
               Menu
             </Text>
@@ -110,13 +110,14 @@ const Sidebar = () => {
                   }}
                 />
                 <Text
+
                   onClick={() => {
                     setSelectedComponent(item.name);
                     if (item.name === 'Sale') {
                       onOpen();
                     }
                   }}
-                  fontSize="18"
+                  fontSize="16"
                 >
                   {item.name}
                 </Text>
@@ -200,11 +201,19 @@ export default Sidebar;
 
 const menuItems = [
   {
-    name: 'Inventory',
+    name: 'Customer Profile',
+    icon: <MdPeopleAlt />,
+  },
+  {
+    name: 'Vendor Profile',
+    icon: <FaShop />,
+  },
+  {
+    name: 'Inventory Profile',
     icon: <FaTruck />,
   },
   {
-    name: 'Products',
+    name: 'Product Profile',
     icon: <FaCarBattery />,
   },
   {
@@ -212,23 +221,23 @@ const menuItems = [
     icon: <MdOutlinePointOfSale />,
   },
   {
-    name: 'Purchase',
-    icon: <BiSolidPurchaseTagAlt />,
+    name: 'Received Cash',
+    icon: <MdOutlinePointOfSale />,
   },
+
   {
     name: 'Report',
     icon: <IoStatsChartSharp />,
   },
-  {
-    name: 'Vendor',
-    icon: <FaShop />,
-  },
-  {
-    name: 'Customers',
-    icon: <MdPeopleAlt />,
-  },
+
+
   {
     name: 'All Sales',
     icon: <MdOutlinePointOfSale />,
   },
+
+  // {
+  //   name: 'Purchase',
+  //   icon: <BiSolidPurchaseTagAlt />,
+  // },
 ];

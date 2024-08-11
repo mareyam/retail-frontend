@@ -78,7 +78,7 @@ const AddNewVendor = ({ refresh, setRefresh }) => {
         }}
         onClick={onOpen}
       >
-        Add New Vendor
+        +
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />

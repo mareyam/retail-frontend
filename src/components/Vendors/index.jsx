@@ -31,7 +31,7 @@ import VendorDetailModal from './VendorDetailModal';
 import { FaTrashAlt } from 'react-icons/fa';
 
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 100;
 const Vendors = () => {
   const toast = useToast();
   const [currentPage, setCurrentPage] = useState(1);
@@ -112,7 +112,7 @@ const Vendors = () => {
 
   return (
     <VStack bgColor="#F0FFF4" align="center">
-      <HStack py="8" w="80%" justifyContent="space-between">
+      <HStack py="2" w="80%" justifyContent="space-between">
         <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <AddNewVendor refresh={refresh} setRefresh={setRefresh} />
       </HStack>
@@ -123,7 +123,7 @@ const Vendors = () => {
         w="80%"
         pos="relative"
         h="auto"
-        overflow="hidden"
+        overflowY="auto"
         css={{
           '&::-webkit-scrollbar': {
             width: '10px',
@@ -153,19 +153,19 @@ const Vendors = () => {
             }}
           >
             <Tr bg="#4682b4" color="white" pb="4">
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 ID
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Vendor Name
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Description
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Address
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Phone Number
               </Th>
               <Th
@@ -217,7 +217,7 @@ const Vendors = () => {
         </Table>
       </TableContainer>
 
-      <HStack
+      {/* <HStack
         pos="absolute"
         bottom="4"
         spacing={4}
@@ -255,7 +255,7 @@ const Vendors = () => {
           }}
           disabled={currentPage == totalPages}
         />
-      </HStack>
+      </HStack> */}
       {isOpenDetailModal && (
         <VendorDetailModal
           vendorDetail={vendor}

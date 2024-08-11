@@ -117,156 +117,155 @@ const Products = () => {
   return (
     <VStack h="85dvh" bgColor="#F0FFF4" align="center">
       <HStack w="80%">
-        <Flex py="2" justifyContent="space-between" w="full">
-          <Searchbar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-          {/* <Heading color="#4682b4">Products</Heading> */}
-          <AddNewProduct refresh={refresh} setRefresh={setRefresh} />
-        </Flex>
-      </HStack>
-      <TableContainer
-        border="1px solid"
-        borderColor="gray.400"
-        w="80%"
-        pos="relative"
-        // h="61dvh"
-        h="auto"
-        overflowY="auto"
-        css={{
-          '&::-webkit-scrollbar': {
-            width: '10px',
-            height: '6px',
-          },
-          '&::-webkit-scrollbar-track': {
-            borderRadius: '10px',
-            background: '#f0f0f0',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            borderRadius: '10px',
-            background: '#ccc',
-          },
-        }}
-      >
-        <Table variant="simple" size="sm">
-          <Thead
-            pos="sticky"
-            top="0"
-            zIndex="1"
-            style={{
-              position: 'sticky',
-              top: 0,
-              zIndex: 1,
-              backgroundColor: 'white',
+        <Flex py="8" gap='2' w="full">
+
+          <TableContainer
+            border="1px solid"
+            borderColor="gray.400"
+            pos="relative"
+            // h="61dvh"
+            h="auto"
+            overflowY="auto"
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '10px',
+                height: '6px',
+              },
+              '&::-webkit-scrollbar-track': {
+                borderRadius: '10px',
+                background: '#f0f0f0',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                borderRadius: '10px',
+                background: '#ccc',
+              },
             }}
           >
-            <Tr bg="#4682b4" color="white" pb="4">
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                ID
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Battery Name
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Model Number
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Description
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Availability
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Stock
-              </Th>
-              <Th
-                textTransform="capitilize"
-                color="white"
-                fontSize="16"
-                isNumeric
+            <Table variant="simple" size="sm">
+              <Thead
+                pos="sticky"
+                top="0"
+                zIndex="1"
+                style={{
+                  position: 'sticky',
+                  top: 0,
+                  zIndex: 1,
+                  backgroundColor: 'white',
+                }}
               >
-                Price
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">Edit</Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">Delete</Th>
-
-            </Tr>
-          </Thead>
-          <Tbody>
-            {currentBatteryData.map((battery) => (
-              <Tr lineHeight="1" gap="1" key={battery.id}>
-                <Td fontSize="16">{battery.productId}</Td>
-                <Td
-                  fontSize="16"
-                  onClick={() => {
-                    setBattery(battery);
-                    onOpenDetailModal();
-                  }}
-                >
-                  {battery.brandName}
-                </Td>
-                <Td fontSize="16">{battery.productModel}</Td>
-                <Td fontSize="16">{battery.productDescription}</Td>
-                <Td fontSize="16" w="20">
-                  <Text
-                    // p="2"
-                    w="28"
-                    textAlign="center"
-                    rounded="full"
-                    // bgColor={
-                    //   battery.status === "Available"
-                    //     ? "green.200"
-                    //     : "red.200"
-                    // }
-                    color={
-                      battery.productStatus === 'Available'
-                        ? 'green.800'
-                        : 'red.800'
-                    }
+                <Tr bg="#4682b4" color="white" pb="4">
+                  {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                    ID
+                  </Th> */}
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                    Name
+                  </Th>
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                    Model
+                  </Th>
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                    Description
+                  </Th>
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                    Availability
+                  </Th>
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                    Stock
+                  </Th>
+                  <Th
+                    fontWeight='400'
+                    textTransform="capitilize"
+                    color="white"
+                    fontSize="16"
+                    isNumeric
                   >
-                    {battery.productStatus}
-                  </Text>
-                </Td>
-                <Td fontSize="16" isNumeric>
-                  {battery.quantity}
-                </Td>
-                <Td fontSize="16" isNumeric>
-                  {battery.productPrice}
-                </Td>
-                <Td>
-                  <IconButton
-                    p="none"
-                    onClick={() => handleEdit(battery)}
-                    bgColor="transparent"
-                    color="#4682b4"
-                    aria-label="left-icon"
-                    icon={<FiEdit />}
-                    fontSize="12"
-                    _hover={{
-                      backgroundColor: 'transparent',
-                    }}
-                  />
-                </Td>
-                <Td>
-                  <IconButton
-                    p="none"
-                    onClick={() => handleDeleteClick(battery.productId)}
-                    bgColor="transparent"
-                    color="#4682b4"
-                    aria-label="left-icon"
-                    icon={<FaTrashAlt />}
-                    fontSize="12"
-                    _hover={{
-                      backgroundColor: 'transparent',
-                    }}
-                  />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+                    Price
+                  </Th>
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Edit</Th>
+                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Delete</Th>
+
+                </Tr>
+              </Thead>
+              <Tbody>
+                {currentBatteryData.map((battery) => (
+                  <Tr lineHeight="1" gap="1" key={battery.id}>
+                    {/* <Td fontSize="16">{battery.productId}</Td> */}
+                    <Td
+                      fontSize="16"
+                      onClick={() => {
+                        setBattery(battery);
+                        onOpenDetailModal();
+                      }}
+                    >
+                      {battery.brandName}
+                    </Td>
+                    <Td fontSize="16">{battery.productModel}</Td>
+                    <Td fontSize="16">{battery.productDescription}</Td>
+                    <Td fontSize="16" w="20">
+                      <Text
+                        // p="2"
+                        w="28"
+                        textAlign="center"
+                        rounded="full"
+                        // bgColor={
+                        //   battery.status === "Available"
+                        //     ? "green.200"
+                        //     : "red.200"
+                        // }
+                        color={
+                          battery.productStatus === 'Available'
+                            ? 'green.800'
+                            : 'red.800'
+                        }
+                      >
+                        {battery.productStatus}
+                      </Text>
+                    </Td>
+                    <Td fontSize="16" isNumeric>
+                      {battery.quantity}
+                    </Td>
+                    <Td fontSize="16" isNumeric>
+                      {battery.productPrice}
+                    </Td>
+                    <Td>
+                      <IconButton
+                        p="none"
+                        onClick={() => handleEdit(battery)}
+                        bgColor="transparent"
+                        color="#4682b4"
+                        aria-label="left-icon"
+                        icon={<FiEdit />}
+                        fontSize="12"
+                        _hover={{
+                          backgroundColor: 'transparent',
+                        }}
+                      />
+                    </Td>
+                    <Td>
+                      <IconButton
+                        p="none"
+                        onClick={() => handleDeleteClick(battery.productId)}
+                        bgColor="transparent"
+                        color="#4682b4"
+                        aria-label="left-icon"
+                        icon={<FaTrashAlt />}
+                        fontSize="12"
+                        _hover={{
+                          backgroundColor: 'transparent',
+                        }}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+
+          <AddNewProduct refresh={refresh} setRefresh={setRefresh} />
+
+        </Flex>
+      </HStack>
+
       <HStack
         pos="absolute"
         bottom="4"

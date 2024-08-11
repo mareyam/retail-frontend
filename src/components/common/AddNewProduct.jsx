@@ -85,7 +85,7 @@ const AddNewProduct = ({ refresh, setRefresh }) => {
         }}
         onClick={onOpen}
       >
-        Add new Battery
+        +
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />

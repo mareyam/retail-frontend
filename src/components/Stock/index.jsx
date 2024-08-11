@@ -114,84 +114,67 @@ const Stock = () => {
   }
   return (
     <VStack h="85dvh" bgColor="#F0FFF4" align="center">
-      <HStack w="80%">
-        <Flex py="2" justifyContent="space-between" w="full">
-          {/* <Searchbar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          /> */}
-          {/* <Heading color="#4682b4">Inventory Details</Heading> */}
-          <Button
-            bg="#4682b4"
-            color="white"
-            _hover={{
-              bgColor: '4682b4',
-              color: 'white',
-            }}
-            onClick={() => setSelectedComponent('invoice')}
-          >
-            Receive Stock
-          </Button>
-        </Flex>
-      </HStack>
-      <TableContainer
-        border="1px solid"
-        borderColor="gray.400"
-        w="80%"
-        pos="relative"
-        // h="61dvh"
-        h="auto"
-        overflowY="auto"
-        css={{
-          '&::-webkit-scrollbar': {
-            width: '10px',
-            height: '6px',
-          },
-          '&::-webkit-scrollbar-track': {
-            borderRadius: '10px',
-            background: '#f0f0f0',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            borderRadius: '10px',
-            background: '#ccc',
-          },
-        }}
-      >
-        <Table variant="simple" size="sm">
-          <Thead
-            pos="sticky"
-            top="0"
-            zIndex="1"
-            style={{
-              position: 'sticky',
-              top: 0,
-              zIndex: 1,
-              backgroundColor: 'white',
-            }}
-          >
-            <Tr bg="#4682b4" color="white" pb="4">
-              <Th textTransform="capitilize" color="white" fontSize="16">
+
+      <Flex w='full' mt='4' gap='2' justifyContent='center'>
+        <TableContainer
+          ml='12'
+          border="1px solid"
+          borderColor="gray.400"
+          w="80%"
+          pos="relative"
+          // h="61dvh"
+          h="auto"
+          overflowY="auto"
+          css={{
+            '&::-webkit-scrollbar': {
+              width: '10px',
+              height: '6px',
+            },
+            '&::-webkit-scrollbar-track': {
+              borderRadius: '10px',
+              background: '#f0f0f0',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              borderRadius: '10px',
+              background: '#ccc',
+            },
+          }}
+        >
+          <Table variant="simple" size="sm">
+            <Thead
+              pos="sticky"
+              top="0"
+              zIndex="1"
+              style={{
+                position: 'sticky',
+                top: 0,
+                zIndex: 1,
+                backgroundColor: 'white',
+              }}
+            >
+              <Tr bg="#4682b4" color="white" pb="4">
+                {/* <Th textTransform="capitilize" color="white" fontSize="16">
                 Product Id
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Product Model
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Description
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Invoice Number
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Quantity
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Vendor Name
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
-                Actions
-              </Th>
-              {/* <Th
+              </Th> */}
+                <Th textTransform="capitilize" color="white" fontSize="16">
+                  Model
+                </Th>
+                <Th textTransform="capitilize" color="white" fontSize="16">
+                  Description
+                </Th>
+                <Th textTransform="capitilize" color="white" fontSize="16">
+                  Invoice Number
+                </Th>
+                <Th textTransform="capitilize" color="white" fontSize="16">
+                  Quantity
+                </Th>
+                <Th textTransform="capitilize" color="white" fontSize="16">
+                  Vendor Name
+                </Th>
+                <Th textTransform="capitilize" color="white" fontSize="16">
+                  Actions
+                </Th>
+                {/* <Th
                 textTransform="capitilize"
                 color="white"
                 fontSize="16"
@@ -199,46 +182,60 @@ const Stock = () => {
               >
                 Price
               </Th> */}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {currentBatteryData.map((battery) => (
-              <Tr lineHeight="1" gap="1" key={battery.id}>
-                <Td fontSize="16">{battery.productId}</Td>
-                <Td fontSize="16">{battery.productModel}</Td>
-                <Td fontSize="16">{battery.productDescription ? battery.productDescription : 'null'}</Td>
-                <Td fontSize="16">{battery.invoiceNumber}</Td>
-                <Td fontSize="16">{battery.quantity}</Td>
-                <Td fontSize="16">{battery.vendorName}</Td>
-                <Td>
-                  <IconButton
-                    p="none"
-                    onClick={() => handleEdit(battery)}
-                    bgColor="transparent"
-                    color="#4682b4"
-                    aria-label="left-icon"
-                    icon={<FiEdit />}
-                    fontSize="14"
-                    _hover={{
-                      backgroundColor: 'transparent',
-                    }}
-                  />
-                  <IconButton
-                    p="none"
-                    onClick={() => handleDeleteClick(battery.invoiceNumber)}
-                    _hover={{
-                      bgColor: "transparent"
-                    }}
-                    aria-label='delete' icon={<FaTrashAlt size="14" />}
-                    bgColor="transparent"
-                    color="#4682b4"
-                  />
-                </Td>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+            </Thead>
+            <Tbody>
+              {currentBatteryData.map((battery) => (
+                <Tr lineHeight="1" gap="1" key={battery.id}>
+                  {/* <Td fontSize="16">{battery.productId}</Td> */}
+                  <Td fontSize="16">{battery.productModel}</Td>
+                  <Td fontSize="16">{battery.productDescription ? battery.productDescription : 'null'}</Td>
+                  <Td fontSize="16">{battery.invoiceNumber}</Td>
+                  <Td fontSize="16">{battery.quantity}</Td>
+                  <Td fontSize="16">{battery.vendorName}</Td>
+                  <Td>
+                    <IconButton
+                      p="none"
+                      onClick={() => handleEdit(battery)}
+                      bgColor="transparent"
+                      color="#4682b4"
+                      aria-label="left-icon"
+                      icon={<FiEdit />}
+                      fontSize="14"
+                      _hover={{
+                        backgroundColor: 'transparent',
+                      }}
+                    />
+                    <IconButton
+                      p="none"
+                      onClick={() => handleDeleteClick(battery.invoiceNumber)}
+                      _hover={{
+                        bgColor: "transparent"
+                      }}
+                      aria-label='delete' icon={<FaTrashAlt size="14" />}
+                      bgColor="transparent"
+                      color="#4682b4"
+                    />
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <Button
+          bg="#4682b4"
+          color="white"
+          _hover={{
+            bgColor: '4682b4',
+            color: 'white',
+          }}
+          onClick={() => setSelectedComponent('invoice')}
+        >
+          +
+          {/* Receive Stock */}
+        </Button>
+      </Flex>
+
       <HStack
         pos="absolute"
         bottom="4"

@@ -34,6 +34,7 @@ const Navbar = () => {
       <HStack
         px="4"
         py="4"
+        // align='flex-end'
         justifyContent="space-between"
         // bg="#4A4A4A"
         bg="#4682b4"
@@ -42,7 +43,7 @@ const Navbar = () => {
           Date: <GetCurrentDate />
         </Text> */}
 
-        <VStack>
+        {/* <VStack>
           <Heading color="white" textAlign="left" w="full" fontSize="40">
             AGS Battery House
           </Heading>
@@ -55,10 +56,12 @@ const Navbar = () => {
           >
             123 Steet X Cantt, Quetta{' '}
           </Heading>
-        </VStack>
+        </VStack> */}
 
         <Heading
           color="white"
+          pl='12'
+          fontWeight='400'
           display={selectedComponent == 'LandingPage' ? 'none' : 'block'}
         >{selectedComponent}</Heading>
 

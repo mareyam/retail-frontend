@@ -29,7 +29,7 @@ import EditCustomer from './EditCustomer';
 import { CiEdit } from "react-icons/ci";
 import { FiEdit } from 'react-icons/fi';
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 100;
 const Customer = () => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -118,13 +118,15 @@ const Customer = () => {
 
   return (
     <VStack bgColor="#F0FFF4" align="center">
-      <HStack py="8" w="80%" justifyContent="space-between">
+      <HStack py="2" w="80%" justifyContent="space-between">
         <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <AddNewCustomer refresh={refresh} setRefresh={setRefresh} />
       </HStack>
 
       <TableContainer
         border="1px solid"
+
+        overflowY='auto'
         borderColor="gray.400"
         w="80%"
         pos="relative"
@@ -159,34 +161,34 @@ const Customer = () => {
             }}
           >
             <Tr bg="#4682b4" color="white" pb="4">
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Customer ID
-              </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              </Th> */}
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Customer Name
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Addres
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Phone Number
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Type
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Discount %
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">Edit</Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">Delete</Th>
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Edit</Th>
+              {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Delete</Th> */}
 
-              {/* <Th textTransform="capitilize" color="white" fontSize="16">
+              {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Sales
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Bill Summary
               </Th>
-              <Th textTransform="capitilize" color="white" fontSize="16">
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Received Cash
               </Th> */}
             </Tr>
@@ -199,12 +201,12 @@ const Customer = () => {
                   setBattery(customer);
                 }}
               >
-                <Td>{customer.customerId}</Td>
+                {/* <Td>{customer.customerId}</Td> */}
                 <Td>{customer.customerName}</Td>
                 <Td>{customer.address}</Td>
                 <Td>{customer.phoneNumber}</Td>
                 <Td>{customer.customerType}</Td>
-                <Td>{customer.discountPercent}</Td>
+                <Td>{customer.discountPercent ? customer.discountPercent : 0}%</Td>
                 {/* <Td>{customer.sales}</Td>
                 <Td>{customer.billSummary}</Td>
                 <Td>{customer.receivedCashProfiles}</Td> */}
@@ -223,7 +225,7 @@ const Customer = () => {
                     }}
                   />
                 </Td>
-                <Td>
+                {/* <Td>
                   <IconButton
                     p="none"
                     onClick={() => handleDeleteClick(customer.customerId)}
@@ -234,14 +236,14 @@ const Customer = () => {
                     bgColor="transparent"
                     color="#4682b4"
                   />
-                </Td>
+                </Td> */}
               </Tr>
             ))}
           </Tbody>
         </Table>
       </TableContainer>
 
-      <HStack
+      {/* <HStack
         pos="absolute"
         bottom="4"
         spacing={4}
@@ -279,7 +281,7 @@ const Customer = () => {
           }}
           disabled={currentPage == totalPages}
         />
-      </HStack>
+      </HStack> */}
       {isOpen && (
         <EditCustomer
           customerDetails={selectedCustomer}

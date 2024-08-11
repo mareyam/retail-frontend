@@ -19,11 +19,11 @@ function App() {
   const { selectedComponent, setSelectedComponent } = useStateStore();
   const renderComponent = () => {
     switch (selectedComponent) {
-      case 'Inventory':
+      case 'Inventory Profile':
         return <Stock />;
       case 'invoice':
         return <AddNewInvoice />;
-      case 'Products':
+      case 'Product Profile':
         return <Products />;
       case 'Product Sale':
         return <Sale />;
@@ -31,9 +31,9 @@ function App() {
         return <Purchase />;
       case 'Report':
         return <Stats />;
-      case 'Vendor':
+      case 'Vendor Profile':
         return <Vendors />;
-      case 'Customers':
+      case 'Customer Profile':
         return <Customer />;
       case 'LandingPage':
         return <LandingPage />;

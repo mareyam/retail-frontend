@@ -78,8 +78,8 @@ const RemainingAmountByCustomer = ({
                 duration: 3000,
                 isClosable: true
             })
-            setRefresh(!refresh);
             onClose();
+            setRefresh(!refresh);
         } catch (error) {
             console.error('Error adding remaining amount:', error);
             // toast({
@@ -100,9 +100,10 @@ const RemainingAmountByCustomer = ({
         setReturnedProductAmount(null);
     };
 
+    console.log(totalBillAmount + " " + discountAmount + " " + returnedProductAmount + " " + receivedAmount + " " + totalAmountReceived)
 
     useEffect(() => {
-        setFinalBillAmount(totalBillAmount - discountAmount - returnedProductAmount - receivedAmount);
+        setFinalBillAmount(totalBillAmount - discountAmount - returnedProductAmount - receivedAmount - totalAmountReceived);
     }, [totalBillAmount, discountAmount, returnedProductAmount, receivedAmount]);
 
 

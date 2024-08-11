@@ -65,8 +65,10 @@ const Sale = () => {
 
 
   useEffect(() => {
-    setDiscount(selectedCustomer?.discountPercent)
-    setCustomerName(selectedCustomer?.customerName)
+    if (selectedCustomer) {
+      setDiscount(selectedCustomer.discountPercent)
+      setCustomerName(selectedCustomer.customerName)
+    }
   }, [selectedCustomer])
 
   const [newRow, setNewRow] = useState({
@@ -283,8 +285,8 @@ const Sale = () => {
           <CustomerTypeRadio
             saleMade={saleMade}
             customers={customers}
-            customerName={customerName}
-            setCustomerName={setCustomerName}
+            // customerName={customerName}
+            // setCustomerName={setCustomerName}
             selectedCustomerId={selectedCustomerId}
             setSelectedCustomerId={setSelectedCustomerId}
             selectedCustomer={selectedCustomer}
@@ -556,7 +558,7 @@ const Sale = () => {
 
                   <Button onClick={handlePostSale}
                     w='32'
-                    isDisabled={addedBatteries.length < 1}
+                    isDisabled={addedBatteries.length < 1 || saleMade}
                     bg="#4682b4"
                     color="white"
                     _hover={{
@@ -610,42 +612,24 @@ const Sale = () => {
 };
 export default Sale;
 
-const CustomerTypeRadio = ({
-  customerName, setCustomerName,
-  selectedCustomer, setSelectedCustomer, saleMade, setCustomers, selectedCustomerId, setSelectedCustomerId, }) => {
-  const {
-    // customerName, setCustomerName,
-    customers, customerType, setCustomerType } = useStateStore();
+const CustomerTypeRadio = ({ customers, saleMade, selectedCustomerId, setSelectedCustomerId, selectedCustomer, setSelectedCustomer }) => {
+  const { customerType, setCustomerType } = useStateStore();
+  console.log(customers)
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get('https://localhost:7059/api/Customer');
-        setCustomers(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchCustomers();
-  }, []);
 
   const handleCustomerChange = (event) => {
-    const selectedName = event.target.value;
-    setCustomerName(selectedName)
-    console.log(customerName)
 
-    const customer = (customers.find(
-      (customer) => customer.customerName === selectedName
-    ))
-    setSelectedCustomer(customer)
-    console.log(selectedCustomer)
+    const selectedCustomerName = event.target.value;
+    const selectedCustomer = customers.find(
+      (customer) => customer.customerName === selectedCustomerName
+    );
 
     if (selectedCustomer) {
       setSelectedCustomerId(selectedCustomer.customerId);
-    } else {
-      setSelectedCustomerId(null);
+      setSelectedCustomer(selectedCustomer);
     }
+    console.log(selectedCustomerName)
+    console.log(selectedCustomer)
   };
 
   return (

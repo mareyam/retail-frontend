@@ -70,6 +70,11 @@ const useStateStore = create((set) => ({
   returnedProductAmount: 0,
   setReturnedProductAmount: (returnedProductAmount) =>
     set({ returnedProductAmount }),
+
+  email: '',
+  password: '',
+  setEmail: (email) => set({ email }),
+  setPassword: (password) => set({ password }),
 }));
 
 export default useStateStore;

@@ -69,7 +69,7 @@ const ReceiptComponent = () => {
                         <Box w='full' h='1px' borderBottom='3px dotted black' />
                         <Flex w='full' justifyContent='space-between'>
                             <Text fontWeight='500'>Remaining Amount</Text>
-                            <Text fontWeight='500'>PKR {remainingAmount}</Text>
+                            <Text fontWeight='500'>PKR {remainingAmount?.toFixed(0)}</Text>
                         </Flex>
                         <Box w='full' h='1px' borderBottom='3px dotted black' />
                         <Text textAlign='center' mt={4} fontSize='20' fontWeight='600'>Thank you</Text>

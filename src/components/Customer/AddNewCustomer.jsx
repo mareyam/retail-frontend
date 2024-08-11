@@ -34,6 +34,35 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
   const formattedDate = currentDate.toISOString();
 
   const handleAddCustomer = async () => {
+    const missingFields = [];
+
+    if (customerName === "") missingFields.push("Customer Name");
+    if (address === "") missingFields.push("Address");
+    if (phoneNumber === "") missingFields.push("Phone Number");
+
+    if (customerName && (customerName.length < 3 || customerName.length > 20)) {
+      missingFields.push("Customer Name (must be between 3 and 20 characters)");
+    }
+
+    if (address && (address.length < 12 || address.length > 30)) {
+      missingFields.push("Address (must be between 12 and 30 characters)");
+    }
+
+    if (phoneNumber && phoneNumber.length !== 11) {
+      missingFields.push("Phone Number (must be exactly 11 digits)");
+    }
+
+    if (missingFields.length > 0) {
+      toast({
+        title: `${missingFields.join(', ')} fields are missing or incorrect`,
+        description: `Please check and correct the details.`,
+        status: 'warning',
+        duration: 5000,
+        isClosable: true
+      });
+      return;
+    }
+
     const newCustomer = {
       date: formattedDate,
       customerName,
@@ -42,7 +71,7 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
       customerType,
       discountPercent
     };
-
+    console.log(newCustomer)
     try {
       const response = await axios.post('https://localhost:7059/api/Customer', newCustomer);
       console.log('Data:', response.data);
@@ -92,6 +121,8 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
                 <Text>Customer Name</Text>
                 <Input
                   w="52"
+                  minLength='3'
+                  maxLength='20'
                   placeholder="Customer Name"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
@@ -116,6 +147,8 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
                 <Text>Address</Text>
                 <Input
                   w="52"
+                  minLength='3'
+                  maxLength='30'
                   placeholder="Address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
@@ -126,6 +159,8 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
                 <Text>Phone Number</Text>
                 <Input
                   w="52"
+                  minLength='11'
+                  maxLength='11'
                   type='number'
                   placeholder="Phone Number"
                   value={phoneNumber}
@@ -135,14 +170,23 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
 
               <Flex w="full" justifyContent="space-between">
                 <Text>Discount %</Text>
-                <Input
+                {/* <Input
                   w="52"
                   type='number'
                   placeholder="Discount"
                   value={discountPercent}
                   onChange={(e) => setDiscountPercent(e.target.value)}
+                /> */}
+                <Input
+                  w="52"
+                  type='number'
+                  placeholder="Discount"
+                  value={discountPercent}
+                  onChange={(e) => setDiscountPercent(Number(e.target.value))}
                 />
               </Flex>
+
+
 
               <Flex w="full" justifyContent="space-between">
                 <Text>Date</Text>
@@ -171,109 +215,3 @@ const AddNewCustomer = ({ refresh, setRefresh }) => {
 };
 
 export default AddNewCustomer;
-
-// import React from 'react';
-// import {
-//   Modal,
-//   ModalOverlay,
-//   ModalContent,
-//   ModalHeader,
-//   ModalFooter,
-//   ModalBody,
-//   useDisclosure,
-//   Button,
-//   ModalCloseButton,
-//   VStack,
-//   Text,
-//   Input,
-//   Flex, RadioGroup, Stack, Radio
-// } from '@chakra-ui/react';
-
-// const AddNewCustomer = ({ refresh, setRefresh }) => {
-
-//   const { isOpen, onOpen, onClose } = useDisclosure();
-//   const currentDate = new Date();
-
-//   const year = currentDate.getFullYear();
-//   const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-//   const day = String(currentDate.getDate()).padStart(2, '0');
-
-//   const formattedDate = `${year}-${month}-${day}`;
-//   return (
-//     <>
-//       <Button
-//         bg="#4682b4"
-//         color="white"
-//         _hover={{
-//           bgColor: '4682b4',
-//           color: 'white',
-//         }}
-//         onClick={onOpen}
-//       >
-//         Add New Customer
-//       </Button>
-//       <Modal isOpen={isOpen} onClose={onClose} size="xl">
-//         <ModalOverlay />
-//         <ModalOverlay />
-//         <ModalOverlay />
-//         <ModalContent>
-//           <ModalHeader>Add New Customer</ModalHeader>
-//           <ModalCloseButton />
-//           <ModalBody>
-//             <VStack w="full">
-//               <Flex w="full" justifyContent="space-between">
-//                 <Text>Customer Name</Text>
-//                 <Input w="52" placeholder="Customer Name" />
-//               </Flex>
-
-//               <Flex w="full" justifyContent="space-between">
-//                 <Text>Customer Type</Text>
-//                 <RadioGroup defaultValue='Retail'>
-//                   <Stack spacing='12' direction='row'>
-//                     <Radio colorScheme='green' value='Retail'>
-//                       Retail
-//                     </Radio>
-//                     <Radio colorScheme='green' value='Wholesale'>
-//                       Wholesale
-//                     </Radio>
-//                   </Stack>
-//                 </RadioGroup>
-//               </Flex>
-
-//               <Flex w="full" justifyContent="space-between">
-//                 <Text>Address</Text>
-//                 <Input w="52" placeholder="ABC" />
-//               </Flex>
-
-//               <Flex w="full" justifyContent="space-between">
-//                 <Text>Phone Number</Text>
-//                 <Input w="52" placeholder="032342342342" />
-//               </Flex>
-
-//               <Flex w="full" justifyContent="space-between">
-//                 <Text>Date</Text>
-//                 <Text w="52">{formattedDate}</Text>
-//               </Flex>
-//             </VStack>
-//           </ModalBody>
-
-//           <ModalFooter>
-//             <Button
-//               bg="#4682b4"
-//               color="white"
-//               onClick={onClose}
-//               _hover={{
-//                 backgroundColor: "#4682b4",
-//                 color: "white"
-//               }}
-//             >
-//               Add Customer
-//             </Button>
-//           </ModalFooter>
-//         </ModalContent>
-//       </Modal>
-//     </>
-//   );
-// };
-
-// export default AddNewCustomer;

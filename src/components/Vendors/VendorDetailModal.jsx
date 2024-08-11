@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -11,158 +11,164 @@ import {
   VStack,
   Text,
   Flex,
-  HStack,
-  useDisclosure,
   Input,
+  useToast
 } from '@chakra-ui/react';
+import axios from 'axios';
 
-const VendorDetailModal = ({ isOpen, onClose, vendorDetail }) => {
+const VendorDetailModal = ({ isOpen, onClose, vendorDetail, refresh, setRefresh }) => {
+  const toast = useToast();
 
-  console.log(vendorDetail)
-  const {
-    isOpen: isOpenDelete,
-    onOpen: onOpenDelete,
-    onClose: onCloseDelete,
-  } = useDisclosure();
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableDetails, setEditableDetails] = useState({
-    ...vendorDetail,
-  });
-  const handleEditClick = () => {
-    setIsEditing(!isEditing);
+  const [brandName, setBrandName] = useState(vendorDetail.brandName || '');
+  const [vendorName, setVendorName] = useState(vendorDetail.vendorName || '');
+  const [vendorDescription, setVendorDescription] = useState(vendorDetail.vendorDescription || '');
+  const [vendorAddress, setVendorAddress] = useState(vendorDetail.vendorAddress || '');
+  const [phone, setPhone] = useState(vendorDetail.phone || '');
+  const [date, setDate] = useState(vendorDetail.date || '');
+
+  useEffect(() => {
+    if (vendorDetail) {
+      setBrandName(vendorDetail.brandName || '');
+      setVendorName(vendorDetail.vendorName || '');
+      setVendorDescription(vendorDetail.vendorDescription || '');
+      setVendorAddress(vendorDetail.vendorAddress || '');
+      setPhone(vendorDetail.phone || '');
+      setDate(vendorDetail.date || '');
+    }
+  }, [vendorDetail]);
+
+  const validateFields = () => {
+    const missingFields = [];
+
+    if (vendorName.length < 3 || vendorName.length > 20) {
+      missingFields.push('Vendor Name must be between 3 and 20 characters.');
+    }
+    if (vendorAddress.length < 7 || vendorAddress.length > 30) {
+      missingFields.push('Address must be between 7 and 30 characters.');
+    }
+    if (phone.length !== 11) {
+      missingFields.push('Phone Number must be exactly 11 digits.');
+    }
+
+    if (missingFields.length > 0) {
+      toast({
+        title: 'Validation Error',
+        description: missingFields.join(' '),
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      });
+      return false;
+    }
+    return true;
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditableDetails({ ...editableDetails, [name]: value });
+  const handleSave = async () => {
+    if (!validateFields()) return;
+
+    const updatedVendor = {
+      brandName,
+      vendorName,
+      vendorDescription,
+      vendorAddress,
+      phone,
+      date
+    };
+
+    try {
+      const response = await axios.put(`https://localhost:7059/api/Vendor/${vendorDetail.vendorId}`, updatedVendor);
+      console.log('Data:', response.data);
+
+      toast({
+        title: 'Vendor updated successfully',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+
+      setRefresh(!refresh);
+      onClose();
+    } catch (error) {
+      console.error('Error updating vendor:', error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to update the vendor.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
-      <ModalOverlay />
       <ModalContent>
         <ModalHeader fontSize="24" textAlign="center">
-          {editableDetails.brandName}
+          {brandName}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack w="full" gap="4">
-
-
             <Flex w="full" justifyContent="space-between">
               <Text fontSize="20">Vendor Name</Text>
-              {isEditing ? (
-                <Input
-                  w="40"
-                  fontSize="20"
-                  name="brandName"
-                  value={editableDetails.vendorName}
-                  onChange={handleInputChange}
-                />
-              ) : (
-                <Text fontSize="20">{editableDetails.vendorName}</Text>
-              )}
+              <Input
+                w="40"
+                fontSize="20"
+                value={vendorName}
+                onChange={(e) => setVendorName(e.target.value)}
+              />
             </Flex>
 
             <Flex w="full" justifyContent="space-between">
               <Text fontSize="20">Description</Text>
-              {isEditing ? (
-                <Input
-                  fontSize="20"
-                  w="40"
-                  name="productModel"
-                  value={editableDetails.vendorDescription}
-                  onChange={handleInputChange}
-                />
-              ) : (
-                <Text fontSize="20">{editableDetails.vendorDescription}</Text>
-              )}
+              <Input
+                fontSize="20"
+                w="40"
+                value={vendorDescription}
+                onChange={(e) => setVendorDescription(e.target.value)}
+              />
             </Flex>
 
             <Flex w="full" justifyContent="space-between">
               <Text fontSize="20">Address</Text>
-              {isEditing ? (
-                <Input
-                  fontSize="20"
-                  w="40"
-                  name="vendorAddress"
-                  value={editableDetails.vendorAddress}
-                  onChange={handleInputChange}
-                />
-              ) : (
-                <Text fontSize="20">{editableDetails.vendorAddress}</Text>
-              )}
+              <Input
+                fontSize="20"
+                w="40"
+                value={vendorAddress}
+                onChange={(e) => setVendorAddress(e.target.value)}
+              />
             </Flex>
-
-            {/* <Flex w="full" justifyContent="space-between">
-              <Text fontSize="20">Variant</Text>
-              <Text fontSize='20'>{vendorDetail.variant}</Text>
-            </Flex> */}
 
             <Flex w="full" justifyContent="space-between">
               <Text fontSize="20">Phone</Text>
-              {isEditing ? (
-                <Input
-                  fontSize="20"
-                  w="40"
-                  name="phone"
-                  value={editableDetails.phone}
-                  onChange={handleInputChange}
-                />
-              ) : (
-                <Text fontSize="20">{editableDetails.phone}</Text>
-              )}
+              <Input
+                fontSize="20"
+                w="40"
+                type="number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </Flex>
-
 
             <Flex w="full" justifyContent="space-between">
               <Text fontSize="20">Date</Text>
-              <Text fontSize="20">{vendorDetail.date}</Text>
+              <Text fontSize="20">{date.split('T')[0]}</Text>
             </Flex>
-
-
           </VStack>
         </ModalBody>
 
         <ModalFooter>
-          <HStack gap="4">
-            <Button
-              onClick={onOpenDelete}
-              bgColor="red"
-              color="white"
-              _hover={{
-                bgColor: 'red',
-                color: 'white',
-              }}
-            >
-              Delete
-            </Button>
-            <Button
-              bgColor={isEditing ? "green" : "orange"}
-              color="white"
-              _hover={{
-                color: 'white',
-              }}
-              onClick={handleEditClick}
-            >
-              {isEditing ? "Save" : "Edit"}
-            </Button>
-            <Button
-              bgColor="#319795"
-              color="white"
-              onClick={onClose}
-              _hover={{
-                bgColor: '#319795',
-                color: 'white',
-              }}
-            >
-              Close
-            </Button>
-          </HStack>
+          <Button
+            bgColor="green"
+            color="white"
+            _hover={{ bgColor: 'green', color: 'white' }}
+            onClick={handleSave}
+          >
+            Save
+          </Button>
         </ModalFooter>
       </ModalContent>
-
     </Modal>
   );
 };

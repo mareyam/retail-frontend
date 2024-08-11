@@ -20,37 +20,58 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 
-const EditCustomer = ({ customerId, refresh, setRefresh, onClose, isOpen, onOpen }) => {
+const EditCustomer = ({ customerDetails, refresh, setRefresh, onClose, isOpen, onOpen }) => {
   const toast = useToast();
 
-  const [customerName, setCustomerName] = useState('');
-  const [customerType, setCustomerType] = useState('Retail');
-  const [address, setAddress] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [discountPercent, setDiscountPercent] = useState(0);
-  const [date, setDate] = useState('');
+  const [customerName, setCustomerName] = useState(customerDetails.customerName || '');
+  const [customerType, setCustomerType] = useState(customerDetails.customerType || 'Retail');
+  const [address, setAddress] = useState(customerDetails.address || '');
+  const [phoneNumber, setPhoneNumber] = useState(customerDetails.phoneNumber || '');
+  const [discountPercent, setDiscountPercent] = useState(customerDetails.discountPercent || 0);
+  const [date, setDate] = useState(customerDetails.date || '');
 
   useEffect(() => {
-    if (customerId) {
-      const fetchCustomerData = async () => {
-        try {
-          const response = await axios.get(`https://localhost:7059/api/Customer/${customerId}`);
-          const customer = response.data;
-          setCustomerName(customer.customerName);
-          setCustomerType(customer.customerType);
-          setAddress(customer.address);
-          setPhoneNumber(customer.phoneNumber);
-          setDiscountPercent(customer.discountPercent);
-          setDate(customer.date);
-        } catch (error) {
-          console.error('Error fetching customer data:', error);
-        }
-      };
-      fetchCustomerData();
+    if (customerDetails) {
+      setCustomerName(customerDetails.customerName);
+      setCustomerType(customerDetails.customerType);
+      setAddress(customerDetails.address);
+      setPhoneNumber(customerDetails.phoneNumber);
+      setDiscountPercent(customerDetails.discountPercent);
+      setDate(customerDetails.date);
     }
-  }, [customerId]);
+  }, [customerDetails]);
+
+  const validateFields = () => {
+    const missingFields = [];
+
+    if (customerName.length < 3 || customerName.length > 20) {
+      missingFields.push('Customer Name must be between 3 and 20 characters.');
+    }
+    if (address.length < 7 || address.length > 30) {
+      missingFields.push('Address must be between 7 and 30 characters.');
+    }
+    if (phoneNumber.length !== 11) {
+      missingFields.push('Phone Number must be exactly 11 digits.');
+    }
+    if (discountPercent < 0 || discountPercent > 100) {
+      missingFields.push('Discount Percent must be between 0% and 100%.');
+    }
+    if (missingFields.length > 0) {
+      toast({
+        title: 'Validation Error',
+        description: missingFields.join(' '),
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      });
+      return false;
+    }
+    return true;
+  };
 
   const handleEditCustomer = async () => {
+    if (!validateFields()) return;
+
     const updatedCustomer = {
       date,
       customerName,
@@ -61,7 +82,7 @@ const EditCustomer = ({ customerId, refresh, setRefresh, onClose, isOpen, onOpen
     };
 
     try {
-      const response = await axios.put(`https://localhost:7059/api/Customer/${customerId}`, updatedCustomer);
+      const response = await axios.put(`https://localhost:7059/api/Customer/${customerDetails.customerId}`, updatedCustomer);
       console.log('Data:', response.data);
 
       toast({

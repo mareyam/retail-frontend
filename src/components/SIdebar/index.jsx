@@ -40,7 +40,7 @@ const Sidebar = () => {
     <>
       <Box px="4" h="full">
         <Box w="40" h="20" onClick={() => setSelectedComponent('LandingPage')}>
-          <Image src="/image.png" alt='landing page'/>
+          <Image src="/image.png" alt='landing page' />
         </Box>
 
         <VStack h="full" gap="8">
@@ -66,7 +66,28 @@ const Sidebar = () => {
             </Text>
           </HStack>
 
-          <VStack w="full" gap="0">
+          <VStack
+            w="full"
+            gap="0"
+            h="45dvh"
+            overflow="auto"
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '6px',
+                backgroundColor: 'transparent',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'transparent',
+                borderRadius: '10px',
+              },
+              '&:hover::-webkit-scrollbar-thumb': {
+                backgroundColor: 'white',
+              },
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: 'transparent',
+              },
+            }}
+          >
             {menuItems.map((item, index) => (
               <Flex
                 key={index}
@@ -102,6 +123,48 @@ const Sidebar = () => {
               </Flex>
             ))}
           </VStack>
+
+          {/* <VStack w="full" gap="0"
+            h='50dvh'
+            overflow='auto'
+            border='1px solid red'
+
+          >
+            {menuItems.map((item, index) => (
+              <Flex
+                key={index}
+                w="full"
+                py="0.5"
+                alignItems="center"
+                cursor="pointer"
+                _hover={{
+                  textDecor: 'underline',
+                }}
+              >
+                <IconButton
+                  aria-label={item.name}
+                  icon={item.icon}
+                  color="white"
+                  fontSize="20"
+                  bg="transparent"
+                  _hover={{
+                    backgroundColor: 'transparent',
+                  }}
+                />
+                <Text
+                  onClick={() => {
+                    setSelectedComponent(item.name);
+                    if (item.name === 'Sale') {
+                      onOpen();
+                    }
+                  }}
+                  fontSize="18"
+                >
+                  {item.name}
+                </Text>
+              </Flex>
+            ))}
+          </VStack> */}
 
           <VStack>
             <Text color="white">
@@ -163,5 +226,9 @@ const menuItems = [
   {
     name: 'Customers',
     icon: <MdPeopleAlt />,
+  },
+  {
+    name: 'All Sales',
+    icon: <MdOutlinePointOfSale />,
   },
 ];

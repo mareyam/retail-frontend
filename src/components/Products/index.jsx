@@ -19,12 +19,12 @@ import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import AddNewProduct from '../common/AddNewProduct';
-import BatteryDetailModal from './BatteryDetailModal';
 import axios from 'axios';
-import { CiEdit } from 'react-icons/ci';
 import { FaTrashAlt } from 'react-icons/fa';
+import { FiEdit } from 'react-icons/fi';
+import EditProduct from './EditProduct';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 7;
 
 const Products = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,15 +72,21 @@ const Products = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-      fetchData();
     };
+    fetchData();
   }, [refresh]);
 
-  console.log(battery);
+  const handleEdit = (customer) => {
+    onOpenDetailModal();
+    setBattery(customer)
+  }
+
+
+  console.log(batteries);
   return (
     <VStack h="85dvh" bgColor="#F0FFF4" align="center">
       <HStack w="80%">
-        <Flex py="8" justifyContent="space-between" w="full">
+        <Flex py="2" justifyContent="space-between" w="full">
           <Searchbar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -92,7 +98,6 @@ const Products = () => {
       <TableContainer
         border="1px solid"
         borderColor="gray.400"
-        mt="2"
         w="80%"
         pos="relative"
         // h="61dvh"
@@ -201,11 +206,11 @@ const Products = () => {
                 <Td>
                   <IconButton
                     p="none"
-                    onClick={() => handleEdit(customer.customerId)}
+                    onClick={() => handleEdit(battery)}
                     bgColor="transparent"
                     color="#4682b4"
                     aria-label="left-icon"
-                    icon={<CiEdit />}
+                    icon={<FiEdit />}
                     fontSize="12"
                     _hover={{
                       backgroundColor: 'transparent',
@@ -272,10 +277,13 @@ const Products = () => {
         />
       </HStack>
       {isOpenDetailModal && (
-        <BatteryDetailModal
-          batteryDetails={battery}
+        <EditProduct
+          productDetails={battery}
           isOpen={onOpenDetailModal}
           onClose={onCloseDetailModal}
+          onOpen={onOpenDetailModal}
+          refresh={refresh}
+          setRefresh={setRefresh}
         />
       )}
     </VStack>

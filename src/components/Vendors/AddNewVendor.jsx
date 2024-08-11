@@ -18,9 +18,8 @@ import {
 import { FaTruckPlane } from 'react-icons/fa6';
 import axios from 'axios'
 
-const AddNewVendor = () => {
+const AddNewVendor = ({ refresh, setRefresh }) => {
   const toast = useToast();
-  const [refresh, setRefresh] = useState(false);
   const [vendorName, setVendorName] = useState("");
   const [vendorDescription, setVendorDescription] = useState("");
   const [vendorAddress, setVendorAddress] = useState("");

@@ -27,6 +27,7 @@ import axios from 'axios';
 import { FaTrashAlt } from 'react-icons/fa';
 import EditCustomer from './EditCustomer';
 import { CiEdit } from "react-icons/ci";
+import { FiEdit } from 'react-icons/fi';
 
 const ITEMS_PER_PAGE = 6;
 const Customer = () => {
@@ -41,7 +42,7 @@ const Customer = () => {
   const [refresh, setRefresh] = useState();
   const [selectedCustomer, setSelectedCustomer] = useState();
 
-
+  console.log(selectedCustomer)
   console.log(customers.length);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -109,9 +110,9 @@ const Customer = () => {
     }
   };
 
-  const handleEdit = (index) => {
+  const handleEdit = (customer) => {
     onOpen();
-    setSelectedCustomer(index)
+    setSelectedCustomer(customer)
   }
 
 
@@ -203,7 +204,7 @@ const Customer = () => {
                 <Td>{customer.address}</Td>
                 <Td>{customer.phoneNumber}</Td>
                 <Td>{customer.customerType}</Td>
-                <Td>{customer.discount}</Td>
+                <Td>{customer.discountPercent}</Td>
                 {/* <Td>{customer.sales}</Td>
                 <Td>{customer.billSummary}</Td>
                 <Td>{customer.receivedCashProfiles}</Td> */}
@@ -211,12 +212,12 @@ const Customer = () => {
                 <Td>
                   <IconButton
                     p="none"
-                    onClick={() => handleEdit(customer.customerId)}
+                    onClick={() => handleEdit(customer)}
                     bgColor="transparent"
                     color="#4682b4"
                     aria-label="left-icon"
-                    icon={<CiEdit />}
-                    fontSize="12"
+                    icon={<FiEdit />}
+                    fontSize="14"
                     _hover={{
                       backgroundColor: 'transparent',
                     }}
@@ -226,14 +227,12 @@ const Customer = () => {
                   <IconButton
                     p="none"
                     onClick={() => handleDeleteClick(customer.customerId)}
+                    _hover={{
+                      bgColor: "transparent"
+                    }}
+                    aria-label='delete' icon={<FaTrashAlt size="14" />}
                     bgColor="transparent"
                     color="#4682b4"
-                    aria-label="left-icon"
-                    icon={<FaTrashAlt />}
-                    fontSize="12"
-                    _hover={{
-                      backgroundColor: 'transparent',
-                    }}
                   />
                 </Td>
               </Tr>

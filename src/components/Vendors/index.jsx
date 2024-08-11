@@ -28,6 +28,7 @@ import axios from 'axios';
 import { FiEdit } from "react-icons/fi";
 import { FiDelete } from "react-icons/fi";
 import VendorDetailModal from './VendorDetailModal';
+import { FaTrashAlt } from 'react-icons/fa';
 
 
 const ITEMS_PER_PAGE = 6;
@@ -192,6 +193,8 @@ const Vendors = () => {
                   <IconButton
                     onClick={onOpenDetailModal}
                     bgColor='transparent'
+                    color="#4682b4"
+
                     _hover={{
                       bgColor: "transparent"
                     }}
@@ -201,10 +204,12 @@ const Vendors = () => {
                   <IconButton
                     onClick={() => handleDeleteClick(vendor.vendorId)}
                     bgColor='transparent'
+                    aria-label='delete' icon={<FaTrashAlt size="14" />}
                     _hover={{
                       bgColor: "transparent"
                     }}
-                    aria-label='delete' icon={<FiDelete size="14" />} />
+                    color="#4682b4"
+                  />
                 </Td>
               </Tr>
             ))}

@@ -15,7 +15,6 @@ import {
   Td,
   useDisclosure,
 } from '@chakra-ui/react';
-import BatteryDetailModal from '../Products/BatteryDetailModal';
 
 const Top3Products = () => {
   const {
@@ -74,13 +73,13 @@ const Top3Products = () => {
           </Table>
         </CardBody>
       </Card>
-      {isOpenDetailModal && (
+      {/* {isOpenDetailModal && (
         <BatteryDetailModal
           batteryDetails={battery}
           isOpen={onOpenDetailModal}
           onClose={onCloseDetailModal}
         />
-      )}
+      )} */}
     </>
   );
 };

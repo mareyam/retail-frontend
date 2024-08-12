@@ -45,6 +45,7 @@ const Sale = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [customerName, setCustomerName] = useState('');
+  console.log(customerName)
   const [batteries, setBatteries] = useState([]);
   const [filteredBatteryData, setFilteredBatteryData] = useState(batteries);
   const [selectedBattery, setSelectedBattery] = useState(null);
@@ -171,7 +172,7 @@ const Sale = () => {
     };
 
     fetchCustomers();
-  }, [refresh]);
+  }, [refresh, customerName]);
 
 
   useEffect(() => {
@@ -283,12 +284,12 @@ const Sale = () => {
   return (
     <>
       <VStack w='full' h='auto' align='center'>
-        <Flex pt='1' w="90%" justifyContent="space-between">
+        <Flex pt='1' w="100%" justifyContent="space-between">
           <CustomerTypeRadio
             saleMade={saleMade}
             customers={customers}
-            // customerName={customerName}
-            // setCustomerName={setCustomerName}
+            customerName={customerName}
+            setCustomerName={setCustomerName}
             selectedCustomerId={selectedCustomerId}
             setSelectedCustomerId={setSelectedCustomerId}
             selectedCustomer={selectedCustomer}
@@ -311,7 +312,7 @@ const Sale = () => {
 
         <Flex
           gap='4'
-          w='90%' pos='relative' justifyContent='space-between' pt='0'>
+          w='100%' pos='relative' justifyContent='space-between' pt='0'>
           <Box
             h="75dvh"
             overflowY='auto'
@@ -613,9 +614,15 @@ const Sale = () => {
 };
 export default Sale;
 
-const CustomerTypeRadio = ({ customers, saleMade, selectedCustomerId, setSelectedCustomerId, selectedCustomer, setSelectedCustomer }) => {
+const CustomerTypeRadio = ({ customerName, setCustomerName, customers, saleMade, selectedCustomerId, setSelectedCustomerId, selectedCustomer, setSelectedCustomer }) => {
+  const toast = useToast();
   const { customerType, setCustomerType } = useStateStore();
   console.log(customers)
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}`;
 
 
   const handleCustomerChange = (event) => {
@@ -633,68 +640,45 @@ const CustomerTypeRadio = ({ customers, saleMade, selectedCustomerId, setSelecte
     console.log(selectedCustomer)
   };
 
+  const handleAddCustomer = async () => {
+
+
+    const newCustomer = {
+      date: formattedDate,
+      customerName: customerName,
+      address: "-",
+      phoneNumber: "00000000000",
+      customerType: customerType,
+      discountPercent: "0"
+    };
+    console.log(newCustomer)
+    try {
+      const response = await axios.post('https://localhost:7059/api/Customer', newCustomer);
+      console.log('Data:', response.data);
+
+      toast({
+        title: 'Customer added successfully',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+
+      setRefresh(!refresh);
+      onClose();
+    } catch (error) {
+      console.error('Error adding customer:', error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to add the customer.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
-    // <Flex align='center'>
-    //   <Flex gap='2'>
-    //     <Button
-    //       bgColor="#4682b4"
-    //       color='white'
-    //       _hover={{
-    //         bgColor: "#4682b4"
-    //       }}
-    //       onClick={() => setCustomerType('Retail')}
-    //       isDisabled={saleMade}
-    //     >
-    //       Retail
-    //     </Button>
 
-    //     <Button
-    //       bgColor="#4682b4"
-    //       color='white'
-    //       _hover={{
-    //         bgColor: "#4682b4"
-    //       }}
-    //       onClick={() => setCustomerType('Wholesale')}
-    //       isDisabled={saleMade}
-
-    //     >
-    //       Wholesale
-    //     </Button>
-
-    //     <Box>
-    //       {customerType === 'Retail' && (
-    //         <Input
-    //           h='10'
-    //           placeholder='Enter customer name'
-    //           isDisabled={saleMade}
-
-    //         />
-    //       )}
-
-    //       {customerType === 'Wholesale' && (
-    //         <Select
-    //           placeholder="Select customer"
-    //           onChange={handleCustomerChange}
-    //           isDisabled={saleMade}
-
-    //         >
-    //           {customers.map((customer) => (
-    //             <option key={customer.customerId} value={customer.customerName}>
-    //               {customer.customerName}
-    //             </option>
-    //           ))}
-    //         </Select>
-    //       )}
-
-
-    //     </Box>
-    //   </Flex>
-
-    //   <Text px='2' fontSize='16' fontWeight='500' >Discount </Text>
-    //   <Text >{selectedCustomer?.discountPercent ? selectedCustomer?.discountPercent : 0}%</Text>
-
-
-    // </Flex>
     <Flex align='center' direction='row'
 
     >
@@ -702,7 +686,6 @@ const CustomerTypeRadio = ({ customers, saleMade, selectedCustomerId, setSelecte
         <Flex gap='2'>
           <Radio
             value='Retail' isDisabled={saleMade}>
-
             <chakra.span
               fontWeight='500'
 
@@ -715,18 +698,33 @@ const CustomerTypeRadio = ({ customers, saleMade, selectedCustomerId, setSelecte
             <chakra.span
               fontWeight='500'
             >
-              Wholesale            </chakra.span>
+              Wholesale
+            </chakra.span>
           </Radio>
         </Flex>
       </RadioGroup>
 
       <Flex w='full' align='center' gap='2'>
         {customerType === 'Retail' && (
-          <Input
-            h='10'
-            placeholder='Enter customer name'
-            isDisabled={saleMade}
-          />
+          <>
+            <Input
+              h='10'
+              value={customerName}
+              placeholder='Enter customer name'
+              isDisabled={saleMade}
+              onChange={(event) => setCustomerName(event.target.value)}
+            />
+            <Button
+
+              isDisabled={!customerName}
+              bgColor='#4682b4'
+              color='white'
+              _hover={{
+                color: 'white',
+                bgColor: '#4682b4'
+              }}
+              onClick={handleAddCustomer}>+</Button>
+          </>
         )}
 
         {customerType === 'Wholesale' && (

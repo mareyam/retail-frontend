@@ -41,13 +41,18 @@ const Customer = () => {
   const [customer, setBattery] = useState();
   const [refresh, setRefresh] = useState();
   const [selectedCustomer, setSelectedCustomer] = useState();
+  const [billSummary, setBillSummary] = useState({});
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
 
   console.log(selectedCustomer)
   console.log(customers.length);
+  console.log(billSummary
 
+  )
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentBatteryData = filteredBatteryData.slice(startIndex, endIndex);
+  const currentCustomers = filteredCustomers.slice(startIndex, endIndex);
+
 
   const totalPages = Math.ceil(filteredBatteryData.length / ITEMS_PER_PAGE);
 
@@ -115,10 +120,50 @@ const Customer = () => {
     setSelectedCustomer(customer)
   }
 
+  useEffect(() => {
+    const fetchBillSummary = async () => {
+      try {
+        const response = await axios.get('https://localhost:7059/api/BillSummary');
+        const billData = response.data;
+        setBillSummary(billData.reduce((acc, bill) => {
+          acc[bill.customerId] = bill;
+          return acc;
+        }, {}));
+      } catch (error) {
+        console.error('Error fetching bill summary:', error);
+      }
+    };
+
+    fetchBillSummary();
+  }, [refresh]);
+
+  useEffect(() => {
+    setFilteredCustomers(
+      customers.filter(customer =>
+        customer.customerName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+    setCurrentPage(1);
+  }, [searchQuery, customers]);
+  // useEffect(() => {
+  //   const fetchBillSummary = async () => {
+  //     try {
+  //       const response = await axios.get('https://localhost:7059/api/BillSummary');
+  //       setBillSummary(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+
+  //   fetchBillSummary();
+  // }, [refresh]);
+
+
+
 
   return (
-    <VStack bgColor="#F0FFF4" align="center">
-      <HStack py="2" w="80%" justifyContent="space-between">
+    <VStack bgColor="#F0FFF4" align="center" w='100%'>
+      <HStack py="2" w="100%" justifyContent="space-between">
         <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <AddNewCustomer refresh={refresh} setRefresh={setRefresh} />
       </HStack>
@@ -128,7 +173,7 @@ const Customer = () => {
 
         overflowY='auto'
         borderColor="gray.400"
-        w="80%"
+        w="100%"
         pos="relative"
         h="auto"
         overflow="hidden"
@@ -182,19 +227,14 @@ const Customer = () => {
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Edit</Th>
               {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Delete</Th> */}
 
-              {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
-                Sales
-              </Th>
-              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
-                Bill Summary
-              </Th>
+
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Received Cash
-              </Th> */}
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {customers?.map((customer, index) => (
+            {currentCustomers?.map((customer, index) => (
               <Tr
                 key={customer.id}
                 onClick={() => {
@@ -210,6 +250,11 @@ const Customer = () => {
                 {/* <Td>{customer.sales}</Td>
                 <Td>{customer.billSummary}</Td>
                 <Td>{customer.receivedCashProfiles}</Td> */}
+
+                {/* <Td>{billSummary[customer.id]?.invoiceNumber || '-'}</Td>
+                <Td>{billSummary[customer.id]?.remainingAmount || '-'}</Td>
+                <Td>{billSummary[customer.id]?.receivedAmount || '-'}</Td> */}
+
 
                 <Td>
                   <IconButton

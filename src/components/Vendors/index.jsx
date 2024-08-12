@@ -112,7 +112,7 @@ const Vendors = () => {
 
   return (
     <VStack bgColor="#F0FFF4" align="center">
-      <HStack py="2" w="80%" justifyContent="space-between">
+      <HStack py="2" w="100%" justifyContent="space-between">
         <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <AddNewVendor refresh={refresh} setRefresh={setRefresh} />
       </HStack>
@@ -120,7 +120,7 @@ const Vendors = () => {
       <TableContainer
         border="1px solid"
         borderColor="gray.400"
-        w="80%"
+        w="100%"
         pos="relative"
         h="auto"
         overflowY="auto"
@@ -153,9 +153,7 @@ const Vendors = () => {
             }}
           >
             <Tr bg="#4682b4" color="white" pb="4">
-              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
-                ID
-              </Th>
+
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Vendor Name
               </Th>
@@ -184,7 +182,6 @@ const Vendors = () => {
                   setVendor(vendor);
                 }}
               >
-                <Td>{vendor.vendorId}</Td>
                 <Td>{vendor.vendorName}</Td>
                 <Td>{vendor.vendorDescription}</Td>
                 <Td>{vendor.vendorAddress}</Td>

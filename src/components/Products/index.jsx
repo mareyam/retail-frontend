@@ -116,11 +116,12 @@ const Products = () => {
   console.log(batteries);
   return (
     <VStack h="85dvh" bgColor="#F0FFF4" align="center">
-      <HStack w="80%">
+      <HStack w="100%">
         <Flex py="8" gap='2' w="full">
 
           <TableContainer
             border="1px solid"
+            w='100%'
             borderColor="gray.400"
             pos="relative"
             // h="61dvh"

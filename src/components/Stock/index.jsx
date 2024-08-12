@@ -117,10 +117,9 @@ const Stock = () => {
 
       <Flex w='full' mt='4' gap='2' justifyContent='center'>
         <TableContainer
-          ml='12'
           border="1px solid"
           borderColor="gray.400"
-          w="80%"
+          w="100%"
           pos="relative"
           // h="61dvh"
           h="auto"
@@ -153,25 +152,25 @@ const Stock = () => {
               }}
             >
               <Tr bg="#4682b4" color="white" pb="4">
-                {/* <Th textTransform="capitilize" color="white" fontSize="16">
+                {/* <Th fontWeight='400'  textTransform="capitilize" color="white" fontSize="16">
                 Product Id
               </Th> */}
-                <Th textTransform="capitilize" color="white" fontSize="16">
+                <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                   Model
                 </Th>
-                <Th textTransform="capitilize" color="white" fontSize="16">
+                <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                   Description
                 </Th>
-                <Th textTransform="capitilize" color="white" fontSize="16">
+                <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                   Invoice Number
                 </Th>
-                <Th textTransform="capitilize" color="white" fontSize="16">
+                <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                   Quantity
                 </Th>
-                <Th textTransform="capitilize" color="white" fontSize="16">
+                <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                   Vendor Name
                 </Th>
-                <Th textTransform="capitilize" color="white" fontSize="16">
+                <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                   Actions
                 </Th>
                 {/* <Th

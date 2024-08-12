@@ -201,19 +201,19 @@ export default Sidebar;
 
 const menuItems = [
   {
-    name: 'Customer Profile',
+    name: 'Customer',
     icon: <MdPeopleAlt />,
   },
   {
-    name: 'Vendor Profile',
+    name: 'Vendor',
     icon: <FaShop />,
   },
   {
-    name: 'Inventory Profile',
+    name: 'Inventory',
     icon: <FaTruck />,
   },
   {
-    name: 'Product Profile',
+    name: 'Product',
     icon: <FaCarBattery />,
   },
   {

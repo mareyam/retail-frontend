@@ -19,11 +19,11 @@ function App() {
   const { selectedComponent, setSelectedComponent } = useStateStore();
   const renderComponent = () => {
     switch (selectedComponent) {
-      case 'Inventory Profile':
+      case 'Inventory':
         return <Stock />;
       case 'invoice':
         return <AddNewInvoice />;
-      case 'Product Profile':
+      case 'Product':
         return <Products />;
       case 'Product Sale':
         return <Sale />;
@@ -31,9 +31,9 @@ function App() {
         return <Purchase />;
       case 'Report':
         return <Stats />;
-      case 'Vendor Profile':
+      case 'Vendor':
         return <Vendors />;
-      case 'Customer Profile':
+      case 'Customer':
         return <Customer />;
       case 'LandingPage':
         return <LandingPage />;
@@ -59,9 +59,13 @@ function App() {
           <Sidebar />
         </Box>
 
-        <Box ml="220px" width="calc(100% - 220px)" height="full">
+        <Box ml="220px" width="calc(100% - 220px)" height="full"
+          align='center'
+        >
           <Navbar />
-          <Box>{renderComponent()}</Box>
+          <Box
+            w={{ base: "full", lg: "1000px", "2xl": "1100px" }}
+          >{renderComponent()}</Box>
         </Box>
       </Flex>
     </>

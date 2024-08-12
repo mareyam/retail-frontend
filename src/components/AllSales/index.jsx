@@ -101,22 +101,20 @@ const AllSales = () => {
                         zIndex="1"
                     >
                         <Tr bg="#4682b4" color="white">
-                            <Th textTransform="capitalize" color="white" fontSize="16">ID</Th>
-                            <Th textTransform="capitalize" color="white" fontSize="16">Invoice Number</Th>
-                            <Th textTransform="capitalize" color="white" fontSize="16">Customer ID</Th>
-                            <Th textTransform="capitalize" color="white" fontSize="16">Total Bill Amount</Th>
-                            <Th textTransform="capitalize" color="white" fontSize="16">Total Discount Amount</Th>
-                            <Th textTransform="capitalize" color="white" fontSize="16">Received Amount</Th>
-                            <Th textTransform="capitalize" color="white" fontSize="16">Remaining Amount</Th>
-                            <Th textTransform="capitalize" color="white" fontSize="16">Returned Product Amount</Th>
-                            <Th textTransform="capitalize" color="white" fontSize="16">Final Bill Amount</Th>
+                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Invoice Number</Th>
+                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Customer ID</Th>
+                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Total Bill Amount</Th>
+                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Total Discount Amount</Th>
+                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Received Amount</Th>
+                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Remaining Amount</Th>
+                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Returned Product Amount</Th>
+                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Final Bill Amount</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {currentSales?.map((saleItem, index) => (
                             <Tr key={index}>
-                                <Td>{saleItem.billSummaryId}</Td>
-                                <Td>{saleItem.invoiceNumber}</Td>
+                                <Td>#{saleItem.invoiceNumber}</Td>
                                 <Td>{saleItem.customerId}</Td>
                                 <Td>{saleItem.totalBillAmount}</Td>
                                 <Td>{saleItem.totalDiscountAmount ? saleItem.totalDiscountAmount : "null"}</Td>

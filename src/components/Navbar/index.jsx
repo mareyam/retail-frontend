@@ -63,7 +63,11 @@ const Navbar = () => {
           pl='12'
           fontWeight='400'
           display={selectedComponent == 'LandingPage' ? 'none' : 'block'}
-        >{selectedComponent}</Heading>
+        >
+          {selectedComponent === 'Vendor' || selectedComponent === 'Customer' || selectedComponent === 'Product' || selectedComponent === 'Inventory'
+            ? `${selectedComponent} profile`
+            : selectedComponent}
+        </Heading>
 
         {/* {user ? (
           <VStack w="44" h="20" pt="2">

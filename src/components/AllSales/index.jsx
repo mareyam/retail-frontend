@@ -46,38 +46,41 @@ const AllSales = () => {
         fetchCustomers();
     }, []);
 
-    useEffect(() => {
-        setFilteredSale(
-            sale?.filter((saleItem) =>
-                saleItem.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-        );
-        setCurrentPage(1);
-    }, [searchQuery, sale]);
+    // useEffect(() => {
+    //     setFilteredSale(
+    //         sale?.filter((saleItem) =>
+    //             saleItem.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase())
+    //         )
+    //     );
+    //     setCurrentPage(1);
+    // }, [searchQuery, sale]);
 
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const currentSales = filteredSale?.slice(startIndex, endIndex);
-    const totalPages = Math.ceil(filteredSale?.length / ITEMS_PER_PAGE);
+    // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    // const endIndex = startIndex + ITEMS_PER_PAGE;
+    // const currentSales = filteredSale?.slice(startIndex, endIndex);
+    // const totalPages = Math.ceil(filteredSale?.length / ITEMS_PER_PAGE);
 
-    const goToPreviousPage = () => setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
-    const goToNextPage = () => setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+    // const goToPreviousPage = () => setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+    // const goToNextPage = () => setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
 
 
     return (
-        <VStack bgColor="#F0FFF4" align="center" spacing="8">
-            <HStack w="80%" justifyContent="space-between" mt='4'>
+        <VStack bgColor="#F0FFF4" align="center" >
+            <HStack w="100%" justifyContent="space-between" mt='2'>
                 <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </HStack>
 
             <TableContainer
                 border="1px solid"
                 borderColor="gray.400"
-                w="80%"
-                overflow="auto"
+                w="100%"
+                overflowY="scroll"
+
+                h='auto'
+                maxH='70dvh'
                 css={{
                     '&::-webkit-scrollbar': {
-                        width: '2px',
+                        width: '4px',
                         height: '4px',
                         backgroundColor: 'transparent',
                     },
@@ -112,7 +115,7 @@ const AllSales = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {currentSales?.map((saleItem, index) => (
+                        {sale?.map((saleItem, index) => (
                             <Tr key={index}>
                                 <Td>#{saleItem.invoiceNumber}</Td>
                                 <Td>{saleItem.customerId}</Td>
@@ -129,7 +132,7 @@ const AllSales = () => {
             </TableContainer>
 
 
-            <HStack spacing={4} alignItems="center">
+            {/* <HStack spacing={4} alignItems="center">
                 <IconButton
                     disabled={currentPage === 1}
                     bgColor="#4682b4"
@@ -151,7 +154,7 @@ const AllSales = () => {
                     onClick={goToNextPage}
                     _hover={{ backgroundColor: '#4682b4' }}
                 />
-            </HStack>
+            </HStack> */}
         </VStack >
     );
 };

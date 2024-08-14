@@ -14,7 +14,8 @@ import {
   Heading,
   Flex,
   useDisclosure,
-  useToast
+  useToast,
+  Badge
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -124,8 +125,8 @@ const Products = () => {
             w='100%'
             borderColor="gray.400"
             pos="relative"
-            // h="61dvh"
             h="auto"
+            maxH='70dvh'
             overflowY="auto"
             css={{
               '&::-webkit-scrollbar': {
@@ -183,7 +184,6 @@ const Products = () => {
                     Price
                   </Th>
                   <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Edit</Th>
-                  <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Delete</Th>
 
                 </Tr>
               </Thead>
@@ -229,6 +229,26 @@ const Products = () => {
                       {battery.productPrice}
                     </Td>
                     <Td>
+                      <Badge
+                        cursor='pointer'
+                        colorScheme='green'
+                        onClick={() => handleEdit(battery)}
+                        mx='2'
+                      >
+                        Edit
+                      </Badge>
+
+                      <Badge
+                        cursor='pointer'
+                        colorScheme='red'
+                        onClick={() => handleDeleteClick(battery.productId)}
+
+                      >
+                        Delete
+                      </Badge>
+                    </Td>
+
+                    {/* <Td>
                       <IconButton
                         p="none"
                         onClick={() => handleEdit(battery)}
@@ -241,8 +261,8 @@ const Products = () => {
                           backgroundColor: 'transparent',
                         }}
                       />
-                    </Td>
-                    <Td>
+                    </Td> */}
+                    {/* <Td>
                       <IconButton
                         p="none"
                         onClick={() => handleDeleteClick(battery.productId)}
@@ -255,7 +275,7 @@ const Products = () => {
                           backgroundColor: 'transparent',
                         }}
                       />
-                    </Td>
+                    </Td> */}
                   </Tr>
                 ))}
               </Tbody>

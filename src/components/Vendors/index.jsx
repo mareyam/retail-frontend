@@ -18,7 +18,8 @@ import {
   Heading,
   IconButton,
   useDisclosure,
-  useToast
+  useToast,
+  Badge
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -123,6 +124,7 @@ const Vendors = () => {
         w="100%"
         pos="relative"
         h="auto"
+        maxH='70dvh'
         overflowY="auto"
         css={{
           '&::-webkit-scrollbar': {
@@ -131,6 +133,7 @@ const Vendors = () => {
           },
           '&::-webkit-scrollbar-track': {
             borderRadius: '10px',
+            marginTop: '30px',
             background: '#f0f0f0',
           },
           '&::-webkit-scrollbar-thumb': {
@@ -168,10 +171,8 @@ const Vendors = () => {
               </Th>
               <Th
                 textTransform="capitilize" color="white" fontSize="16"
-              >Edit</Th>
-              <Th
-                textTransform="capitilize" color="white" fontSize="16"
-              >Delete</Th>
+              >Actions</Th>
+
             </Tr>
           </Thead>
           <Tbody>
@@ -186,7 +187,7 @@ const Vendors = () => {
                 <Td>{vendor.vendorDescription}</Td>
                 <Td>{vendor.vendorAddress}</Td>
                 <Td>{vendor.phone}</Td>
-                <Td>
+                {/* <Td>
                   <IconButton
                     onClick={onOpenDetailModal}
                     bgColor='transparent'
@@ -196,8 +197,31 @@ const Vendors = () => {
                       bgColor: "transparent"
                     }}
                     aria-label='edit' icon={<FiEdit size="14" />} />
+                </Td> */}
+
+
+
+                <Td >
+                  <Badge
+                    cursor='pointer'
+                    colorScheme='green'
+                    onClick={onOpenDetailModal}
+                    mx='2'
+                  >
+                    Edit
+                  </Badge>
+
+                  <Badge
+                    cursor='pointer'
+                    colorScheme='red'
+                    onClick={() => handleDeleteClick(vendor.vendorId)}
+                  >
+                    Delete
+                  </Badge>
+
                 </Td>
-                <Td>
+
+                {/* <Td>
                   <IconButton
                     onClick={() => handleDeleteClick(vendor.vendorId)}
                     bgColor='transparent'
@@ -207,7 +231,7 @@ const Vendors = () => {
                     }}
                     color="#4682b4"
                   />
-                </Td>
+                </Td> */}
               </Tr>
             ))}
           </Tbody>

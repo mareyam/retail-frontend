@@ -24,7 +24,8 @@ import {
   Input,
   useToast,
   Radio, RadioGroup,
-  Divider
+  Divider,
+  Badge
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -65,6 +66,12 @@ const Sale = () => {
   const [selectedCustomer, setSelectedCustomer] = useState(null)
 
   console.log(selectedCustomer)
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+
+  const formattedDate = `${year}-${month}-${day}`;
 
 
   useEffect(() => {
@@ -190,6 +197,42 @@ const Sale = () => {
   }, [refresh, saleMade]);
 
   const handlePostSale = async () => {
+    if (customerType === 'Retail' && customerName) {
+      try {
+        const newCustomer = {
+          date: formattedDate,
+          customerName: customerName,
+          address: "-",
+          phoneNumber: "00000000000",
+          customerType: customerType,
+          discountPercent: "0"
+        };
+
+        const addCustomerResponse = await axios.post('https://localhost:7059/api/Customer', newCustomer);
+        console.log('Customer added:', addCustomerResponse.data);
+
+        toast({
+          title: 'Customer added successfully',
+          status: 'success',
+          duration: 3000,
+          isClosable: true
+        });
+
+        console.log(addCustomerResponse.data.customerId)
+        setSelectedCustomerId(addCustomerResponse.data.customerId);
+
+      } catch (error) {
+        console.error('Error adding customer:', error);
+        toast({
+          title: 'An error occurred.',
+          description: 'Unable to add the customer.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        return; // Exit function if customer addition fails
+      }
+    }
     if (selectedCustomerId) {
       setSaleMade(true)
       try {
@@ -279,6 +322,42 @@ const Sale = () => {
   useEffect(() => {
     handleCancel()
   }, [])
+
+
+  const handleAddCustomer = async () => {
+    const newCustomer = {
+      date: formattedDate,
+      customerName: customerName,
+      address: "-",
+      phoneNumber: "00000000000",
+      customerType: customerType,
+      discountPercent: "0"
+    };
+    console.log(newCustomer)
+    try {
+      const response = await axios.post('https://localhost:7059/api/Customer', newCustomer);
+      console.log('Data:', response.data);
+
+      toast({
+        title: 'Customer added successfully',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+
+      setRefresh(!refresh);
+      onClose();
+    } catch (error) {
+      console.error('Error adding customer:', error);
+      toast({
+        title: 'An error occurred.',
+        description: 'Unable to add the customer.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
 
   return (
@@ -475,8 +554,10 @@ const Sale = () => {
                       <Td>{battery.productPrice}</Td>
                       <Td>PKR.{calculateTotalPrice(battery.quantity, battery.productPrice).toFixed(0)}</Td>
 
+
+
                       <Td>
-                        <IconButton
+                        {/* <IconButton
                           isDisabled={saleMade}
                           p="none"
                           onClick={() => handleDeleteClick(index)}
@@ -488,7 +569,19 @@ const Sale = () => {
                           _hover={{
                             backgroundColor: 'transparent',
                           }}
-                        />
+                        /> */}
+
+
+                        <Badge
+                          cursor='pointer'
+                          colorScheme='green'
+                          onClick={() => handleDeleteClick(index)}
+
+                          mx='2'
+                        >
+                          Edit
+                        </Badge>
+
                       </Td>
                     </Tr>
                   ))}
@@ -618,11 +711,6 @@ const CustomerTypeRadio = ({ customerName, setCustomerName, customers, saleMade,
   const toast = useToast();
   const { customerType, setCustomerType } = useStateStore();
   console.log(customers)
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const day = String(currentDate.getDate()).padStart(2, '0');
-  const formattedDate = `${year}-${month}-${day}`;
 
 
   const handleCustomerChange = (event) => {
@@ -640,42 +728,6 @@ const CustomerTypeRadio = ({ customerName, setCustomerName, customers, saleMade,
     console.log(selectedCustomer)
   };
 
-  const handleAddCustomer = async () => {
-
-
-    const newCustomer = {
-      date: formattedDate,
-      customerName: customerName,
-      address: "-",
-      phoneNumber: "00000000000",
-      customerType: customerType,
-      discountPercent: "0"
-    };
-    console.log(newCustomer)
-    try {
-      const response = await axios.post('https://localhost:7059/api/Customer', newCustomer);
-      console.log('Data:', response.data);
-
-      toast({
-        title: 'Customer added successfully',
-        status: 'success',
-        duration: 3000,
-        isClosable: true
-      });
-
-      setRefresh(!refresh);
-      onClose();
-    } catch (error) {
-      console.error('Error adding customer:', error);
-      toast({
-        title: 'An error occurred.',
-        description: 'Unable to add the customer.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
 
   return (
 
@@ -714,8 +766,7 @@ const CustomerTypeRadio = ({ customerName, setCustomerName, customers, saleMade,
               isDisabled={saleMade}
               onChange={(event) => setCustomerName(event.target.value)}
             />
-            <Button
-
+            {/* <Button
               isDisabled={!customerName}
               bgColor='#4682b4'
               color='white'
@@ -723,7 +774,7 @@ const CustomerTypeRadio = ({ customerName, setCustomerName, customers, saleMade,
                 color: 'white',
                 bgColor: '#4682b4'
               }}
-              onClick={handleAddCustomer}>+</Button>
+              onClick={handleAddCustomer}>+</Button> */}
           </>
         )}
 

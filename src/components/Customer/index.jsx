@@ -17,7 +17,13 @@ import {
   VStack,
   Heading,
   IconButton,
-  useToast, useDisclosure
+  useToast, useDisclosure,
+  Badge,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -37,10 +43,12 @@ const Customer = () => {
   console.log(customerType);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredBatteryData, setFilteredBatteryData] = useState(batteryData);
   const [customer, setBattery] = useState();
   const [refresh, setRefresh] = useState();
   const [selectedCustomer, setSelectedCustomer] = useState();
+  const [isActive, setIsActive] = useState(false);
+  const [selectedTab, setSelectedTab] = useState('Retail');
+
   const [billSummary, setBillSummary] = useState({});
   const [filteredCustomers, setFilteredCustomers] = useState([]);
 
@@ -54,24 +62,19 @@ const Customer = () => {
   const currentCustomers = filteredCustomers.slice(startIndex, endIndex);
 
 
-  const totalPages = Math.ceil(filteredBatteryData.length / ITEMS_PER_PAGE);
+  const rCustomers = customers.filter(customer => customer.customerType === 'Retail');
+  const wCustomers = customers.filter(customer => customer.customerType === 'Whole');
 
-  const goToPreviousPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
 
-  const goToNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  };
 
-  useEffect(() => {
-    setFilteredBatteryData(
-      batteryData.filter((customer) =>
-        customer.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
-    setCurrentPage(1);
-  }, [searchQuery, batteryData]);
+  // useEffect(() => {
+  //   setFilteredBatteryData(
+  //     batteryData.filter((customer) =>
+  //       customer.name.toLowerCase().includes(searchQuery.toLowerCase())
+  //     )
+  //   );
+  //   setCurrentPage(1);
+  // }, [searchQuery, batteryData]);
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -79,6 +82,7 @@ const Customer = () => {
         const response = await axios.get('https://localhost:7059/api/Customer');
         console.log('Data:', response.data);
         setCustomers(response.data);
+        console.log(customers)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -160,22 +164,331 @@ const Customer = () => {
 
 
 
+  const handleToggleStatus = async (customer) => {
+    // try {
+    const updatedStatus = !customer.isActive;
+    toast({
+      title: `Customer ${updatedStatus ? 'enabled' : 'disabled'}.`,
+      description: `The customer has been successfully ${updatedStatus ? 'enabled' : 'disabled'}.`,
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+    setRefresh(!refresh);
+    // } catch (error) {
+    //   console.error('Error updating status:', error);
+    //   toast({
+    //     title: 'An error occurred.',
+    //     description: 'Unable to update the customer status.',
+    //     status: 'error',
+    //     duration: 3000,
+    //     isClosable: true,
+    //   });
+    // }
+  };
 
+
+  console.log(selectedTab)
   return (
-    <VStack bgColor="#F0FFF4" align="center" w='100%'>
+    <VStack bgColor="#F0FFF4" align="center" w='100%'
+    >
       <HStack py="2" w="100%" justifyContent="space-between">
         <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <AddNewCustomer refresh={refresh} setRefresh={setRefresh} />
       </HStack>
 
-      <TableContainer
+      <Box w='full'
+
+
+
+      >
+        <Tabs
+
+
+
+          onChange={(index) => setSelectedTab(index === 0 ? 'Wholesale' : 'Retail')}
+
+          variant='soft-rounded' colorScheme='blue'>
+          <TabList>
+            <Tab>Wholesale</Tab>
+            <Tab>Retail</Tab>
+          </TabList>
+          <TabPanels
+
+          >
+            <TabPanel
+
+            >
+              {wCustomers.length > 0 && (
+                <TableContainer
+                  border="1px solid"
+
+                  overflowY='auto'
+                  borderColor="gray.400"
+                  w="100%"
+                  pos="relative"
+                  h='auto'
+                  maxH="70dvh"
+                  overflow="hidden"
+                  css={{
+                    '&::-webkit-scrollbar': {
+                      width: '10px',
+                      height: '6px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      borderRadius: '10px',
+                      marginTop: '40px',
+                      background: '#f0f0f0',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      borderRadius: '10px',
+                      background: '#ccc',
+                    },
+                  }}
+                >
+                  <Table variant="simple" size="sm">
+                    <Thead
+                      pos="sticky"
+                      top="0"
+                      zIndex="1"
+                      bgColor="white"
+                      style={{
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 1,
+                        backgroundColor: 'white',
+                      }}
+                    >
+
+                      <Tr bg="#4682b4" color="white" pb="4">
+                        {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                Customer ID
+              </Th> */}
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Customer Name
+                        </Th>
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Address
+                        </Th>
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Phone Number
+                        </Th>
+                        {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                Type
+              </Th> */}
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Discount %
+                        </Th>
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Edit</Th>
+
+
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Received Cash
+                        </Th>
+
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Enable/Disable</Th>
+
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {wCustomers.map((customer) => (
+                        <Tr
+                          key={customer.id}
+                          onClick={() => {
+                            setBattery(customer);
+                          }}
+                        >
+                          {/* <Td>{customer.customerId}</Td> */}
+                          <Td>{customer.customerName}</Td>
+                          <Td>{customer.address}</Td>
+                          <Td>{customer.phoneNumber}</Td>
+                          {/* <Td>{customer.customerType}</Td> */}
+                          <Td>{customer.discountPercent ? customer.discountPercent : 0}%</Td>
+                          {/* <Td>{customer.sales}</Td>
+                <Td>{customer.billSummary}</Td>
+                <Td>{customer.receivedCashProfiles}</Td> */}
+
+                          {/* <Td>{billSummary[customer.id]?.invoiceNumber || '-'}</Td>
+                <Td>{billSummary[customer.id]?.remainingAmount || '-'}</Td>
+                <Td>{billSummary[customer.id]?.receivedAmount || '-'}</Td> */}
+
+                          <Td>
+                            <Badge
+                              cursor='pointer'
+                              colorScheme='green'
+                              onClick={() => handleEdit(customer)}
+
+                            >
+                              Edit
+                            </Badge>
+                          </Td>
+
+                          <Td>received cash </Td>
+
+                          <Td>
+                            <Badge
+                              cursor='pointer'
+                              colorScheme={isActive ? 'red' : 'blue'}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {isActive ? 'Disable' : 'Enable'}
+                            </Badge>
+                          </Td>
+                        </Tr>
+
+
+                      ))}
+
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+
+              )}
+
+
+
+            </TabPanel>
+            <TabPanel >
+              {rCustomers.length > 0 && (
+                <TableContainer
+                  border="1px solid"
+                  overflowY='auto'
+                  borderColor="gray.400"
+                  w="100%"
+                  pos="relative"
+                  h='auto'
+                  maxH="70dvh"
+                  overflow="hidden"
+                  css={{
+                    '&::-webkit-scrollbar': {
+                      width: '10px',
+                      height: '6px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      borderRadius: '10px',
+                      marginTop: '40px',
+                      background: '#f0f0f0',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      borderRadius: '10px',
+                      background: '#ccc',
+                    },
+                  }}
+                >
+                  <Table variant="simple" size="sm"
+
+                  >
+                    <Thead
+                      pos="sticky"
+                      top="0"
+                      zIndex="1"
+                      bgColor="white"
+                      style={{
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 1,
+                        backgroundColor: 'white',
+                      }}
+                    >
+
+                      <Tr bg="#4682b4" color="white" pb="4">
+                        {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                Customer ID
+              </Th> */}
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Customer Name
+                        </Th>
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Address
+                        </Th>
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Phone Number
+                        </Th>
+                        {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                Type
+              </Th> */}
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Discount %
+                        </Th>
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Edit</Th>
+
+
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
+                          Received Cash
+                        </Th>
+
+                        <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Enable/Disable</Th>
+
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {rCustomers.map((customer) => (
+                        <Tr
+                          key={customer.id}
+                          onClick={() => {
+                            setBattery(customer);
+                          }}
+                        >
+                          {/* <Td>{customer.customerId}</Td> */}
+                          <Td>{customer.customerName}</Td>
+                          <Td>{customer.address}</Td>
+                          <Td>{customer.phoneNumber}</Td>
+                          {/* <Td>{customer.customerType}</Td> */}
+                          <Td>{customer.discountPercent ? customer.discountPercent : 0}%</Td>
+                          {/* <Td>{customer.sales}</Td>
+                <Td>{customer.billSummary}</Td>
+                <Td>{customer.receivedCashProfiles}</Td> */}
+
+                          {/* <Td>{billSummary[customer.id]?.invoiceNumber || '-'}</Td>
+                <Td>{billSummary[customer.id]?.remainingAmount || '-'}</Td>
+                <Td>{billSummary[customer.id]?.receivedAmount || '-'}</Td> */}
+
+                          <Td>
+                            <Badge
+                              cursor='pointer'
+                              colorScheme='green'
+                              onClick={() => handleEdit(customer)}
+
+                            >
+                              Edit
+                            </Badge>
+                          </Td>
+
+                          <Td>received cash </Td>
+
+                          <Td>
+                            <Badge
+                              cursor='pointer'
+                              colorScheme={isActive ? 'red' : 'blue'}
+                              onClick={() => setIsActive(!isActive)}
+                            >
+                              {isActive ? 'Disable' : 'Enable'}
+                            </Badge>
+                          </Td>
+                        </Tr>
+
+
+                      ))}
+
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+
+              )}
+
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
+      {/* <TableContainer
         border="1px solid"
 
         overflowY='auto'
         borderColor="gray.400"
         w="100%"
         pos="relative"
-        h="auto"
+        h='auto'
+        maxH="70dvh"
         overflow="hidden"
         css={{
           '&::-webkit-scrollbar': {
@@ -184,6 +497,7 @@ const Customer = () => {
           },
           '&::-webkit-scrollbar-track': {
             borderRadius: '10px',
+            marginTop: '40px',
             background: '#f0f0f0',
           },
           '&::-webkit-scrollbar-thumb': {
@@ -205,32 +519,31 @@ const Customer = () => {
               backgroundColor: 'white',
             }}
           >
+
             <Tr bg="#4682b4" color="white" pb="4">
-              {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
-                Customer ID
-              </Th> */}
+
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Customer Name
               </Th>
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
-                Addres
+                Address
               </Th>
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Phone Number
               </Th>
-              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
-                Type
-              </Th>
+
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Discount %
               </Th>
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Edit</Th>
-              {/* <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Delete</Th> */}
 
 
               <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">
                 Received Cash
               </Th>
+
+              <Th fontWeight='400' textTransform="capitilize" color="white" fontSize="16">Enable/Disable</Th>
+
             </Tr>
           </Thead>
           <Tbody>
@@ -241,148 +554,58 @@ const Customer = () => {
                   setBattery(customer);
                 }}
               >
-                {/* <Td>{customer.customerId}</Td> */}
                 <Td>{customer.customerName}</Td>
                 <Td>{customer.address}</Td>
                 <Td>{customer.phoneNumber}</Td>
-                <Td>{customer.customerType}</Td>
                 <Td>{customer.discountPercent ? customer.discountPercent : 0}%</Td>
-                {/* <Td>{customer.sales}</Td>
-                <Td>{customer.billSummary}</Td>
-                <Td>{customer.receivedCashProfiles}</Td> */}
-
-                {/* <Td>{billSummary[customer.id]?.invoiceNumber || '-'}</Td>
-                <Td>{billSummary[customer.id]?.remainingAmount || '-'}</Td>
-                <Td>{billSummary[customer.id]?.receivedAmount || '-'}</Td> */}
-
 
                 <Td>
-                  <IconButton
-                    p="none"
+                  <Badge
+                    cursor='pointer'
+                    colorScheme='green'
                     onClick={() => handleEdit(customer)}
-                    bgColor="transparent"
-                    color="#4682b4"
-                    aria-label="left-icon"
-                    icon={<FiEdit />}
-                    fontSize="14"
-                    _hover={{
-                      backgroundColor: 'transparent',
-                    }}
-                  />
+
+                  >
+                    Edit
+                  </Badge>
                 </Td>
-                {/* <Td>
-                  <IconButton
-                    p="none"
-                    onClick={() => handleDeleteClick(customer.customerId)}
-                    _hover={{
-                      bgColor: "transparent"
-                    }}
-                    aria-label='delete' icon={<FaTrashAlt size="14" />}
-                    bgColor="transparent"
-                    color="#4682b4"
-                  />
-                </Td> */}
+
+                <Td>received cash </Td>
+
+                <Td>
+                  <Badge
+                    cursor='pointer'
+                    colorScheme={isActive ? 'red' : 'blue'}
+                    onClick={() => setIsActive(!isActive)}
+                  >
+                    {isActive ? 'Disable' : 'Enable'}
+                  </Badge>
+                </Td>
+
+
+
               </Tr>
             ))}
           </Tbody>
         </Table>
-      </TableContainer>
+      </TableContainer> */}
 
-      {/* <HStack
-        pos="absolute"
-        bottom="4"
-        spacing={4}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <IconButton
-          disabled={currentPage == 1}
-          rounded="full"
-          bgColor="#4682b4"
-          aria-label="left-icon"
-          icon={<SlArrowLeft />}
-          fontSize="20"
-          color="white"
-          onClick={goToPreviousPage}
-          _hover={{
-            backgroundColor: '#4682b4',
-          }}
-        />
 
-        <Text>
-          Showing {startIndex + 1} to {Math.min(endIndex, batteryData.length)}{' '}
-          of {batteryData.length} entries
-        </Text>
-        <IconButton
-          rounded="full"
-          bgColor="#4682b4"
-          aria-label="left-icon"
-          icon={<SlArrowRight />}
-          color="white"
-          fontSize="20"
-          onClick={goToNextPage}
-          _hover={{
-            backgroundColor: '#4682b4',
-          }}
-          disabled={currentPage == totalPages}
-        />
-      </HStack> */}
-      {isOpen && (
-        <EditCustomer
-          customerDetails={selectedCustomer}
-          refresh={refresh}
-          setRefresh={setRefresh}
-          isOpen={isOpen}
-          onOpen={onOpen}
-          onClose={onClose}
-        />
-      )}
+      {
+        isOpen && (
+          <EditCustomer
+            customerDetails={selectedCustomer}
+            refresh={refresh}
+            setRefresh={setRefresh}
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+          />
+        )
+      }
     </VStack >
   );
 };
 export default Customer;
 
-const batteryData = [
-  {
-    id: 1,
-    name: 'Battery abc',
-    modelNumber: 'BA123',
-    variant: 'Standard',
-    availability: 'In Stock',
-    purchasePrice: 100,
-    salePrice: 150,
-    stockLeft: 50,
-    description: 'abc',
-    date: '15-12-2023',
-    profit: '5%',
-    quantity: 0,
-  },
-  {
-    id: 2,
-    name: 'abc Battery B',
-    modelNumber: 'BB456',
-    variant: 'Premium',
-    availability: 'Out of Stock',
-    purchasePrice: 200,
-    salePrice: 250,
-    stockLeft: 0,
-    description: 'abc',
-    date: '15-12-2023',
-    profit: '5%',
-    quantity: 0,
-  },
-  {
-    id: 3,
-    name: 'Battery def',
-    modelNumber: 'BC789',
-    variant: 'Standard',
-    availability: 'In Stock',
-    purchasePrice: 150,
-    salePrice: 200,
-    stockLeft: 20,
-    description: 'abc',
-    date: '15-12-2023',
-    profit: '5%',
-    quantity: 0,
-  },
-];
+

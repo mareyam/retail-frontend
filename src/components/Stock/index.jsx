@@ -15,7 +15,8 @@ import {
   Flex,
   useDisclosure,
   Button,
-  useToast
+  useToast,
+  Badge
 } from '@chakra-ui/react';
 import { SlArrowRight } from 'react-icons/sl';
 import { SlArrowLeft } from 'react-icons/sl';
@@ -123,6 +124,7 @@ const Stock = () => {
           pos="relative"
           // h="61dvh"
           h="auto"
+          maxH='70dvh'
           overflowY="auto"
           css={{
             '&::-webkit-scrollbar': {
@@ -131,6 +133,7 @@ const Stock = () => {
             },
             '&::-webkit-scrollbar-track': {
               borderRadius: '10px',
+              marginTop: '30px',
               background: '#f0f0f0',
             },
             '&::-webkit-scrollbar-thumb': {
@@ -192,7 +195,29 @@ const Stock = () => {
                   <Td fontSize="16">{battery.invoiceNumber}</Td>
                   <Td fontSize="16">{battery.quantity}</Td>
                   <Td fontSize="16">{battery.vendorName}</Td>
-                  <Td>
+
+                  <Td >
+                    <Badge
+                      cursor='pointer'
+                      colorScheme='green'
+                      onClick={() => handleEdit(battery)}
+                      mx='2'
+                    >
+                      Edit
+                    </Badge>
+
+                    <Badge
+                      cursor='pointer'
+                      colorScheme='red'
+                      onClick={() => handleDeleteClick(battery.invoiceNumber)}
+                    >
+                      Delete
+                    </Badge>
+
+                  </Td>
+
+
+                  {/* <Td>
                     <IconButton
                       p="none"
                       onClick={() => handleEdit(battery)}
@@ -215,7 +240,7 @@ const Stock = () => {
                       bgColor="transparent"
                       color="#4682b4"
                     />
-                  </Td>
+                  </Td> */}
                 </Tr>
               ))}
             </Tbody>

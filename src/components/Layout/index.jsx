@@ -14,6 +14,7 @@ import Stock from '../Stock';
 import AddNewInvoice from '../Stock/AddNewInvoice';
 import ReceiptComponent from '../Receipt';
 import AllSales from '../AllSales';
+import ReceivedCash from '../ReceivedCash';
 
 function App() {
   const { selectedComponent, setSelectedComponent } = useStateStore();
@@ -41,6 +42,8 @@ function App() {
         return <ReceiptComponent />;
       case 'All Sales':
         return <AllSales />;
+      case 'Received Cash':
+        return <ReceivedCash />;
       default:
         return <LandingPage />;
     }

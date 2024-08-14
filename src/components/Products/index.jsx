@@ -188,8 +188,8 @@ const Products = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {currentBatteryData.map((battery) => (
-                  <Tr lineHeight="1" gap="1" key={battery.id}>
+                {currentBatteryData.map((battery, index) => (
+                  <Tr key={index} lineHeight="1" gap="1" >
                     {/* <Td fontSize="16">{battery.productId}</Td> */}
                     <Td
                       fontSize="16"

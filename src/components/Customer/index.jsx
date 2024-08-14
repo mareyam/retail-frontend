@@ -291,9 +291,9 @@ const Customer = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {wCustomers.map((customer) => (
+                      {wCustomers.map((customer, index) => (
                         <Tr
-                          key={customer.id}
+                          key={index}
                           onClick={() => {
                             setBattery(customer);
                           }}
@@ -422,9 +422,9 @@ const Customer = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {rCustomers.map((customer) => (
+                      {rCustomers.map((customer, index) => (
                         <Tr
-                          key={customer.id}
+                          key={index}
                           onClick={() => {
                             setBattery(customer);
                           }}

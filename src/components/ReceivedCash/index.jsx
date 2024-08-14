@@ -114,8 +114,8 @@ const ReceivedCash = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {receivedCashList.map((cash) => (
-                                    <Tr key={cash.receivedCashId}>
+                                {receivedCashList.map((cash, index) => (
+                                    <Tr key={index}>
                                         <Td fontSize="16">
                                             {cash.customerId}
                                         </Td>
@@ -151,7 +151,7 @@ const ReceivedCash = () => {
                     <AddNewProduct refresh={refresh} setRefresh={setRefresh} />
                 </Flex>
             </HStack>
-            {isOpenDetailModal && (
+            {/* {isOpenDetailModal && (
                 <EditProduct
                     productDetails={cash}
                     isOpen={isOpenDetailModal}
@@ -159,7 +159,7 @@ const ReceivedCash = () => {
                     refresh={refresh}
                     setRefresh={setRefresh}
                 />
-            )}
+            )} */}
         </VStack>
     );
 };

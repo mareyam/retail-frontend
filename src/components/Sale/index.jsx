@@ -171,7 +171,8 @@ const Sale = () => {
     const fetchCustomers = async () => {
       try {
         const response = await axios.get('https://localhost:7059/api/Customer');
-        setCustomers(response.data);
+        const wholesaleCustomers = response.data.filter(customer => customer.customerType === 'Whole');
+        setCustomers(wholesaleCustomers);
         console.log(customers)
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -196,46 +197,32 @@ const Sale = () => {
     }
   }, [refresh, saleMade]);
 
+
   const handlePostSale = async () => {
     if (customerType === 'Retail' && customerName) {
-      try {
-        const newCustomer = {
-          date: formattedDate,
-          customerName: customerName,
-          address: "-",
-          phoneNumber: "00000000000",
-          customerType: customerType,
-          discountPercent: "0"
-        };
+      setDiscount(0)
+      const newCustomer = {
+        date: formattedDate,
+        customerName: customerName,
+        address: "-",
+        phoneNumber: "00000000000",
+        customerType: "Retail",
+        discountPercent: discount
+      };
 
-        const addCustomerResponse = await axios.post('https://localhost:7059/api/Customer', newCustomer);
-        console.log('Customer added:', addCustomerResponse.data);
+      const addCustomerResponse = await axios.post('https://localhost:7059/api/Customer', newCustomer);
+      console.log('Customer added:', addCustomerResponse.data);
 
-        toast({
-          title: 'Customer added successfully',
-          status: 'success',
-          duration: 3000,
-          isClosable: true
-        });
-
-        console.log(addCustomerResponse.data.customerId)
-        setSelectedCustomerId(addCustomerResponse.data.customerId);
-
-      } catch (error) {
-        console.error('Error adding customer:', error);
-        toast({
-          title: 'An error occurred.',
-          description: 'Unable to add the customer.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        return; // Exit function if customer addition fails
-      }
+      setSelectedCustomerId(addCustomerResponse.data.customerId);
+      setSaleMade(true);
+    } else {
+      setSaleMade(true);
     }
-    if (selectedCustomerId) {
-      setSaleMade(true)
-      try {
+  };
+
+  useEffect(() => {
+    if (saleMade && selectedCustomerId !== null) {
+      const postSales = async () => {
         for (const battery of addedBatteries) {
           const postSale = {
             invoiceNumber: invoiceNumber,
@@ -250,27 +237,16 @@ const Sale = () => {
           const response = await axios.post('https://localhost:7059/api/Sale', postSale);
           console.log('Data:', response.data);
 
-          // toast({
-          //   title: `Sale made to ${customerName}`,
-          //   description: "",
-          //   status: 'success',
-          //   duration: 3000,
-          //   isClosable: true
-          // });
           setRefresh(!refresh);
-          onClose();
-          // setAddedBatteries([]);
+          // Reset states here
           setSelectedBattery("");
           setTotalAmountReceived("")
           setCustomerType("")
-          // setCustomerName("")
           setFinalAmount("")
-          // setInvoiceNumber("")
           setIsCustomerAdded(false)
           setSaleMade(true)
           setSelectedComponent("Product Sale")
           setShowReceipt(true)
-
         }
         toast({
           title: `Sale made to ${customerName}`,
@@ -279,29 +255,82 @@ const Sale = () => {
           duration: 3000,
           isClosable: true
         });
-      }
-      catch (error) {
-        console.error('Error adding product:', error);
-        toast({
-          title: 'An error occurred.',
-          description: 'Unable to record the sale.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-      }
+      };
+      postSales();
     }
-    if (!selectedCustomerId) {
-      toast({
-        title: "Customer Name is missing",
-        description: "",
-        status: 'warning',
-        duration: 3000,
-        isClosable: true
-      });
-    }
+  }, [saleMade, selectedCustomerId]);
 
-  };
+
+
+  // const handlePostSale = async () => {
+  //   if (customerType === 'Retail' && customerName) {
+  //     const newCustomer = {
+  //       date: formattedDate,
+  //       customerName: customerName,
+  //       address: "-",
+  //       phoneNumber: "00000000000",
+  //       customerType: "Retail",
+  //       discountPercent: "0"
+  //     };
+
+  //     const addCustomerResponse = await axios.post('https://localhost:7059/api/Customer', newCustomer);
+  //     console.log('Customer added:', addCustomerResponse.data);
+
+  //     console.log(addCustomerResponse.data.customerId)
+  //     setSelectedCustomerId(addCustomerResponse.data.customerId);
+  //     console.log(selectedCustomerId)
+  //   }
+  //   if (addCustomerResponse.data.customerId) {
+  //     setSaleMade(true)
+  //     for (const battery of addedBatteries) {
+  //       const postSale = {
+  //         invoiceNumber: invoiceNumber,
+  //         customerId: selectedCustomerId,
+  //         productId: battery.productId,
+  //         quantity: battery.quantity,
+  //         unitPrice: battery.productPrice * battery.quantity
+  //       };
+
+  //       console.log(postSale)
+
+  //       const response = await axios.post('https://localhost:7059/api/Sale', postSale);
+  //       console.log('Data:', response.data);
+
+  //       setRefresh(!refresh);
+  //       onClose();
+  //       // setAddedBatteries([]);
+  //       setSelectedBattery("");
+  //       setTotalAmountReceived("")
+  //       setCustomerType("")
+  //       // setCustomerName("")
+  //       setFinalAmount("")
+  //       // setInvoiceNumber("")
+  //       setIsCustomerAdded(false)
+  //       setSaleMade(true)
+  //       setSelectedComponent("Product Sale")
+  //       setShowReceipt(true)
+
+  //     }
+  //     toast({
+  //       title: `Sale made to ${customerName}`,
+  //       description: "",
+  //       status: 'success',
+  //       duration: 3000,
+  //       isClosable: true
+  //     });
+
+  //   } else {
+  //     console.log('hrer 3')
+  //     console.error('Error adding product:');
+  //     toast({
+  //       title: 'An error occurred.',
+  //       description: 'Unable to record the sale.',
+  //       status: 'error',
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
 
   useEffect(() => {
     if (!saleMade) {
@@ -622,7 +651,7 @@ const Sale = () => {
                   >{showReceipt ? "Print Receipt" : "Add"}</Button> */}
 
                   <Button
-                    display={!showReceipt ? 'block' : "none"}
+                    // display={!showReceipt ? 'block' : "none"}
                     fontSize='12'
                     zIndex='100'
                     w='28'

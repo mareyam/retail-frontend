@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Flex, VStack } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Flex, IconButton, VStack } from '@chakra-ui/react';
 import Sidebar from '../SIdebar';
 import Navbar from '../Navbar';
 import useStateStore from '../zustand/store';
@@ -15,9 +15,17 @@ import AddNewInvoice from '../Stock/AddNewInvoice';
 import ReceiptComponent from '../Receipt';
 import AllSales from '../AllSales';
 import ReceivedCash from '../ReceivedCash';
+import { FaBars, FaTimes } from 'react-icons/fa';
 
 function App() {
-  const { selectedComponent, setSelectedComponent } = useStateStore();
+  const { selectedComponent, setSelectedComponent, isCollapsed, setIsCollapsed } = useStateStore();
+
+
+  console.log(selectedComponent)
+  
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
   const renderComponent = () => {
     switch (selectedComponent) {
       case 'Inventory':
@@ -52,23 +60,42 @@ function App() {
     <>
       <Flex height="100vh" bgColor="#F0FFF4">
         <Box
-          width="220px"
+          width={isCollapsed ? "100px" : "220px"}
           bg="#4682b4"
           color="white"
           px="2"
           position="fixed"
           height="100vh"
+          transition="all 0.5s ease"
         >
+          <IconButton
+            icon={<FaBars />}
+            onClick={toggleSidebar}
+            aria-label="Toggle Sidebar"
+            size="md"
+            variant="ghost"
+            color="white"
+            _hover={{ bg: "transparent" }}
+            position="absolute"
+            top="20px"
+            right='-20px'
+          // right="-15px"
+          />
           <Sidebar />
         </Box>
 
-        <Box ml="220px" width="calc(100% - 220px)" height="full"
-          align='center'
+        <Box
+          ml={isCollapsed ? "100px" : "220px"}
+          width={isCollapsed ? "calc(100% - 100px)" : "calc(100% - 220px)"}
+          height="full"
+          align="center"
+          transition="all 0.5s ease"
+
         >
           <Navbar />
-          <Box
-            w={{ base: "full", lg: "1000px", "2xl": "1100px" }}
-          >{renderComponent()}</Box>
+          <Box w={{ base: "full", lg: "1000px", "2xl": "1100px" }}>
+            {renderComponent()}
+          </Box>
         </Box>
       </Flex>
     </>

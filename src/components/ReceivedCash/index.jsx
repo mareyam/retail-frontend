@@ -76,6 +76,7 @@ const ReceivedCash = () => {
                             '&::-webkit-scrollbar-track': {
                                 borderRadius: '10px',
                                 background: '#f0f0f0',
+                                marginTop: '20px'
                             },
                             '&::-webkit-scrollbar-thumb': {
                                 borderRadius: '10px',
@@ -145,6 +146,7 @@ const ReceivedCash = () => {
                                         </Td>
                                     </Tr>
                                 ))}
+
                             </Tbody>
                         </Table>
                     </TableContainer>

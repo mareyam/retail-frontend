@@ -1,57 +1,85 @@
-import React, { useState, useEffect } from 'react';
-import { ChakraProvider, Box, Select } from '@chakra-ui/react';
-import axios from 'axios';
+import React, { useState } from 'react';
 
-function App() {
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  const [customers, setCustomers] = useState([]);
+const LiveUpdateInput = () => {
+  const [inputValue, setInputValue] = useState('');
 
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+    console.log(inputValue)
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get('https://localhost:7059/api/Customer');
-        setCustomers(response.data);
-        console.log(customers)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchCustomers();
-  }, []);
-
-
-
-  const handleCustomerChange = (event) => {
-    const selectedName = event.target.value;
-    const selectedCustomer = customers.find(
-      (customer) => customer.customerName === selectedName
-    );
-    if (selectedCustomer) {
-      setSelectedCustomerId(selectedCustomer.customerId);
-    } else {
-      setSelectedCustomerId(null);
-    }
   };
 
-  return (
-    <ChakraProvider>
-      <Box p={5}>
-        <Select placeholder="Select customer" onChange={handleCustomerChange}>
-          {customers.map((customer) => (
-            <option key={customer.customerId} value={customer.customerName}>
-              {customer.customerName}
-            </option>
-          ))}
-        </Select>
-        {selectedCustomerId && <Box mt={3}>Selected Customer ID: {selectedCustomerId}</Box>}
-      </Box>
-    </ChakraProvider>
-  );
-}
 
-export default App;
+  return (
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleChange}
+        placeholder="Type something..."
+        style={{ padding: '10px', fontSize: '16px' }}
+      />
+      <p>Live Output: {inputValue}</p>
+    </div>
+  );
+};
+
+export default LiveUpdateInput;
+
+// import React, { useState, useEffect } from 'react';
+// import { ChakraProvider, Box, Select } from '@chakra-ui/react';
+// import axios from 'axios';
+
+// function App() {
+//   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+//   const [customers, setCustomers] = useState([]);
+
+
+//   useEffect(() => {
+//     const fetchCustomers = async () => {
+//       try {
+//         const response = await axios.get('https://localhost:7059/api/Customer');
+//         setCustomers(response.data);
+//         console.log(customers)
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     };
+
+//     fetchCustomers();
+//   }, []);
+
+
+
+//   const handleCustomerChange = (event) => {
+//     const selectedName = event.target.value;
+//     const selectedCustomer = customers.find(
+//       (customer) => customer.customerName === selectedName
+//     );
+//     if (selectedCustomer) {
+//       setSelectedCustomerId(selectedCustomer.customerId);
+//     } else {
+//       setSelectedCustomerId(null);
+//     }
+//   };
+
+//   return (
+//     <ChakraProvider>
+//       <Box p={5}>
+//         <Select placeholder="Select customer" onChange={handleCustomerChange}>
+//           {customers.map((customer) => (
+//             <option key={customer.customerId} value={customer.customerName}>
+//               {customer.customerName}
+//             </option>
+//           ))}
+//         </Select>
+//         {selectedCustomerId && <Box mt={3}>Selected Customer ID: {selectedCustomerId}</Box>}
+//       </Box>
+//     </ChakraProvider>
+//   );
+// }
+
+// export default App;
 
 
 // import React, { useState } from 'react';

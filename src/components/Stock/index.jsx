@@ -260,7 +260,7 @@ const Stock = () => {
         </Button>
       </Flex>
 
-      <HStack
+      {/* <HStack
         pos="absolute"
         bottom="4"
         spacing={4}
@@ -299,7 +299,7 @@ const Stock = () => {
           }}
           disabled={currentPage == totalPages}
         />
-      </HStack>
+      </HStack> */}
       {isOpen && (
         <EditStock
           stockDetails={selectedStock}

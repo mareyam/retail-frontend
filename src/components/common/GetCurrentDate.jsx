@@ -26,4 +26,20 @@ const GetCurrentDate = () => {
   return formattedDate;
 };
 
-export default GetCurrentDate;
+
+
+const GetShortCurrentDate = () => {
+  const date = new Date();
+  const day = ('0' + date.getDate()).slice(-2); // Ensures day is always two digits
+  const month = ('0' + (date.getMonth() + 1)).slice(-2); // Month is zero-indexed, so add 1 and ensure it's two digits
+  const year = date.getFullYear();
+  const formattedDate = `${day}/${month}/${year}`; // Format as day/month/year
+  console.log(formattedDate)
+  return formattedDate;
+};
+
+
+// export default GetCurrentDate;
+
+export { GetCurrentDate, GetShortCurrentDate };
+

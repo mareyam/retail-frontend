@@ -14,7 +14,12 @@ import {
     IconButton,
     useToast,
     useDisclosure,
-    VStack
+    VStack,
+    Tabs,
+    TabPanel,
+    TabList,
+    Tab,
+    TabPanels
 } from '@chakra-ui/react';
 import { SlArrowRight, SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
@@ -22,29 +27,54 @@ import axios from 'axios';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 
-const ITEMS_PER_PAGE = 11;
 
 const AllSales = () => {
     const toast = useToast();
     const [sale, setSale] = useState();
+    const [customers, setCustomers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
-    const [filteredSale, setFilteredSale] = useState([]);
-    // const [refresh, setRefresh] = useState(false);
+    const [selectedTab, setSelectedTab] = useState('Overview');
+
 
     useEffect(() => {
-        const fetchCustomers = async () => {
+        const fetchBillSummary = async () => {
             try {
+
                 const response = await axios.get('https://localhost:7059/api/BillSummary');
-                setSale(response.data);
-                setFilteredSale(response.data);
+                const billSummaryData = response.data;
+                console.log('Bill Summary Data:', billSummaryData);
+
+                const customerResponse = await axios.get('https://localhost:7059/api/Customers');
+                const customerData = customerResponse.data;
+                console.log('Customer Data:', customerData);
+
+                const customerMap = {};
+                customerData.forEach(customer => {
+                    customerMap[customer.customerId] = customer.customerName;
+                });
+
+                console.log(customerMap)
+                const combinedData = billSummaryData.map(bill => ({
+                    ...bill,
+                    customerName: customerMap[bill.customerId] || 'Unknown Customer'
+                }));
+
+                console.log(combinedData)
+                setSale(combinedData);
+                console.log('Combined Data:', combinedData);
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
-        fetchCustomers();
+        fetchBillSummary();
     }, []);
+
+    
+
+    console.log(sale)
 
     // useEffect(() => {
     //     setFilteredSale(
@@ -70,66 +100,142 @@ const AllSales = () => {
                 <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             </HStack>
 
-            <TableContainer
-                border="1px solid"
-                borderColor="gray.400"
-                w="100%"
-                overflowY="scroll"
+            <Tabs
+                w='full'
+                onChange={(index) => setSelectedTab(index === 0 ? 'Wholesale' : 'Retail')}
 
-                h='auto'
-                maxH='70dvh'
-                css={{
-                    '&::-webkit-scrollbar': {
-                        width: '4px',
-                        height: '4px',
-                        backgroundColor: 'transparent',
-                    },
-                    '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'transparent',
-                        borderRadius: '10px',
-                    },
-                    '&:hover::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#4682b4',
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        backgroundColor: 'transparent',
-                    },
-                }}
-            >
-                <Table variant="simple" size="sm">
-                    <Thead
-                        pos="sticky"
-                        top="0"
-                        bgColor="#F0FFF4"
-                        zIndex="1"
-                    >
-                        <Tr bg="#4682b4" color="white">
-                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Invoice Number</Th>
-                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Customer ID</Th>
-                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Total Bill Amount</Th>
-                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Total Discount Amount</Th>
-                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Received Amount</Th>
-                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Remaining Amount</Th>
-                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Returned Product Amount</Th>
-                            <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Final Bill Amount</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {sale?.map((saleItem, index) => (
-                            <Tr key={index}>
-                                <Td>#{saleItem.invoiceNumber}</Td>
-                                <Td>{saleItem.customerId}</Td>
-                                <Td>{saleItem.totalBillAmount}</Td>
-                                <Td>{saleItem.totalDiscountAmount ? saleItem.totalDiscountAmount : "null"}</Td>
-                                <Td>{saleItem.receivedAmount ? saleItem.receivedAmount : 'null'}</Td>
-                                <Td>{saleItem.remainingAmount ? saleItem.remainingAmount : 'null'}</Td>
-                                <Td>{saleItem.returnedProductAmount ? saleItem.returnedProductAmount : 'null'}</Td>
-                                <Td>{saleItem.finalBillAmount}</Td>
-                            </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
-            </TableContainer>
+                variant='soft-rounded' colorScheme='blue'>
+                <TabList>
+                    <Tab>Overview</Tab>
+                    <Tab>Detail View</Tab>
+                </TabList>
+                <TabPanels >
+                    <TabPanel >
+                        <TableContainer
+
+                            border="1px solid"
+                            borderColor="gray.400"
+                            w="100%"
+                            overflowY="scroll"
+                            h='auto'
+                            maxH='70dvh'
+                            css={{
+                                '&::-webkit-scrollbar': {
+                                    width: '4px',
+                                    height: '4px',
+                                    backgroundColor: 'transparent',
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    backgroundColor: 'transparent',
+                                    borderRadius: '10px',
+                                },
+                                '&:hover::-webkit-scrollbar-thumb': {
+                                    backgroundColor: '#4682b4',
+                                },
+                                '&::-webkit-scrollbar-track': {
+                                    backgroundColor: 'transparent',
+                                },
+                            }}
+                        >
+                            <Table variant="simple" size="sm">
+                                <Thead
+                                    pos="sticky"
+                                    top="0"
+                                    bgColor="#F0FFF4"
+                                    zIndex="1"
+                                >
+                                    <Tr bg="#4682b4" color="white">
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Invoice Number</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Customer ID</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Total Bill Amount</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Received Amount</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Remaining Amount</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {sale?.map((saleItem, index) => (
+                                        <Tr key={index}>
+                                            <Td>#{saleItem.invoiceNumber}</Td>
+                                            <Td>{saleItem.customerId}</Td>
+                                            <Td>{saleItem.totalBillAmount}</Td>
+                                            <Td>{saleItem.receivedAmount ? saleItem.receivedAmount : 'null'}</Td>
+                                            <Td>{saleItem.remainingAmount ? saleItem.remainingAmount : 'null'}</Td>
+                                        </Tr>
+                                    ))}
+                                </Tbody>
+                            </Table>
+                        </TableContainer>
+                    </TabPanel>
+                    <TabPanel>
+                        <TableContainer
+                            border="1px solid"
+                            borderColor="gray.400"
+                            w="100%"
+                            overflowY="scroll"
+
+                            h='auto'
+                            maxH='70dvh'
+                            css={{
+                                '&::-webkit-scrollbar': {
+                                    width: '4px',
+                                    height: '4px',
+                                    backgroundColor: 'transparent',
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    backgroundColor: 'transparent',
+                                    borderRadius: '10px',
+                                },
+                                '&:hover::-webkit-scrollbar-thumb': {
+                                    backgroundColor: '#4682b4',
+                                },
+                                '&::-webkit-scrollbar-track': {
+                                    backgroundColor: 'transparent',
+                                },
+                            }}
+                        >
+                            <Table variant="simple" size="sm">
+                                <Thead
+                                    pos="sticky"
+                                    top="0"
+                                    bgColor="#F0FFF4"
+                                    zIndex="1"
+                                >
+                                    <Tr bg="#4682b4" color="white">
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Invoice Number</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Customer ID</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Customer Name</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Total Bill Amount</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Total Discount Amount</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Received Amount</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Remaining Amount</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Returned Product Amount</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Final Bill Amount</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {sale?.map((saleItem, index) => (
+                                        <Tr key={index}>
+                                            <Td>#{saleItem.invoiceNumber}</Td>
+                                            <Td>{saleItem.customerId}</Td>
+                                            <Td>{saleItem.customerName}</Td>
+                                            <Td>{saleItem.totalBillAmount}</Td>
+                                            <Td>{saleItem.totalDiscountAmount ? saleItem.totalDiscountAmount : "null"}</Td>
+                                            <Td>{saleItem.receivedAmount ? saleItem.receivedAmount : 'null'}</Td>
+                                            <Td>{saleItem.remainingAmount ? saleItem.remainingAmount : 'null'}</Td>
+                                            <Td>{saleItem.returnedProductAmount ? saleItem.returnedProductAmount : 'null'}</Td>
+                                            <Td>{saleItem.finalBillAmount}</Td>
+                                        </Tr>
+                                    ))}
+                                </Tbody>
+                            </Table>
+                        </TableContainer>
+
+                    </TabPanel>
+
+                </TabPanels>
+            </Tabs>
+
+
 
 
             {/* <HStack spacing={4} alignItems="center">

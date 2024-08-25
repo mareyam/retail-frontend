@@ -12,6 +12,7 @@ import {
   IconButton,
   Text,
   Button,
+  chakra
 } from '@chakra-ui/react';
 import useStateStore from '../zustand/store';
 import CustomerTypeModal from '../Sale/CustomerTypeModal';
@@ -20,7 +21,7 @@ import { BiSolidPurchaseTagAlt } from 'react-icons/bi';
 import { FaShop } from 'react-icons/fa6';
 import { MdPeopleAlt } from 'react-icons/md';
 import { FaTruck } from 'react-icons/fa';
-import GetCurrentDate from '../common/GetCurrentDate';
+import { GetCurrentDate, GetShortCurrentDate } from '../common/GetCurrentDate';
 import { CiLogin } from 'react-icons/ci';
 import { CiLogout } from 'react-icons/ci';
 
@@ -33,18 +34,27 @@ const Sidebar = () => {
     setIsCustomerTypeModal,
     isCustomerTypeModal,
     isOpen,
-    onOpen,
+    onOpen, isCollapsed, setIsCollapsed
+
   } = useStateStore();
 
   return (
     <>
       <Box px="4" h="full">
-        <Box w="40" h="20" onClick={() => setSelectedComponent('LandingPage')}>
+        <Box
+          transition='all 0.5s ease'
+          mt={isCollapsed ? "12" : "0"}
+          pr={isCollapsed ? "4" : "0"}
+
+          w={isCollapsed ? "20" : "40"}
+          h={isCollapsed ? "12" : "20"} onClick={() => setSelectedComponent('LandingPage')}>
           <Image src="/image.png" alt='landing page' />
         </Box>
 
         <VStack h="full" gap="8">
-          <HStack mt="14" w="full" alignItems="center">
+          <HStack
+
+            mt={isCollapsed ? "8" : "14"} w="full" alignItems="center">
             <IconButton
               pt="1"
               aria-label={'name'}
@@ -61,6 +71,7 @@ const Sidebar = () => {
               textAlign="flex-start"
               fontSize="28"
               fontWeight="400"
+              display={isCollapsed ? "none" : "block"}
             >
               Menu
             </Text>
@@ -110,6 +121,8 @@ const Sidebar = () => {
                   }}
                 />
                 <Text
+
+                  display={isCollapsed ? "none" : "block"}
 
                   onClick={() => {
                     setSelectedComponent(item.name);
@@ -168,31 +181,50 @@ const Sidebar = () => {
           </VStack> */}
 
           <VStack>
+
+
             <Text color="white">
-              Date: <GetCurrentDate />
+              {isCollapsed ? (
+                <>{GetShortCurrentDate()}</>
+              ) : (
+                <>{`Date: ${GetCurrentDate()}`}</>
+
+              )}
             </Text>
 
+
+
             {user ? (
-              <VStack w="44" h="20" pt="2" gap="0">
+              <VStack w="44" h="20" gap="0">
                 <Button onClick={() => setUser(null)}>
                   <CiLogout />
-                  &nbsp; Logout
+                  &nbsp;
+                  <chakra.span display={isCollapsed ? "none" : "block"}> Logout</chakra.span>
                 </Button>
-                <Text color="white" display={user ? 'block' : 'none'}>
-                  Welcome {user}
-                </Text>
+                <Flex align='center' flexDir={isCollapsed ? "column" : "row"}>
+                  <Text color="white" >
+                    Welcome &nbsp;
+                  </Text>
+                  <Text>{user}</Text>
+                </Flex>
+
+
               </VStack>
             ) : (
               <VStack w="44" h="20">
-                <Button onClick={() => setUser('Maryam')}>
+                <Button
+                  h='8'
+                  onClick={() => setUser('Maryam')}>
                   <CiLogin />
-                  &nbsp; Login
+                  &nbsp;
+
+                  <chakra.span display={isCollapsed ? "none" : "block"}> Login</chakra.span>
                 </Button>
               </VStack>
             )}
           </VStack>
         </VStack>
-      </Box>
+      </Box >
     </>
   );
 };

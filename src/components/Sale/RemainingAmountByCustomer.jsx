@@ -49,7 +49,11 @@ const RemainingAmountByCustomer = ({
     const formattedDate = `${year}-${month}-${day}`;
 
     useEffect(() => {
-        setDiscountAmount(totalBillAmount * (discount / 100));
+        if (discount > 0) {
+            setDiscountAmount(totalBillAmount * (discount / 100));
+        }
+        else setDiscountAmount(0)
+
     }, [totalBillAmount, discount]);
 
 
@@ -58,7 +62,6 @@ const RemainingAmountByCustomer = ({
 
 
     const handlePostRemainingAmount = async () => {
-
         const remainingAmountData = {
             invoiceNumber: invoiceNumber,
             customerId, customerId,

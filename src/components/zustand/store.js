@@ -75,6 +75,9 @@ const useStateStore = create((set) => ({
   password: '',
   setEmail: (email) => set({ email }),
   setPassword: (password) => set({ password }),
+
+  isCollapsed: false,
+  setIsCollapsed: (component) => set({ isCollapsed: component }),
 }));
 
 export default useStateStore;

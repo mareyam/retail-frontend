@@ -18,8 +18,11 @@ const Pricing = ({ total, quantity, discount }) => {
 
 
   useEffect(() => {
-    const discountValue = (total * discount) / 100;
-    setCalcDiscount(discountValue);
+    if (discount > 0) {
+      const discountValue = (total * discount) / 100;
+      setCalcDiscount(discountValue);
+    } else setCalcDiscount(0)
+
   }, [total, discount]);
 
   console.log(calcDiscount)

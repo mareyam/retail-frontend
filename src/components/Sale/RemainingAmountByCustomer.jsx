@@ -30,16 +30,13 @@ const RemainingAmountByCustomer = ({
     const { receivedAmount, setReceivedAmount, totalAmountReceived,
         returnedProductAmount, setReturnedProductAmount,
         setSelectedComponent
-
-
     } = useStateStore();
 
     const [finalBillAmount, setFinalBillAmount] = useState();
     const [discountAmount, setDiscountAmount] = useState();
-    // const [receivedAmount, setReceivedAmount] = useState("");
     const [remainingAmount, setRemainingAmount] = useState("");
-    // const [returnedProductAmount, setReturnedProductAmount] = useState();
     const [total, setTotal] = useState("");
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const currentDate = new Date();
 
@@ -169,20 +166,6 @@ const RemainingAmountByCustomer = ({
                     <ModalCloseButton />
                     <ModalBody>
                         <VStack w="full">
-                            {/* <Flex w="full" justifyContent="space-between">
-                                <Text>Invoice Number</Text>
-                                <Input
-                                    value={invoiceNumber}
-                                    w="52" />
-                            </Flex>
-
-                            <Flex w="full" justifyContent="space-between">
-                                <Text>Customer ID</Text>
-                                <Input
-                                    value={customerId}
-                                    w="52" placeholder="Customer ID" />
-                            </Flex> */}
-
                             <Flex w="full" justifyContent="space-between">
                                 <Text>Total Bill Amount</Text>
                                 <Input
@@ -211,14 +194,6 @@ const RemainingAmountByCustomer = ({
                                     onChange={(event) => setReceivedAmount(event.target.value)}
                                     w="52" placeholder="Received Amount" />
                             </Flex>
-
-                            {/* <Flex w="full" justifyContent="space-between">
-                                <Text>Remaining Amount</Text>
-                                <Input
-                                    value={remainingAmount}
-                                    w="52" placeholder="Remaining Amount" />
-                            </Flex> */}
-
                             <Flex w="full" justifyContent="space-between">
                                 <Text>Returned Product Amount</Text>
                                 <Input
@@ -227,20 +202,11 @@ const RemainingAmountByCustomer = ({
                                     w="52" placeholder="Returned Product Amount" />
                             </Flex>
 
-                            {/* <Flex w="full" justifyContent="space-between">
-                                <Text>Final Bill Amount</Text>
-                                <Input
-                                    value={finalBillAmount}
-                                    w="52" />
-                            </Flex> */}
-
 
 
 
                         </VStack>
                     </ModalBody>
-
-
                     <ModalFooter>
                         <Flex justifyContent='space-between' w='full'>
                             <Text fontSize='20' fontWeight='700'>PKR. {finalBillAmount?.toFixed(0)}</Text>

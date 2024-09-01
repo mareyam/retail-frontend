@@ -14,7 +14,9 @@ import {
   Input,
   useToast
 } from '@chakra-ui/react';
-import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import { updateVendor } from '@/hooks/vendors';
+
 
 const VendorDetailModal = ({ isOpen, onClose, vendorDetail, refresh, setRefresh }) => {
   const toast = useToast();
@@ -63,22 +65,10 @@ const VendorDetailModal = ({ isOpen, onClose, vendorDetail, refresh, setRefresh 
     return true;
   };
 
-  const handleSave = async () => {
-    if (!validateFields()) return;
 
-    const updatedVendor = {
-      brandName,
-      vendorName,
-      vendorDescription,
-      vendorAddress,
-      phone,
-      date
-    };
-
-    try {
-      const response = await axios.put(`https://localhost:7059/api/Vendor/${vendorDetail.vendorId}`, updatedVendor);
-      console.log('Data:', response.data);
-
+  const mutation = useMutation({
+    mutationFn: updateVendor,
+    onSuccess: () => {
       toast({
         title: 'Vendor updated successfully',
         status: 'success',
@@ -86,8 +76,9 @@ const VendorDetailModal = ({ isOpen, onClose, vendorDetail, refresh, setRefresh 
         isClosable: true
       });
       setRefresh(!refresh);
-      onClose();
-    } catch (error) {
+      queryClient.invalidateQueries(['vendors']);
+    },
+    onError: (error) => {
       console.error('Error updating vendor:', error);
       toast({
         title: 'An error occurred.',
@@ -96,8 +87,28 @@ const VendorDetailModal = ({ isOpen, onClose, vendorDetail, refresh, setRefresh 
         duration: 3000,
         isClosable: true,
       });
-    }
+    },
+  });
+
+
+  const handleSave = () => {
+    if (!validateFields()) return;
+
+    const updatedVendor = {
+      brandName,
+      vendorName,
+      vendorDescription,
+      vendorAddress,
+      phone,
+      date,
+    };
+
+    mutation.mutate({ vendorId: vendorDetail.vendorId, updatedVendor });
+    onClose();
+
   };
+
+
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">

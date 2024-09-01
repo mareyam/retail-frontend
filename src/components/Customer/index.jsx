@@ -34,12 +34,15 @@ import { FaTrashAlt } from 'react-icons/fa';
 import EditCustomer from './EditCustomer';
 import { CiEdit } from "react-icons/ci";
 import { FiEdit } from 'react-icons/fi';
+import { fetchCustomers } from '@/hooks/customers';
+import { useQuery, useMutation } from '@tanstack/react-query';
+
 
 const ITEMS_PER_PAGE = 100;
 const Customer = () => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { customerType, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
+  const { customerType, cart, addToCart, removeFromCart } = useStateStore();
   console.log(customerType);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
@@ -53,43 +56,26 @@ const Customer = () => {
   const [filteredCustomers, setFilteredCustomers] = useState([]);
 
   console.log(selectedCustomer)
-  console.log(customers.length);
-  console.log(billSummary
+  console.log(billSummary)
 
-  )
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentCustomers = filteredCustomers.slice(startIndex, endIndex);
+  const currentCustomers = filteredCustomers?.slice(startIndex, endIndex);
 
-
-  const rCustomers = customers.filter(customer => customer.customerType === 'Retail');
-  const wCustomers = customers.filter(customer => customer.customerType === 'Whole');
-
-
-
-  // useEffect(() => {
-  //   setFilteredBatteryData(
-  //     batteryData.filter((customer) =>
-  //       customer.name.toLowerCase().includes(searchQuery.toLowerCase())
-  //     )
-  //   );
-  //   setCurrentPage(1);
-  // }, [searchQuery, batteryData]);
+  const { data: customers, error, isLoading } = useQuery({
+    queryKey: ['customers'],
+    queryFn: fetchCustomers,
+  });
 
   useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get('https://localhost:7059/api/Customer');
-        console.log('Data:', response.data);
-        setCustomers(response.data);
-        console.log(customers)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+    if (customers) {
+      setFilteredCustomers(customers);
+    }
+  }, [customers]);
 
-    fetchCustomers();
-  }, [refresh]);
+  const rCustomers = customers?.filter(customer => customer.customerType === 'Retail');
+  const wCustomers = customers?.filter(customer => customer.customerType === 'Whole');
+
 
   console.log(customers)
 
@@ -143,7 +129,7 @@ const Customer = () => {
 
   useEffect(() => {
     setFilteredCustomers(
-      customers.filter(customer =>
+      customers?.filter(customer =>
         customer.customerName.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
@@ -219,7 +205,7 @@ const Customer = () => {
             <TabPanel
 
             >
-              {wCustomers.length > 0 && (
+              {wCustomers?.length > 0 && (
                 <TableContainer
                   border="1px solid"
 
@@ -291,7 +277,7 @@ const Customer = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {wCustomers.map((customer, index) => (
+                      {wCustomers?.map((customer, index) => (
                         <Tr
                           key={index}
                           onClick={() => {
@@ -349,7 +335,7 @@ const Customer = () => {
 
             </TabPanel>
             <TabPanel >
-              {rCustomers.length > 0 && (
+              {rCustomers?.length > 0 && (
                 <TableContainer
                   border="1px solid"
                   overflowY='auto'
@@ -422,7 +408,7 @@ const Customer = () => {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {rCustomers.map((customer, index) => (
+                      {rCustomers?.map((customer, index) => (
                         <Tr
                           key={index}
                           onClick={() => {

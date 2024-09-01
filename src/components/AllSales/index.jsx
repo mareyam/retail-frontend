@@ -19,50 +19,88 @@ import {
     TabPanel,
     TabList,
     Tab,
-    TabPanels
+    TabPanels,
+    Badge
 } from '@chakra-ui/react';
 import { SlArrowRight, SlArrowLeft } from 'react-icons/sl';
 import Searchbar from '../common/Searchbar';
 import axios from 'axios';
 import { FaTrashAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
+import EditSale from './EditSale';
 
 
 const AllSales = () => {
-    const toast = useToast();
-    const [sale, setSale] = useState();
     const [customers, setCustomers] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTab, setSelectedTab] = useState('Overview');
-
+    const [overviewData, setOverviewData] = useState([]);
+    const [detailData, setDetailData] = useState([]);
+    const [sale, setSale] = useState([]);
+    const [saleItem, setSaleItem] = useState();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [refresh, setRefresh] = useState();
+    const [billSummaries, setBillSummaries] = useState([]);
 
     useEffect(() => {
         const fetchBillSummary = async () => {
             try {
 
-                const response = await axios.get('https://localhost:7059/api/BillSummary');
-                const billSummaryData = response.data;
-                console.log('Bill Summary Data:', billSummaryData);
+                const detailResponse = await axios.get('https://localhost:7059/api/BillSummary');
+                const detailData = detailResponse.data;
+                setDetailData(detailData);
 
-                const customerResponse = await axios.get('https://localhost:7059/api/Customers');
-                const customerData = customerResponse.data;
-                console.log('Customer Data:', customerData);
+                const overviewResponse = await axios.get('https://localhost:7059/api/Sale');
+                const overviewData = overviewResponse.data;
+                setOverviewData(overviewData);
 
-                const customerMap = {};
-                customerData.forEach(customer => {
-                    customerMap[customer.customerId] = customer.customerName;
+                const customersResponse = await axios.get('https://localhost:7059/api/Customer');
+                const customersData = customersResponse.data;
+                setCustomers(customersData);
+
+                const billCustomerIds = billSummaryData.map((bill) => bill.customerId);
+                console.log(billCustomerIds)
+
+                const filteredCustomers = customersData.filter((customer) =>
+                    billCustomerIds.includes(customer.customerId)
+                );
+                console.log(filteredCustomers)
+
+                const updatedBillSummaries = billSummaryData.map((bill) => {
+                    const relatedCustomer = filteredCustomers.find(
+                        (customer) => customer.customerId === bill.customerId
+                    );
+
+                    console.log(relatedCustomer)
+
+                    return {
+                        ...bill,
+                        customerName: relatedCustomer ? relatedCustomer.customerName : 'Unknown',
+                    };
                 });
 
-                console.log(customerMap)
-                const combinedData = billSummaryData.map(bill => ({
-                    ...bill,
-                    customerName: customerMap[bill.customerId] || 'Unknown Customer'
-                }));
+                setBillSummaries(updatedBillSummaries);
+                setCustomers(customersData);
 
-                console.log(combinedData)
-                setSale(combinedData);
-                console.log('Combined Data:', combinedData);
+                // setBillSummaryData(updatedBillSummaryData);
+
+
+                // const customerMap = {};
+                // customersData.forEach(customer => {
+                //     customerMap[customer.customerId] = customer.customerName;
+                // });
+
+
+
+
+                // const combinedData = detailData.map(bill => ({
+                //     ...bill,
+                //     customerName: customerMap[bill.customerId] || 'Unknown Customer'
+                // }));
+
+                // setSale(combinedData);
+                // console.log(combinedData)
+
 
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -72,27 +110,16 @@ const AllSales = () => {
         fetchBillSummary();
     }, []);
 
-    
 
+    console.log(detailData)
+    console.log(overviewData)
+    console.log(customers)
     console.log(sale)
 
-    // useEffect(() => {
-    //     setFilteredSale(
-    //         sale?.filter((saleItem) =>
-    //             saleItem.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase())
-    //         )
-    //     );
-    //     setCurrentPage(1);
-    // }, [searchQuery, sale]);
-
-    // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    // const endIndex = startIndex + ITEMS_PER_PAGE;
-    // const currentSales = filteredSale?.slice(startIndex, endIndex);
-    // const totalPages = Math.ceil(filteredSale?.length / ITEMS_PER_PAGE);
-
-    // const goToPreviousPage = () => setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
-    // const goToNextPage = () => setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
-
+    const handleEdit = (saleItem) => {
+        onOpen();
+        setSaleItem(saleItem)
+    }
 
     return (
         <VStack bgColor="#F0FFF4" align="center" >
@@ -102,8 +129,7 @@ const AllSales = () => {
 
             <Tabs
                 w='full'
-                onChange={(index) => setSelectedTab(index === 0 ? 'Wholesale' : 'Retail')}
-
+                onChange={(index) => setSelectedTab(index === 0 ? 'Overview' : 'Detail View')}
                 variant='soft-rounded' colorScheme='blue'>
                 <TabList>
                     <Tab>Overview</Tab>
@@ -153,7 +179,7 @@ const AllSales = () => {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {sale?.map((saleItem, index) => (
+                                    {overviewData?.map((saleItem, index) => (
                                         <Tr key={index}>
                                             <Td>#{saleItem.invoiceNumber}</Td>
                                             <Td>{saleItem.customerId}</Td>
@@ -210,10 +236,12 @@ const AllSales = () => {
                                         <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Remaining Amount</Th>
                                         <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Returned Product Amount</Th>
                                         <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Final Bill Amount</Th>
+                                        <Th fontWeight='400' textTransform="capitalize" color="white" fontSize="16">Action</Th>
+
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {sale?.map((saleItem, index) => (
+                                    {billSummaries?.map((saleItem, index) => (
                                         <Tr key={index}>
                                             <Td>#{saleItem.invoiceNumber}</Td>
                                             <Td>{saleItem.customerId}</Td>
@@ -221,48 +249,63 @@ const AllSales = () => {
                                             <Td>{saleItem.totalBillAmount}</Td>
                                             <Td>{saleItem.totalDiscountAmount ? saleItem.totalDiscountAmount : "null"}</Td>
                                             <Td>{saleItem.receivedAmount ? saleItem.receivedAmount : 'null'}</Td>
-                                            <Td>{saleItem.remainingAmount ? saleItem.remainingAmount : 'null'}</Td>
+                                            {/* <Td>{saleItem.remainingAmount ? saleItem.remainingAmount : 'null'}</Td> */}
+                                            <Td>
+                                                {saleItem.remainingAmount !== null && saleItem.remainingAmount > 0
+                                                    ? saleItem.remainingAmount
+                                                    : '0'}
+                                            </Td>
+
+
                                             <Td>{saleItem.returnedProductAmount ? saleItem.returnedProductAmount : 'null'}</Td>
                                             <Td>{saleItem.finalBillAmount}</Td>
+
+                                            <Td>
+                                                <Badge
+                                                    colorScheme={saleItem.remainingAmount < 1 ? 'red' : 'green'}
+                                                    onClick={() => saleItem.remainingAmount < 1 ? "" : handleEdit(saleItem)}
+                                                    cursor={saleItem.remainingAmount < 1 ? 'no-drop' : 'pointer'}
+
+                                                >
+                                                    Edit
+                                                </Badge>
+                                            </Td>
+
                                         </Tr>
                                     ))}
                                 </Tbody>
                             </Table>
                         </TableContainer>
-
                     </TabPanel>
-
                 </TabPanels>
             </Tabs>
-
-
-
-
-            {/* <HStack spacing={4} alignItems="center">
-                <IconButton
-                    disabled={currentPage === 1}
-                    bgColor="#4682b4"
-                    aria-label="Previous page"
-                    icon={<SlArrowLeft />}
-                    color="white"
-                    onClick={goToPreviousPage}
-                    _hover={{ backgroundColor: '#4682b4' }}
-                />
-                <Text>
-                    Showing {startIndex + 1} to {Math.min(endIndex, filteredSale?.length)} of {filteredSale?.length} entries
-                </Text>
-                <IconButton
-                    disabled={currentPage === totalPages}
-                    bgColor="#4682b4"
-                    aria-label="Next page"
-                    icon={<SlArrowRight />}
-                    color="white"
-                    onClick={goToNextPage}
-                    _hover={{ backgroundColor: '#4682b4' }}
-                />
-            </HStack> */}
+            {
+                isOpen && (
+                    <EditSale
+                        saleDetail={saleItem}
+                        refresh={refresh}
+                        setRefresh={setRefresh}
+                        isOpen={isOpen}
+                        onOpen={onOpen}
+                        onClose={onClose}
+                    />
+                )
+            }
         </VStack >
     );
 };
 
 export default AllSales;
+
+// {
+// "date": "0001-01-01T00:00:00",
+//     "billSummaryId": 29,
+//         "totalBillAmount": 12127,
+//             "totalDiscountAmount": 0,
+//                 "finalBillAmount": 11027,
+//                     "receivedAmount": 100,
+//                         "remainingAmount": 10863,
+//                             "returnedProductAmount": 1000,
+//                                 "invoiceNumber": "240096",
+//                                     "customerId": 0
+// },

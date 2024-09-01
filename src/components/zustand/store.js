@@ -64,6 +64,9 @@ const useStateStore = create((set) => ({
   receivedAmount: 0,
   setReceivedAmount: (receivedAmount) => set({ receivedAmount }),
 
+  cashType: '',
+  setCashType: (cashType) => set({ cashType }),
+
   addedBatteries: [],
   setAddedBatteries: (addedBatteries) => set({ addedBatteries }),
 

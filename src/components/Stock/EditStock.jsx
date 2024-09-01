@@ -169,7 +169,7 @@ const EditStock = ({ stockDetails, refresh, setRefresh, onClose, isOpen, onOpen 
                                     w="52"
                                     placeholder="Invoice Number"
                                     value={invoiceNumber}
-                                    // onChange={(e) => setInvoiceNumber(e.target.value)}
+                                // onChange={(e) => setInvoiceNumber(e.target.value)}
                                 />
                             </Flex>
 

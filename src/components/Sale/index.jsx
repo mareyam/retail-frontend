@@ -39,7 +39,7 @@ import RemainingAmountByCustomer from './RemainingAmountByCustomer';
 
 const ITEMS_PER_PAGE = 100;
 const Sale = () => {
-  const { addedBatteries, setAddedBatteries, discount, setDiscount, totalAmountReceived, setSelectedComponent, setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, customerType, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
+  const { receivedAmount, cashType, setCashType, addedBatteries, setAddedBatteries, discount, setDiscount, totalAmountReceived, setSelectedComponent, setTotalAmountReceived, finalAmount, setFinalAmount, setCustomerType, customerType, cart, addToCart, removeFromCart, customers, setCustomers } = useStateStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const toast = useToast();
@@ -156,6 +156,7 @@ const Sale = () => {
     setFinalAmount("")
     setInvoiceNumber("")
     setIsCustomerAdded(false)
+    setCashType("")
     // setSelectedComponent("LandingPage")
   }
   useEffect(() => {
@@ -199,6 +200,16 @@ const Sale = () => {
 
 
   const handlePostSale = async () => {
+    if (!customerType || !cashType) {
+      toast({
+        title: 'Customer Type or Cash Type is missing',
+        description: "",
+        status: 'warning',
+        duration: 3000,
+        isClosable: true
+      });
+      return;
+    }
     if (customerType === 'Retail' && customerName) {
       setDiscount(0)
       const newCustomer = {
@@ -211,6 +222,11 @@ const Sale = () => {
       };
 
       const addCustomerResponse = await axios.post('https://localhost:7059/api/Customer', newCustomer);
+
+
+      const response = await axios.post('https://localhost:7059/api/ReceivedCash', cashTypeData);
+      console.log('Cash Type:', response.data);
+
       console.log('Customer added:', addCustomerResponse.data);
 
       setSelectedCustomerId(addCustomerResponse.data.customerId);
@@ -220,8 +236,12 @@ const Sale = () => {
     }
   };
 
+
   useEffect(() => {
     if (saleMade && selectedCustomerId !== null) {
+      console.log('here 1')
+      handleAddCashType()
+      console.log('here')
       const postSales = async () => {
         for (const battery of addedBatteries) {
           const postSale = {
@@ -352,41 +372,26 @@ const Sale = () => {
     handleCancel()
   }, [])
 
+  const handleAddCashType = async () => {
 
-  const handleAddCustomer = async () => {
-    const newCustomer = {
-      date: formattedDate,
-      customerName: customerName,
-      address: "-",
-      phoneNumber: "00000000000",
-      customerType: customerType,
-      discountPercent: "0"
-    };
-    console.log(newCustomer)
-    try {
-      const response = await axios.post('https://localhost:7059/api/Customer', newCustomer);
-      console.log('Data:', response.data);
-
-      toast({
-        title: 'Customer added successfully',
-        status: 'success',
-        duration: 3000,
-        isClosable: true
-      });
-
-      setRefresh(!refresh);
-      onClose();
-    } catch (error) {
-      console.error('Error adding customer:', error);
-      toast({
-        title: 'An error occurred.',
-        description: 'Unable to add the customer.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
+    if (!cashType) {
+      return;
     }
-  };
+    const cashTypeData = {
+      date: formattedDate,
+      receivedCashDescription: "string",
+      amount: receivedAmount,
+      cashType: cashType,
+      customerId: selectedCustomerId,
+    };
+    console.log(cashTypeData)
+
+    const response = await axios.post('https://localhost:7059/api/ReceivedCash', cashTypeData);
+    console.log('Cash Type:', response.data);
+  }
+
+
+
 
 
   return (
@@ -405,9 +410,21 @@ const Sale = () => {
           />
 
 
+          <Text fontWeight="500" >
+            Cash Type:
+            <chakra.span fontWeight="500">
+              <Input w='32'
+                value={cashType}
+                onChange={() => setCashType(event.target.value)}
+                isDisabled={saleMade}
+              />
+            </chakra.span>
+          </Text>
+
+
 
           <Text fontWeight="500" >
-            Invoice Name:
+            Invoice Number:
             <chakra.span fontWeight="500">
               <Input w='44' value={invoiceNumber}
                 isDisabled={saleMade}
@@ -790,20 +807,13 @@ const CustomerTypeRadio = ({ customerName, setCustomerName, customers, saleMade,
           <>
             <Input
               h='10'
+              w='40'
               value={customerName}
               placeholder='Enter customer name'
               isDisabled={saleMade}
               onChange={(event) => setCustomerName(event.target.value)}
             />
-            {/* <Button
-              isDisabled={!customerName}
-              bgColor='#4682b4'
-              color='white'
-              _hover={{
-                color: 'white',
-                bgColor: '#4682b4'
-              }}
-              onClick={handleAddCustomer}>+</Button> */}
+
           </>
         )}
 
@@ -820,13 +830,11 @@ const CustomerTypeRadio = ({ customerName, setCustomerName, customers, saleMade,
             ))}
           </Select>
         )}
-        <Flex align='center'>
-          <Text px='2' fontSize='16' fontWeight='500'>Discount</Text>
+        <Flex align='center' >
+          <Text px='2' fontSize='16' fontWeight='500'>&nbsp;Discount</Text>
           <Text>{selectedCustomer?.discountPercent ? selectedCustomer?.discountPercent : 0}%</Text>
         </Flex>
       </Flex>
-
-
     </Flex>
   );
 };
